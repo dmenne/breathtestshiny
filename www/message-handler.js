@@ -1,6 +1,6 @@
 // This recieves messages of type "testmessage" from the server.
-Shiny.addCustomMessageHandler("testmessage",
-  function(message) {
-    window.location.replace("http://stackoverflow.com");
+Shiny.addCustomMessageHandler("replace_message",
+  function(url) {
+    window.location.replace(url);
   }
 );

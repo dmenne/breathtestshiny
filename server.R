@@ -1,19 +1,30 @@
 shinyServer(function(input, output, session) {
 
-  observe({
-    url_s = parseQueryString(session$clientData$url_search)
-    uid = url_s[["uid"]]
-    if (is.null(uid)) {
-      uid = digest::digest(rnorm(1),"xxhash64")
-    }
-    url = paste0(base_url, "/?uid=", uid)
-    updateActionButton(session, "userid", label = url)
+  uid = reactive({
+    u = parseQueryString(session$clientData$url_search)[["uid"]]
+    # Make it a valid subdirectory name
+    cc = cleanup_uid(u)
+    cc
   })
 
+  data_dir = function(){
+    if (is.null(uid()) || uid() == "")
+      return(NULL)
+    file.path(data_root, uid())
+  }
+
   observe({
-    session$clientData$url_search
-    session$sendCustomMessage(type = 'testmessage',
-                    message = '')
+    cd = session$clientData
+    url_hostname = cd$url_hostname
+    url_port = cd$url_port
+    url = paste0(url_hostname, ":", url_port)
+    dd = data_dir()
+    if (!is.null(dd)) {
+      safe_dir_create(data_root)
+      safe_dir_create(dd)
+      url = paste0(url, "/?uid=", uid())
+    }
+    updateActionButton(session, "userid", url )
   })
 
   # A histogram

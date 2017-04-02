@@ -1,5 +1,19 @@
 library(shiny)
-if (is.null(unlist(options("shiny.port"))))
-  options(shiny.port = 34712)
-base_url = paste0("localhost:",options("shiny.port"))
+library(stringr)
+data_root = "~/breathtestcore/"
 
+cleanup_uid = function(uid){
+  uid = str_replace_all(tolower(uid), " ","_")
+  paste0(unlist(str_extract_all(uid, "[a-z0-9_]*")), collapse = "")
+}
+
+safe_dir_create <- function(path)
+{
+  dirTest <- function(x) !is.na(isdir <- file.info(x)$isdir) &
+    isdir
+  dt = !dirTest(path)
+  if (dt && !dir.create(path))
+    stop(gettextf("cannot create directory '%s'", path),
+         domain = NA)
+  dt
+}
