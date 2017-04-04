@@ -18,5 +18,19 @@ safe_dir_create <- function(path)
   dt
 }
 
+popit = function(session, show, id, title, placement = "right" ){
+  if (show) {
+    content = pop_content[id]
+    if (is.na(pop_content[id]))
+      content = ""
+    addPopover(session, id, title, content, placement)
+  } else {
+    removePopover(session, id)
+  }
+}
+
 
 ace_options = "ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});"
+
+pop_content = c(
+  method_a = "<code>linexp</code>, <b>Methode</b><br>Beschreibung ")

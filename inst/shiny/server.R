@@ -27,8 +27,13 @@ shinyServer(function(input, output, session) {
     updateActionButton(session, "userid", url )
   })
 
+  observe({
+    show = input$show_pop
+    popit(session, show, "method_a", "Fitting method")
+  })
+
   # A histogram
-  output$myplot <- renderPlot({
-    hist(rnorm(input$obs), main="h")
+  output$fitplot <- renderPlot({
+    hist(rnorm(100), main = "Platzhalter")
   })
 })
