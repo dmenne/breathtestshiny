@@ -4,36 +4,23 @@ shinyServer(function(input, output, session) {
   uid = reactive({
     u = parseQueryString(session$clientData$url_search)[["uid"]]
     # Make it a valid subdirectory name
-    cc = cleanup_uid(u)
-    cc
+    cleanup_uid(u)
   })
 
   data_dir = function(){
-    if (is.null(uid()))
-      return(NULL)
-    file.path(data_root, uid())
+    u = uid()
+    ifelse(is.null(u), NULL, file.path(data_root, u))
   }
 
   url = reactive({
     cd = session$clientData
-    url_hostname = cd$url_hostname
-    url_port = cd$url_port
-    url1 = paste0(url_hostname, ":", url_port)
-    dd = data_dir()
-    if (!is.null(dd)) {
-      safe_dir_create(data_root)
-      safe_dir_create(dd)
-      url1 = paste0(url1, "/?uid=", uid())
-    }
-    url1
-  })
-
-  store_path = reactive({
-    parseQueryString(session$clientData$url_search)[["uid"]]
+    url1 = paste0(cd$url_hostname, ":", cd$url_port)
+    ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 
   observe({
-    shinyjs::toggleState("create_workspace", is.null(uid()))
+    shinyjs::toggle("create_workspace", condition = is.null(uid()))
+    shinyjs::toggle("userid", condition = !is.null(uid()))
   })
 
   observe({
@@ -44,8 +31,12 @@ shinyServer(function(input, output, session) {
     if (input$create_workspace == 0)
       return(NULL)
     new_uid = paste0("?uid=", digest::digest(rnorm(1), "xxhash32" ))
-    session$sendCustomMessage(type = 'replace_message',
+    session$sendCustomMessage(type = 'replace_url',
             message = new_uid )
+  })
+
+  output$use_link = reactive({
+    ifelse(is.null(uid()), "", "Use this link to recover data")
   })
 
   observe({

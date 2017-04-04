@@ -1,9 +1,7 @@
 library(shiny)
 library(stringr)
-library(htmlwidgets)
 
 data_root = "~/breathtestcore/"
-
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -34,6 +32,7 @@ popit = function(session, show, id, title, placement = "right" ){
     removePopover(session, id)
   }
 }
+
 
 
 ace_options = "ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});"

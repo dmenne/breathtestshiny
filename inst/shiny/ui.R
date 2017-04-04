@@ -24,11 +24,11 @@ shinyUI(
             ),
           selected = "nls"
         ),
-        helpText("Use this link to recover your data"),
+        textOutput("use_link"),
         actionLink("userid", ""),
-        checkboxInput("show_pop", "Show popover help", value = TRUE),
         actionButton("create_workspace", "Keep data"),
         actionButton("test", "Test"),
+        checkboxInput("show_pop", "Show popover help", value = TRUE),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
         width = 3

@@ -1,4 +1,4 @@
-Shiny.addCustomMessageHandler("replace_message",
+Shiny.addCustomMessageHandler("replace_url",
   function(url) {
     location.replace(url);
   }
