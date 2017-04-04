@@ -8,7 +8,8 @@ shinyUI(
     useShinyjs(),
     theme = "bootstrap.css",
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
-    titlePanel("Fit 13C Breat Test"),
+    singleton(tags$head(tags$script(src = "message-handler.js"))),
+    titlePanel("Fit 13C Breath Test"),
     sidebarLayout(
       sidebarPanel(
         h3("Analyze data"),
@@ -26,8 +27,9 @@ shinyUI(
         helpText("Use this link to recover your data"),
         actionLink("userid", ""),
         checkboxInput("show_pop", "Show popover help", value = TRUE),
-        # The following should not be moved to the server, because one
-        # popover must remain on the page to load dependencies
+        actionButton("create_workspace", "Keep data"),
+        actionButton("test", "Test"),
+        # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
         width = 3
       ),

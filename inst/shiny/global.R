@@ -1,10 +1,16 @@
 library(shiny)
 library(stringr)
+library(htmlwidgets)
+
 data_root = "~/breathtestcore/"
 
+
 cleanup_uid = function(uid){
-  uid = str_replace_all(tolower(uid), " ","_")
-  paste0(unlist(str_extract_all(uid, "[a-z0-9_]*")), collapse = "")
+  if (is.null(uid) || uid == '') return(NULL)
+  uid = str_replace_all(str_trim(tolower(uid)), " ","_")
+  uid = paste0(unlist(str_extract_all(uid, "[a-z0-9_]*")), collapse = "")
+  if (uid == "") return(NULL)
+  uid
 }
 
 safe_dir_create <- function(path)
