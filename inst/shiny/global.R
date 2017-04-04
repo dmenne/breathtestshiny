@@ -17,3 +17,6 @@ safe_dir_create <- function(path)
          domain = NA)
   dt
 }
+
+
+ace_options = "ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});"
