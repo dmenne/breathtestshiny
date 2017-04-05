@@ -1,4 +1,9 @@
 library(shinyjs)
+library(shinyAce)
+library(breathtestcore)
+library(dplyr)
+
+
 shinyServer(function(input, output, session) {
 
   uid = reactive({
@@ -14,7 +19,9 @@ shinyServer(function(input, output, session) {
 
   url = reactive({
     cd = session$clientData
-    url1 = paste0(cd$url_hostname, ":", cd$url_port)
+    url1 = cd$url_hostname
+    if (!is.null(cd$url_port))
+      url1 = paste0(url1, ":", cd$url_port)
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 
@@ -40,8 +47,41 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
+    # Clear ace editor
+    if (input$clearButton == 0)
+      return(NULL)
+    updateAceEditor(session, "data",value = 1)
+    updateSelectizeInput(session, "test_data", selected = NA)
+
+  })
+
+
+  observe({
+    # Retrieve data
+    td = input$test_data
+    if (is.null(td)) return(NULL)
+    data("usz_13c", envir = environment())
+    data = usz_13c  %>%
+      filter(pat_id %in% td) %>%
+      mutate(
+        pdr = round(pdr, 1)
+      )
+    tc = textConnection("dt", "w")
+    #comment = str_replace_all(comment(data),"\\n", " ")
+    comment = "Subset of USZ 13C data"
+    writeLines(paste0("# ", comment), con = tc)
+    writeLines(paste0("# ", paste0(input$test_data, collapse = ", ")), con = tc)
+    suppressWarnings(write.table(data, file = tc, append = TRUE,
+              row.names = FALSE, sep = "\t", quote = FALSE))
+    updateAceEditor(session, "data", value = paste(dt, collapse = "\n"))
+    close(tc)
+  })
+
+
+  observe({
     show = input$show_pop
     popit(session, show, "method_a", "Fitting method")
+    popit(session, show, "test_data", "Sample test data")
   })
 
   # A histogram

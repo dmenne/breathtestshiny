@@ -1,6 +1,7 @@
 library(shiny)
 library(stringr)
-
+library(breathtestcore)
+#options(shiny.error = browser)
 data_root = "~/breathtestcore/"
 
 cleanup_uid = function(uid){
@@ -33,9 +34,11 @@ popit = function(session, show, id, title, placement = "right" ){
   }
 }
 
-
-
-ace_options = "ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});"
+ace_options =
+  "ace.edit('data').setOptions({tabSize:16,showInvisibles:true,useSoftTabs:false,useElasticTabStops:true});"
 
 pop_content = c(
-  method_a = "<code>linexp</code>, <b>Methode</b><br>Beschreibung ")
+  method_a = "<code>linexp</code>, <b>Methode</b><br>Beschreibung ",
+  test_data = "<code>Anton</code>, <b>Use test data from USZ collection"
+)
+

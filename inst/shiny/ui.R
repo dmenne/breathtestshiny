@@ -24,6 +24,11 @@ shinyUI(
             ),
           selected = "nls"
         ),
+        selectInput("test_data", "Select test data:",
+          list(`Easy normals` = c("norm_001", "norm_002", "norm_003"),
+               `Easy patients` = c("pat_001", "pat_002", "pat_003"),
+               `Difficult patients` = c("pat_021", "pat_023", "pat_032")),
+        multiple = TRUE),
         textOutput("use_link"),
         actionLink("userid", ""),
         actionButton("create_workspace", "Keep data"),

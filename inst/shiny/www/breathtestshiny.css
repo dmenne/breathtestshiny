@@ -99,3 +99,7 @@ hr {
 #plot.recalculating {
   z-index: -2;
 }
+
+.selectize-dropdown-content {
+  max-height: 400px;
+}
