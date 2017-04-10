@@ -9,7 +9,7 @@ shinyUI(
     theme = "bootstrap.css",
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
     singleton(tags$head(tags$script(src = "message-handler.js"))),
-    titlePanel("Fit 13C Breath Test"),
+    titlePanel("Gastric emptying from 13C Breath Test Data"),
     sidebarLayout(
       sidebarPanel(
         h3("Analyze data"),
@@ -18,21 +18,20 @@ shinyUI(
           "Method",
           choices =
             c(
-              "single curve fit" = "nls",
-              "nlme population fit" = "nlme",
-              "Bayesian Stan fit" = "stan"
+              "Individual curve fit (nls)" = "nls",
+              "Population fit (nlme) " = "nlme",
+              "Bayesian fit (Stan)" = "stan"
             ),
           selected = "nls"
         ),
         selectInput("test_data", "Select test data:",
-          list(`Easy normals` = c("norm_001", "norm_002", "norm_003"),
+          list(`Easy normals, solid and liquid` = c("norm_001", "norm_002", "norm_003"),
                `Easy patients` = c("pat_001", "pat_002", "pat_003"),
-               `Difficult patients` = c("pat_021", "pat_023", "pat_032")),
-        multiple = TRUE),
+               `Difficult patients` = c("pat_051", "pat_016", "pat_033")),
+        multiple = TRUE, selected = c("norm_001", "norm_002", "norm_003")),
         textOutput("use_link"),
         actionLink("userid", ""),
         actionButton("create_workspace", "Keep data"),
-        actionButton("test", "Test"),
         checkboxInput("show_pop", "Show popover help", value = TRUE),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
@@ -43,7 +42,7 @@ shinyUI(
           tabPanel(
             "Data",
             aceEditor("data", "", mode = "plain_text"),
-            actionButton("clearButton", "Clear", icon = icon("eraser")),
+            actionButton("clear_button", "Clear", icon = icon("eraser")),
             tags$script(type = "text/javascript",HTML(ace_options)),
             div(
               id = "plot-container",

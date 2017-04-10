@@ -3,7 +3,6 @@ library(shinyAce)
 library(breathtestcore)
 library(dplyr)
 
-
 shinyServer(function(input, output, session) {
 
   uid = reactive({
@@ -48,7 +47,7 @@ shinyServer(function(input, output, session) {
 
   observe({
     # Clear ace editor
-    if (input$clearButton == 0)
+    if (input$clear_button == 0)
       return(NULL)
     updateAceEditor(session, "data",value = 1)
     updateSelectizeInput(session, "test_data", selected = NA)
@@ -59,10 +58,13 @@ shinyServer(function(input, output, session) {
   observe({
     # Retrieve data
     td = input$test_data
-    if (is.null(td)) return(NULL)
+    if (is.null(td)) {
+      updateAceEditor(session, "data",value = 1) # Funny method to clear
+      return(NULL)
+    }
     data("usz_13c", envir = environment())
     data = usz_13c  %>%
-      filter(pat_id %in% td) %>%
+      filter(patient_id %in% td) %>%
       mutate(
         pdr = round(pdr, 1)
       )
@@ -84,8 +86,42 @@ shinyServer(function(input, output, session) {
     popit(session, show, "test_data", "Sample test data")
   })
 
+
+  getData = reactive({
+    # Read and pre-process editor data
+    data = input$data
+    # Replace multiple spaces or tabs by single tab
+    data = str_replace_all(data,"([\t ]+)","\t")
+    data = str_replace_all(data,",",".")
+    if (nchar(data) < 10) return(NULL)
+    tc = textConnection(data)
+    d = na.omit(read.table(tc, sep = "\t", header = TRUE))
+    close(tc)
+    validate(
+      need(input$method_a == "stan" || nrow(d) >= 10,
+           "At least 10 data values required."),
+      need(input$method_a != "nlme" ||
+             length(unique(paste(d$patient_id, d$group, sep = "_"))) >= 3,
+           "At least 3 records required. Try Bayesian method instead.")
+    )
+    comment = paste(unlist(str_extract_all(data, "^#.*\\n")), collapse = "\n")
+    comment = str_replace_all(comment,"\\t", " ")
+    comment(d) = comment
+    d = cleanup_data(d)
+    d
+  })
+
+
+  fit = reactive({
+    data = getData()
+    if (is.null(data)) return(NULL)
+    nls_fit(data)
+  })
+
   # A histogram
   output$fit_plot <- renderPlot({
-    hist(rnorm(100), main = "Platzhalter")
+    f = fit()
+    if (is.null(f)) return(NULL)
+    plot(f)
   })
 })
