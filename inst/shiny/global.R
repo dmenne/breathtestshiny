@@ -1,6 +1,7 @@
 library(shiny)
 library(stringr)
 library(breathtestcore)
+library(breathteststan)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
 

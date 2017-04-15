@@ -115,7 +115,14 @@ shinyServer(function(input, output, session) {
   fit = reactive({
     data = getData()
     if (is.null(data)) return(NULL)
-    nls_fit(data)
+    method = isolate(input$method_a)
+    switch(method,
+      data_only = null_fit(data),
+      nls = nls_fit(data),
+      nlme = nlme_fit(data),
+      stan = stan_fit(data)
+    )
+
   })
 
   # A histogram

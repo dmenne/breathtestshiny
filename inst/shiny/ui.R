@@ -18,8 +18,9 @@ shinyUI(
           "Method",
           choices =
             c(
+              "Data only, no fit" = "data_only",
               "Individual curve fit (nls)" = "nls",
-              "Population fit (nlme) " = "nlme",
+              "Mixed-model fit (nlme) " = "nlme",
               "Bayesian fit (Stan)" = "stan"
             ),
           selected = "nls"
