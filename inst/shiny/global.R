@@ -38,6 +38,25 @@ popit = function(session, show, id, title, placement = "right" ){
 }
 
 
+test_data = function(td){
+  data("usz_13c", envir = environment())
+  data = usz_13c  %>%
+    filter(patient_id %in% td) %>%
+    mutate(
+      pdr = round(pdr, 1)
+    )
+  tc = textConnection("dt", "w")
+  #comment = str_replace_all(comment(data),"\\n", " ")
+  comment = "Subset of USZ 13C data"
+  writeLines(paste0("# ", comment), con = tc)
+  writeLines(paste0("# ", paste0(td, collapse = ", ")), con = tc)
+  suppressWarnings(write.table(data, file = tc, append = TRUE,
+                               row.names = FALSE, sep = "\t", quote = FALSE))
+  dt = paste(dt, collapse = "\n")
+  close(tc)
+  dt
+}
+
 ace_options =
   "ace.edit('data').setOptions({tabSize:16,showInvisibles:true,useSoftTabs:false,useElasticTabStops:true});"
 

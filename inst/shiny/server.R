@@ -9,29 +9,9 @@ shinyServer(function(input, output, session) {
     updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
   }
 
-  test_data = function(td){
-    data("usz_13c", envir = environment())
-    data = usz_13c  %>%
-      filter(patient_id %in% td) %>%
-      mutate(
-        pdr = round(pdr, 1)
-      )
-    tc = textConnection("dt", "w")
-    #comment = str_replace_all(comment(data),"\\n", " ")
-    comment = "Subset of USZ 13C data"
-    writeLines(paste0("# ", comment), con = tc)
-    writeLines(paste0("# ", paste0(td, collapse = ", ")), con = tc)
-    suppressWarnings(write.table(data, file = tc, append = TRUE,
-                                 row.names = FALSE, sep = "\t", quote = FALSE))
-    dt = paste(dt, collapse = "\n")
-    close(tc)
-    dt
-  }
-
   # Copy test data to editor
   observe({
     # Retrieve data
-    input$method_a
     td = input$select_test_data
     if (is.null(td)) {
       clear_editor()
@@ -41,16 +21,10 @@ shinyServer(function(input, output, session) {
     updateAceEditor(session, "edit_data", value = value)
   })
 
-  # Clear editor when input button pressed, and switch to "data only"
+  # Clear editor when input button pressed
   observeEvent(input$clear_button, {
     clear_editor()
-    updateSelectInput(session, "method_a", selected = "data_only")
     updateSelectInput(session, "select_test_data", selected = NA)
-  })
-
-  # Switch to "data only" when editor data change
-  observeEvent(input$edit_data, {
-    updateSelectInput(session, "method_a", selected = "data_only")
   })
 
   # Format data from editor into a data frame
@@ -68,7 +42,7 @@ shinyServer(function(input, output, session) {
            "At least 10 data values required."),
       need(input$method_a != "nlme" ||
              length(unique(paste(d$patient_id, d$group, sep = "_"))) >= 3,
-           "At least 3 records required. Try Bayesian method instead.")
+           "At least 3 records required. Try single-curve or Bayesian fit instead.")
     )
     comment = paste(unlist(str_extract_all(data, "^#.*\\n")), collapse = "\n")
     comment = str_replace_all(comment,"\\t", " ")
@@ -77,7 +51,7 @@ shinyServer(function(input, output, session) {
     d
   })
 
-  # Compute fit when method changed
+  # Compute fit when button pressed or method changed
   fit = reactive({
     method = input$method_a
     data = get_data()
