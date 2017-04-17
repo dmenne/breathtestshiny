@@ -4,6 +4,8 @@ library(breathtestcore)
 library(breathteststan)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
+options(shiny.reactlog=TRUE)
+
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -34,6 +36,7 @@ popit = function(session, show, id, title, placement = "right" ){
     removePopover(session, id)
   }
 }
+
 
 ace_options =
   "ace.edit('data').setOptions({tabSize:16,showInvisibles:true,useSoftTabs:false,useElasticTabStops:true});"

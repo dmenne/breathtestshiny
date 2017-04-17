@@ -23,13 +23,14 @@ shinyUI(
               "Mixed-model fit (nlme) " = "nlme",
               "Bayesian fit (Stan)" = "stan"
             ),
-          selected = "nls"
+          selected = "data_only"
         ),
-        selectInput("test_data", "Select test data:",
+        selectInput("select_test_data", "Select test data:",
           list(`Easy normals, solid and liquid` = c("norm_001", "norm_002", "norm_003"),
                `Easy patients` = c("pat_001", "pat_002", "pat_003"),
                `Difficult patients` = c("pat_051", "pat_016", "pat_033")),
-        multiple = TRUE, selected = c("norm_001", "norm_002", "norm_003")),
+                multiple = TRUE,
+                selected = c("norm_001", "norm_002", "norm_003")),
         textOutput("use_link"),
         actionLink("userid", ""),
         actionButton("create_workspace", "Keep data"),
@@ -42,7 +43,7 @@ shinyUI(
         tabsetPanel(
           tabPanel(
             "Data",
-            aceEditor("data", "", mode = "plain_text"),
+            aceEditor("edit_data", "", mode = "plain_text"),
             actionButton("clear_button", "Clear", icon = icon("eraser")),
             tags$script(type = "text/javascript",HTML(ace_options)),
             div(
