@@ -136,14 +136,6 @@ shinyServer(function(input, output, session) {
     popit(session, input,  "sample_data", "Data formats")
   })
 
-  # Show/hide popup
-  observe({
-#    show = input$show_pop
-#    popit(session, show, "method_a", "Fitting method")
-#    popit(session, show, "patient_test_data", "Patient test data")
-#    popit(session, show, "sample_data", "Sample data")
-  })
-
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)
 

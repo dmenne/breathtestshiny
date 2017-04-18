@@ -40,11 +40,13 @@ label{
 }
 
 .popover{
-  width: 600px;
+  width: 400px;
+  max-width: 500px;
   background-color:#FBFFFB;
 }
 
 .tooltip{
+  width: 800px;
   background-color:#FBFFFB;
 }
 
