@@ -9,22 +9,30 @@ shinyServer(function(input, output, session) {
     updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
   }
 
-  # Copy test data to editor
+  # Copy patient test data to editor
   observe({
     # Retrieve data
-    td = input$select_test_data
+    td = input$patient_test_data
     if (is.null(td)) {
       clear_editor()
       return(NULL)
     }
-    value = test_data(td)
+    value = patient_test_data(td)
     updateAceEditor(session, "edit_data", value = value)
+  })
+
+  # Copy sample test data to editor
+  observe({
+    td = input$sample_data
+    if (is.null(td) || td == "") return()
+    value = sample_data(td)
+    updateAceEditor(session, "edit_data", value = value )
   })
 
   # Clear editor when input button pressed
   observeEvent(input$clear_button, {
     clear_editor()
-    updateSelectInput(session, "select_test_data", selected = NA)
+    updateSelectInput(session, "patient_test_data", selected = NA)
   })
 
   # Format data from editor into a data frame
@@ -120,11 +128,20 @@ shinyServer(function(input, output, session) {
 
 # ------------- Help-related functions --------------------
 
+  observe({
+    popit(session, input$show_pop,  "method_a", "Fitting method", input$method_a)
+  })
+
+  observe({
+    popit(session, input$show_pop,  "sample_data", "Data formats", input$sample_data)
+  })
+
   # Show/hide popup
   observe({
-    show = input$show_pop
-    popit(session, show, "method_a", "Fitting method")
-    popit(session, show, "select_test_data", "Sample test data")
+#    show = input$show_pop
+#    popit(session, show, "method_a", "Fitting method")
+#    popit(session, show, "patient_test_data", "Patient test data")
+#    popit(session, show, "sample_data", "Sample data")
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html
