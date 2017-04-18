@@ -129,11 +129,11 @@ shinyServer(function(input, output, session) {
 # ------------- Help-related functions --------------------
 
   observe({
-    popit(session, input$show_pop,  "method_a", "Fitting method", input$method_a)
+    popit(session, input,  "method_a", "Fitting method")
   })
 
   observe({
-    popit(session, input$show_pop,  "sample_data", "Data formats", input$sample_data)
+    popit(session, input,  "sample_data", "Data formats")
   })
 
   # Show/hide popup
