@@ -35,27 +35,17 @@ shinyServer(function(input, output, session) {
     updateSelectInput(session, "patient_test_data", selected = NA)
   })
 
-  # Format data from editor into a data frame
   get_data = reactive({
     data = input$edit_data
-    # Replace multiple spaces or tabs by single tab
-    data = str_replace_all(data,"([\t ]+)","\t")
-    data = str_replace_all(data,",",".")
-    if (nchar(data) < 10) return(NULL)
-    tc = textConnection(data)
-    d = na.omit(read.table(tc, sep = "\t", header = TRUE))
-    close(tc)
+    d = format_data(data)
+    if (is.null(d)) return(NULL)
     validate(
       need(input$method_a == "stan" || nrow(d) >= 10,
            "At least 10 data values required."),
       need(input$method_a != "nlme" ||
-             length(unique(paste(d$patient_id, d$group, sep = "_"))) >= 3,
-           "At least 3 records required. Try single-curve or Bayesian fit instead.")
+             length(unique(paste(d$patient_id, d$group, sep = "_"))) >= 2,
+           "At least 2 records required. Try single-curve or Bayesian fit instead.")
     )
-    comment = paste(unlist(str_extract_all(data, "^#.*\\n")), collapse = "\n")
-    comment = str_replace_all(comment,"\\t", " ")
-    comment(d) = comment
-    d = cleanup_data(d)
     d
   })
 
@@ -63,15 +53,17 @@ shinyServer(function(input, output, session) {
   fit = reactive({
     method = input$method_a
     data = get_data()
-    if (is.null(data)) return(NULL)
+    if (is.null(data))
+      return(NULL)
     switch(method,
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
-      stan = stan_fit(data)
+      stan = stan_fit(data,
+                student_df = as.integer(input$student_df),
+                iter = as.integer(input$iter))
     )
   })
-
 
 # --------- outputs -------------------------------------
   output$fit_plot = renderPlot({
@@ -128,12 +120,16 @@ shinyServer(function(input, output, session) {
 
 # ------------- Help-related functions --------------------
 
-  observe({
-    popit(session, input,  "method_a", "Fitting method")
+  observeEvent(input$patient_test_data, {
+    updateSelectInput(session, "sample_data", selected = NA)
   })
 
   observe({
     popit(session, input,  "sample_data", "Data formats")
+  })
+
+  observe({
+    popit(session, input,  "method_a", "Fitting method")
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html

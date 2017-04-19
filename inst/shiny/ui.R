@@ -2,11 +2,13 @@
 suppressPackageStartupMessages(library(shinyjs))
 library(shinyAce)
 library(shinyBS)
+library(shinythemes)
+
 
 shinyUI(
   fluidPage(
+    theme = shinytheme("simplex"),
     useShinyjs(),
-    theme = "bootstrap.css",
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
     singleton(tags$head(tags$script(src = "message-handler.js"))),
     titlePanel("Gastric emptying from 13C Breath Test Data"),
@@ -25,6 +27,13 @@ shinyUI(
             ),
           selected = "data_only"
         ),
+        conditionalPanel("input.method_a == 'stan'",
+          selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000), selected = 1000),
+          selectInput("student_df", "Expected outliers",
+                        choices = c("None - Gaussian" = 10,
+                                    "Few - Student-t 5 df" = 5,
+                                    "Strong - Student-t 3 df" = 3))
+        ),
         selectInput("sample_data", "Sample data",
           list("",
                "One record without header" = "no_header",
@@ -40,7 +49,7 @@ shinyUI(
                 selected = c("norm_001", "norm_002", "norm_003")),
         textOutput("use_link"),
         actionLink("userid", ""),
-        actionButton("create_workspace", "Keep data"),
+        bsButton("create_workspace", "Keep data"),
         checkboxInput("show_pop", "Show popover help", value = TRUE),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
