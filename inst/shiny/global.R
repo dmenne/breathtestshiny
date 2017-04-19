@@ -27,7 +27,7 @@ safe_dir_create <- function(path)
   dt
 }
 
-popit = function(session, input,  id, title, placement = "right" ){
+pop_select = function(session, input,  id, title, placement = "right" ){
   content = as.character(pop_content[input[[id]]])
   if (input$show_pop   && !is.na(content)) {
     addPopover(session, id, title, content, placement)
@@ -36,6 +36,15 @@ popit = function(session, input,  id, title, placement = "right" ){
     removePopover(session, id)
   }
 }
+
+pop_control = function(session, input,  id, title, placement = "right" ) {
+  if (input$show_pop) {
+    addPopover(session, id, "Data entry from clipboard", pop_content[[id]])
+  } else {
+    removePopover(session, id)
+  }
+}
+
 
 
 patient_test_data = function(td){
@@ -112,5 +121,7 @@ pop_content = c(
   no_header = "Single records with two columns for minute and pdr without header",
   with_header = "Single records with two columns and headers <code>minute</code> and <code>pdr</code>",
   two_patients = "With multiple records, the first column must have the header <code>patient_id</code>, followed by <code>minute</code> and <code>pdr</code>",
-  cross_over = "When there are multiple records for one patient such as in cross-over studies, the second column must be labeled <code>group</code>. Group labels must not contain spaces.")
+  cross_over = "When there are multiple records for one patient such as in cross-over studies, the second column must be labeled <code>group</code>. Group labels must not contain spaces.",
+  edit_data = "Paste Excel data from clipboard here. Columns should be tab-separated. See Sample input/Sample data for supported formats:  2 columns with and without header, 3 columns for one record per patient, 4 columns for patients and treatment groups."
+)
 

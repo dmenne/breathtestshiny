@@ -125,11 +125,15 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    popit(session, input,  "sample_data", "Data formats")
+    pop_control(session, input, "edit_data", "Data entry from clipboard")
   })
 
   observe({
-    popit(session, input,  "method_a", "Fitting method")
+    pop_select(session, input,  "sample_data", "Data formats")
+  })
+
+  observe({
+    pop_select(session, input,  "method_a", "Fitting method")
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html

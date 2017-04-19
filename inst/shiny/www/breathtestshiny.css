@@ -45,7 +45,8 @@ label{
   background-color:#FBFFFB;
 }
 
-.tooltip{
+.tooltip {
+  text-align:left;
   width: 800px;
   background-color:#FBFFFB;
 }
