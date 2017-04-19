@@ -28,8 +28,8 @@ shinyUI(
           selected = "data_only"
         ),
         conditionalPanel("input.method_a == 'stan'",
-          selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000), selected = 1000),
-          selectInput("student_df", "Expected outliers",
+            selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000), selected = 200),
+            selectInput("student_df", "Expected outliers",
                         choices = c("None - Gaussian" = 10,
                                     "Few - Student-t 5 df" = 5,
                                     "Strong - Student-t 3 df" = 3))
