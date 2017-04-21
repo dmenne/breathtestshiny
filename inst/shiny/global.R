@@ -5,8 +5,8 @@ library(breathteststan)
 library(shinyBS)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
-options(shiny.reactlog=TRUE)
-
+options(shiny.reactlog = TRUE)
+ncol_facetwrap = 5 # for facet_wrap, number of columns
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -45,8 +45,6 @@ pop_control = function(session, input,  id, title, placement = "right" ) {
   }
 }
 
-
-
 patient_test_data = function(td){
   data("usz_13c", envir = environment())
   data = usz_13c  %>%
@@ -79,9 +77,21 @@ sample_data = function(td) {
   } else if  (td == "cross_over") {
     data = usz_13c  %>%
       filter(patient_id == "norm_007") %>%
-           select(patient_id, group, minute, pdr)
+      select(patient_id, group, minute, pdr)
+  } else if (td == "large_set") {
+    set.seed(4711)
+    use_id = sort(sample(unique(usz_13c$patient_id), 12))
+    data = usz_13c %>%
+      filter(patient_id %in% use_id) %>%
+      select(patient_id, group, minute, pdr)
+  } else if (td == "very_large_set") {
+    set.seed(41)
+    use_id = sort(sample(unique(usz_13c$patient_id), 60))
+    data = usz_13c %>%
+      filter(patient_id %in% use_id) %>%
+      select(patient_id, group, minute, pdr)
   }
-  data$pdr = round(data$pdr,1)
+data$pdr = round(data$pdr,1)
   tc = textConnection("dt", "w")
   write.table(data, file = tc, col.names = td != "no_header",
             row.names = FALSE, sep = "\t", quote = FALSE)

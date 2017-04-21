@@ -40,7 +40,9 @@ shinyUI(
                  "One record without header" = "no_header",
                  "One record with header" = "with_header",
                  "Records from 2 patients" = "two_patients",
-                 "Crossover from 2 patients" = "cross_over"),
+                 "Crossover from 2 patients" = "cross_over",
+                 "A larger data set" = "large_set",
+                 "A very large set" = "very_large_set"),
                 selected = ""),
           selectInput("patient_test_data", "Patient test data",
             list(`Easy normals, solid and liquid` = c("norm_001", "norm_002", "norm_003"),
@@ -56,6 +58,7 @@ shinyUI(
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
         bsButton("create_workspace", "Keep data"),
+        downloadButton("download_coef", "Download"),
         width = 3
       ),
       mainPanel(
@@ -69,10 +72,9 @@ shinyUI(
               id = "plot-container",
               tags$img(src = "spinner.gif",
                        id = "loading-spinner"),
-              plotOutput("fit_plot")
+              plotOutput("fit_plot", height = "auto")
             ),
             hr(),
-            downloadButton("download_coef", "Download"),
             DT::dataTableOutput("table")
           ),
           # tabPanel

@@ -65,12 +65,17 @@ shinyServer(function(input, output, session) {
     )
   })
 
-# --------- outputs -------------------------------------
+  # --------- outputs -------------------------------------
+  plot_height = function(){
+    f = fit()
+    length(unique(f$data$patient_id)) %/% ncol_facetwrap * 130L + 200L
+  }
+
   output$fit_plot = renderPlot({
     f = fit()
     if (is.null(f)) return(NULL)
-    plot(f)
-  })
+    plot(f) + ggplot2::facet_wrap(~patient_id, ncol = ncol_facetwrap)
+  }, height = plot_height)
 
 # --------------- Workspace-related functions -------------------------------
   data_dir = function(){
