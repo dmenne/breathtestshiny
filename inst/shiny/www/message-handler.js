@@ -17,3 +17,20 @@ Shiny.addCustomMessageHandler("replace_url",
         return b;
     })(window.location.search.substr(1).split('&'));
 })(jQuery);
+
+
+shinyBS.addTooltip = function(id, type, opts) {
+  var $id = shinyBS.getTooltipTarget(id);
+  var dopts = {html: true};
+  opts = $.extend(opts, dopts);
+
+  if(type == "tooltip") {
+    $id.tooltip("destroy");
+    setTimeout(function() {$id.tooltip(opts);},100);
+  } else if(type == "popover") {
+    $id.popover("destroy");
+    setTimeout(function() {$id.popover(opts);},100);
+  }
+}
+
+
