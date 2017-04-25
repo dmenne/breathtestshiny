@@ -137,7 +137,7 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    pop_select(session, input,  "sample_data", "Data formats")
+    pop_select(session, input,  "sample_data", "Sample data")
   })
 
   observe({
