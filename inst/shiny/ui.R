@@ -57,8 +57,10 @@ shinyUI(
         checkboxInput("show_pop", "Show popover help", value = TRUE),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
-        bsButton("create_workspace", "Keep data"),
-        downloadButton("download_coef", "Download"),
+#        bsButton("create_workspace", "Keep data"),
+#        downloadButton("download_coef", "Download"),
+        hr(),
+        actionLink("about", "About"),
         width = 3
       ),
       mainPanel(
@@ -75,7 +77,8 @@ shinyUI(
               plotOutput("fit_plot", height = "auto")
             ),
             hr(),
-            DT::dataTableOutput("table")
+            bsModal("about_tab", "About", "about", size = "large",
+                    htmlOutput("about"))
           ),
           # tabPanel
           tabPanel("Check",

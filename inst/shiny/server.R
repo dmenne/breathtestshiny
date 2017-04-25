@@ -144,6 +144,10 @@ shinyServer(function(input, output, session) {
     pop_select(session, input,  "method_a", "Fitting method")
   })
 
+  output$about = renderText({
+    about_text
+  })
+
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)
 

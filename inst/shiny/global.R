@@ -116,9 +116,6 @@ format_data = function(data){
   d
 }
 
-
-
-
 ace_options =
   "ace.edit('edit_data').setOptions({tabSize:16,showInvisibles:true,useSoftTabs:false});"
 
@@ -132,10 +129,13 @@ pop_content = c(
   with_header = "Single records with two columns and headers <code>minute</code> and <code>pdr</code>. The results are the same as those from the two-column data set without headers.",
   two_patients = "With multiple records, the first column must have the header <code>patient_id</code>, followed by <code>minute</code> and <code>pdr</code>.",
   cross_over = "When there are multiple records for one patient such as in cross-over studies, four columns are required. The second column must be labeled <code>group</code>. Group labels must not contain spaces.",
-  large_set = "Cross-over data from two normals, sampled with bags; and 10 data sets from patients. Data from 8 patients set were densely sampled with the BreathId device, data from patients 044 and 094 were obtained with bags. Dense sampling is only visible when no fit or the individual curve fit (nls) is displayed. With the population-based nlme or Stan methods, subsampling to 5 (early) and 15 minute intervals is done to avoid convergence problems.",
+  large_set = "Cross-over data from two normals, sampled with bags; and 10 data sets from patients. Data from 8 patients set were densely sampled with the BreathId device, those from patients 044 and 094 were obtained with bags. Dense sampling is only visible when no fit or the individual curve fit (nls) is displayed. With the population-based nlme or Stan methods, subsampling to 5 (early) and 15 minute intervals is done to avoid convergence problems.",
   very_large_set = "Data from 7 normals, partially cross-over with different meals, and 73 patients. The Bayesian/Stan method needs about 3 minutes to fit these data, but gives stable estimates for all records.",
   edit_data = "Paste Excel data from clipboard here. Columns should be tab-separated. See Sample input/Sample data for supported formats:  2 columns with and without header, 3 columns for one record per patient, 4 columns for patients and treatment groups.",
   student_t_df = "When there are single outliers in the data set, the fits are more robust when the residual data are modeled by the Student-t distribution than when normal (Gaussian) residuals are assumed. Computation time is somewhat longer with non-Gaussian options.",
   iter = "Number of iterations for the Bayesian procedure. The default value of 200 is nice for a first look, but too small for a final estimate; use at least 500 iterations."
 )
+
+about_text = 'This application was written by <a href="mailto:dieter.menne@menne-biomed.de">Dieter Menne</a>, at <a href="https://www.menne-biomed.de">Menne Biomed Consulting, Tübingen</a>.<br><ul><li>All code is GPL-3 Open Source and available on github.</li><li>The core routines to fit data are in package <a href="https://github.com/dmenne/breathtestcore">breathtestcore</a>. Code examples are provided to run analysis under R.</li><li>For faster compilation, the Bayesian <a href="http://mc-stan.org/">Stan-based</a> fit functions are moved to <a href="https://github.com/dmenne/breathteststan">breathteststan</a>.</li><li>Code for the <a href="https://shiny.rstudio.com/">Shiny web app</a> will be made available later for installation on your own server or desktop. </li><li>For a runnable demo of the web app, see <a href="https://apps.menne-biomed.de/breathtestshiny/">here</a>.</li><li><a href="http://cran.r-project.org/">R</a> packages shiny, rstan and nlme are used; for a full list, see <a href="https://github.com/dmenne/breathtestcore/blob/master/DESCRIPTION">here</a> and <a href="https://github.com/dmenne/breathteststan/blob/master/DESCRIPTION">here</a></li></ul>'
+
 
