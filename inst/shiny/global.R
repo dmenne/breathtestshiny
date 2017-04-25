@@ -5,8 +5,8 @@ library(breathteststan)
 library(shinyBS)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
-options(shiny.reactlog = TRUE)
-ncol_facetwrap = 5 # for facet_wrap, number of columns
+#options(shiny.reactlog = TRUE)
+ncol_facetwrap = 7 # for facet_wrap, number of columns
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)

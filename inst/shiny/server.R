@@ -2,6 +2,7 @@ library(shinyjs)
 library(shinyAce)
 library(breathtestcore)
 library(dplyr)
+library(ggplot2)
 
 shinyServer(function(input, output, session) {
 
@@ -55,26 +56,28 @@ shinyServer(function(input, output, session) {
     data = get_data()
     if (is.null(data))
       return(NULL)
+    #save(data, file= "ndata.rda")
     switch(method,
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
       stan = stan_fit(data,
-                student_df = as.integer(input$student_df),
+                      chains = 1,
+                student_t_df = as.integer(input$student_t_df),
                 iter = as.integer(input$iter))
     )
   })
 
   # --------- outputs -------------------------------------
   plot_height = function(){
-    f = fit()
-    length(unique(f$data$patient_id)) %/% ncol_facetwrap * 130L + 200L
+    n_patient = length(unique(get_data()$patient_id))
+    n_patient %/% ncol_facetwrap * 130L + 200L
   }
 
   output$fit_plot = renderPlot({
     f = fit()
     if (is.null(f)) return(NULL)
-    plot(f) + ggplot2::facet_wrap(~patient_id, ncol = ncol_facetwrap)
+    plot(f) + facet_wrap(~patient_id, ncol = ncol_facetwrap) + theme(aspect.ratio = 1)
   }, height = plot_height)
 
 # --------------- Workspace-related functions -------------------------------

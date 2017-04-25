@@ -29,7 +29,7 @@ shinyUI(
         ),
         conditionalPanel("input.method_a == 'stan'",
             selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000), selected = 200),
-            selectInput("student_df", "Expected outliers",
+            selectInput("student_t_df", "Expected outliers",
                         choices = c("None - Gaussian" = 10,
                                     "Few - Student-t 5 df" = 5,
                                     "Strong - Student-t 3 df" = 3))
@@ -51,7 +51,7 @@ shinyUI(
                   multiple = TRUE,
                   selected = c("norm_001", "norm_002", "norm_003"))
         ), # conditionalPanel input.showsample
-        checkboxInput("showsamples", "Sample input", TRUE),
+        checkboxInput("showsamples", "Show sample data sets", TRUE),
         textOutput("use_link"),
         actionLink("userid", ""),
         checkboxInput("show_pop", "Show popover help", value = TRUE),
