@@ -77,7 +77,10 @@ shinyServer(function(input, output, session) {
   output$fit_plot = renderPlot({
     f = fit()
     if (is.null(f)) return(NULL)
-    plot(f) + facet_wrap(~patient_id, ncol = ncol_facetwrap) + theme(aspect.ratio = 1)
+    #capture.output(str(f), file = stderr())
+    plot(f) +
+      facet_wrap(~patient_id, ncol = ncol_facetwrap) +
+      theme(aspect.ratio = 1)
   }, height = plot_height)
 
 # --------------- Workspace-related functions -------------------------------

@@ -49,7 +49,7 @@ shinyUI(
                  `Easy patients` = c("pat_001", "pat_002", "pat_003"),
                  `Difficult patients` = c("pat_051", "pat_016", "pat_033")),
                   multiple = TRUE,
-                  selected = c("norm_001", "norm_002", "norm_003"))
+                  selected = c("norm_001", "norm_002", "norm_003","pat_001", "pat_003","pat_016"))
         ), # conditionalPanel input.showsample
         checkboxInput("showsamples", "Show sample data sets", TRUE),
         textOutput("use_link"),
