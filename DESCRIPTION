@@ -11,5 +11,8 @@ Imports: breathtestcore, breathteststan
 Suggests: testthat, shinytest, packagedocs
 URL: https://github.com/dmenne/breathtestshiny
 License: GPL-3
+Remotes:
+  dmenne/breathtestcore,
+  dmenne/breathteststan
 RoxygenNote: 6.0.1
 VignetteBuilder: packagedocs
