@@ -131,6 +131,7 @@ shinyServer(function(input, output, session) {
 
 # ------------- Help-related functions --------------------
 
+  # Clear sample data selection when patient data are changed
   observeEvent(input$patient_test_data, {
     updateSelectInput(session, "sample_data", selected = NA)
   })
@@ -140,11 +141,23 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    pop_select(session, input,  "sample_data", "Sample data")
+    input$method_a
+    pop_control(session, input,  "student_t_df", "Outlier handling")
   })
 
   observe({
+    input$method_a
+    pop_control(session, input,  "iter", "Number of iterations Stan sampling")
+  })
+
+# Select boxes with per-item description
+  observe({
     pop_select(session, input,  "method_a", "Fitting method")
+  })
+
+  observe({
+    input$method_a
+    pop_select(session, input,  "sample_data", "Sample data")
   })
 
   output$about = renderText({
