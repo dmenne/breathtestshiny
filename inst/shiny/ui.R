@@ -40,7 +40,7 @@ shinyUI(
                  "One record without header" = "no_header",
                  "One record with header" = "with_header",
                  "Records from 2 patients" = "two_patients",
-                 "Crossover from 2 patients" = "cross_over",
+                 "Crossover from one patient" = "cross_over",
                  "Larger data set" = "large_set",
                  "Very large set" = "very_large_set"),
                 selected = ""),
