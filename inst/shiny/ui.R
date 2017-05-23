@@ -3,7 +3,7 @@ suppressPackageStartupMessages(library(shinyjs))
 library(shinyAce)
 library(shinyBS)
 library(shinythemes)
-
+library(shinycssloaders)
 
 shinyUI(
   fluidPage(
@@ -70,12 +70,7 @@ shinyUI(
             aceEditor("edit_data", "", mode = "plain_text"),
             actionButton("clear_button", "Clear", icon = icon("eraser")),
             tags$script(type = "text/javascript",HTML(ace_options)),
-            div(
-              id = "plot-container",
-              tags$img(src = "spinner.gif",
-                       id = "loading-spinner"),
-              plotOutput("fit_plot", height = "auto")
-            ),
+            withSpinner(plotOutput("fit_plot", height = "auto")),
             hr(),
             bsModal("about_tab", "About", "about", size = "large",
                     htmlOutput("about"))

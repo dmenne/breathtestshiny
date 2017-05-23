@@ -30,6 +30,6 @@ shinyBS.addTooltip = function(id, type, opts) {
     $id.popover("destroy");
     setTimeout(function() {$id.popover(opts);},200);
   }
-}
+};
 
 
