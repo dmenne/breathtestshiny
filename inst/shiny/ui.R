@@ -72,8 +72,9 @@ shinyUI(
             tags$script(type = "text/javascript",HTML(ace_options)),
             withSpinner(plotOutput("fit_plot", height = "auto")),
             hr(),
-            bsModal("about_tab", "About", "about", size = "large",
-                    htmlOutput("about"))
+            bsModal("about_tab", "About breathtestshiny", "about",
+                    size = "large", HTML(about_text)),
+            DT::dataTableOutput("table")
           ),
           # tabPanel
           tabPanel("Check",

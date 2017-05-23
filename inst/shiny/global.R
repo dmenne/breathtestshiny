@@ -146,6 +146,5 @@ version_info =
          "), breathteststan (", packageVersion("breathteststan"),
          "), breathtestshiny (", packageVersion("breathtestshiny"), ")")
 
-about_text = paste('This application was written by <a href="mailto:dieter.menne@menne-biomed.de">Dieter Menne</a>, at <a href="https://www.menne-biomed.de">Menne Biomed Consulting, Tübingen</a>.<br><ul><li>All code is GPL-3 Open Source and available on github.</li><li>The core routines to fit data are in package <a href="https://github.com/dmenne/breathtestcore">breathtestcore</a>. Code examples are provided to run analysis under R.</li><li>For faster compilation, the Bayesian <a href="http://mc-stan.org/">Stan-based</a> fit functions are moved to <a href="https://github.com/dmenne/breathteststan">breathteststan</a>.</li><li>Code for the <a href="https://shiny.rstudio.com/">Shiny web app</a> will be made available later for installation on your own server or desktop. </li><li>For a runnable demo of the web app, see <a href="https://apps.menne-biomed.de/breathtestshiny/">here</a>.</li><li><a href="http://cran.r-project.org/">R</a> packages shiny, rstan and nlme are used; for a full list, see <a href="https://github.com/dmenne/breathtestcore/blob/master/DESCRIPTION">here</a> and <a href="https://github.com/dmenne/breathteststan/blob/master/DESCRIPTION">here</a></li></ul><hr>', version_info)
-
+about_text = paste(includeMarkdown("include/about.md"), version_info)
 
