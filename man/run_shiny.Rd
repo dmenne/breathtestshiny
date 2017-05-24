@@ -6,9 +6,6 @@
 \usage{
 run_shiny()
 }
-\value{
-Not used, starts shiny app
-}
 \description{
 Run breathtestshiny app
 }
