@@ -113,6 +113,7 @@ format_data = function(data){
   close(tc)
   comment = paste(unlist(str_extract_all(data, "^#.*\\n")), collapse = "\n")
   comment = str_replace_all(comment,"\\t", " ")
+  comment = str_replace_all(comment,"^# *", "")
   comment(d) = comment
   d = cleanup_data(d)
   d
@@ -135,7 +136,9 @@ pop_content = c(
   very_large_set = "Data from 7 normals, partially cross-over with different meals, and 73 patients. The Bayesian/Stan method needs about 3 minutes to fit these data, but gives stable estimates for all records.",
   edit_data = "Paste Excel data from your clipboard here after clearing current entries. Select items from the <b>Sample data</b> drop-down box to see supported formats:<ul><li>2 columns with and without header</li><li>3 columns for one record per patient</li><li>4 columns for patients and treatment groups</li><us><br><img src='excelsample.png'/><br><span style='font-size:12px'>Example of Excel data that can be pasted into the editor</span>",
   student_t_df = "With outliers in the data set, the fits are more robust when the residual data are modeled by the Student-t distribution than with normal (Gaussian) residuals. Computation time is somewhat longer with non-Gaussian options.",
-  iter = "Number of iterations for Bayesian Stan sampling. More iteration give higher precision of the estimate. The default value of 200 is nice for a first look; use at least 500 iterations for a publishable result."
+  iter = "Number of iterations for Bayesian Stan sampling. More iteration give higher precision of the estimate. The default value of 200 is nice for a first look; use at least 500 iterations for a publishable result.",
+  download_filtered = "Download the visible coefficients as CSV file which is readable from Excel. <br>If you only want some of the coefficients, use the filter boxes above the columns.
+  <ul><li>To only return coefficient <code>m</code>, enter 'm' into the <code>parameter</code> search box. </li><li>Partial matching is allowed, e.g. <code>os</code> for <code>maes_ghoos</code> and <code>maes_goos_scint</code>.</li><li>Regular expressions are supported, most importantly a <code>$</code> for 'end-of-string'. For example, to suppress <code>maes_goos_scint</code>, use <code>maes_ghoos$</code>  or short <code>os$</code>.</li><li>To only return half-times of <code>maes_ghoos</code>, enter <code>t50</code> in the parameter search box, and <code>os$</code> in the method box.</li></ul>"
 )
 
 ## end popup

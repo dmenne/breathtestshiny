@@ -91,3 +91,9 @@ hr {
 .selectize-dropdown-content {
   max-height: 400px;
 }
+
+.dataTable caption {
+  font-size: 20px;
+}
+
+

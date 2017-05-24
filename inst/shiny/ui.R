@@ -58,7 +58,6 @@ shinyUI(
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
 #        bsButton("create_workspace", "Keep data"),
-#        downloadButton("download_coef", "Download"),
         hr(),
         actionLink("about", "About"),
         width = 3
@@ -74,7 +73,12 @@ shinyUI(
             hr(),
             bsModal("about_tab", "About breathtestshiny", "about",
                     size = "large", HTML(about_text)),
-            DT::dataTableOutput("table")
+            downloadButton(outputId = "download_filtered",
+                           label = "Download"),
+            DT::dataTableOutput("coef_table"),
+            # Hide global search box
+            tags$head(tags$style(HTML("#DataTables_Table_0_filter{display: none;}")))
+
           ),
           # tabPanel
           tabPanel("Check",

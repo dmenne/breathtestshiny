@@ -68,7 +68,26 @@ shinyServer(function(input, output, session) {
     )
   })
 
+  # Returns coefficients of fit and comment
+  coef_fit = function(){
+    f  = fit()
+    if (is.null(f)) return(NULL)
+    cf = coef(f)
+    if (is.null(cf)) return(NULL)
+    cf$value = signif(cf$value,4)
+    comment(cf) = comment(f$data)
+    cf
+  }
+
   # --------- outputs -------------------------------------
+  output$coef_table = DT::renderDataTable({
+    cf = coef_fit()
+    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
+                  filter = "top",
+                  options = list(paging = FALSE, searching = TRUE,
+                                 search = list(regex = TRUE)))
+  })
+
   plot_height = function(){
     n_patient = length(unique(get_data()$patient_id))
     n_patient %/% ncol_facetwrap * 130L + 200L
@@ -82,6 +101,20 @@ shinyServer(function(input, output, session) {
       facet_wrap(~patient_id, ncol = ncol_facetwrap) +
       theme(aspect.ratio = 1)
   }, height = plot_height)
+
+
+  output$filtered_row <-
+    renderPrint({
+      input[["table_rows_all"]]
+    })
+
+  output$download_filtered =
+    downloadHandler(
+      filename = "Data.csv",
+      content = function(file){
+        write.csv(coef_fit()[input[["table_rows_all"]], ], file, row.names = FALSE)
+      }
+    )
 
 # --------------- Workspace-related functions -------------------------------
   data_dir = function(){
@@ -137,7 +170,15 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
+    toggle("download_filtered", condition = !is.null(coef_fit()) )
+  })
+
+  observe({
     pop_control(session, input, "edit_data", "Data entry from clipboard")
+  })
+
+  observe({
+    pop_control(session, input, "download_filtered", "Download coefficients as CSV-file")
   })
 
   observe({
