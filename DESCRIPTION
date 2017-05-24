@@ -7,8 +7,8 @@ Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
 Description: This package uses packages breathtestcore and breathteststan 
   to fit gastric emptying 13C time series.
 Depends: R (>= 3.2.0)
-Imports: breathtestcore, breathteststan
-Suggests: testthat, shinytest, knitr
+Imports: breathtestcore, breathteststan,shiny
+Suggests: testthat, knitr
 URL: https://github.com/dmenne/breathtestshiny
 License: GPL-3
 Remotes:
