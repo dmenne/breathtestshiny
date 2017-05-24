@@ -1,6 +1,5 @@
 #' Run breathtestshiny app
 #'
-#' @return  Not used, starts shiny app
 #' @export
 #' @import shiny
 run_shiny = function() {
