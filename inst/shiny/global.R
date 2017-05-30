@@ -6,6 +6,7 @@ library(shinyBS)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
 options(shiny.reactlog = TRUE)
+options(digits = 4) # used in signif
 ncol_facetwrap = 7 # for facet_wrap, number of columns
 
 cleanup_uid = function(uid){

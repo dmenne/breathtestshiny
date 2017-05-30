@@ -81,9 +81,12 @@ shinyUI(
 
           ),
           # tabPanel
-          tabPanel("Check",
-                   plotOutput("residual_plot"),
-                   plotOutput("trace_v")) # check tabPanel
+          tabPanel("Summary",
+                   DT::dataTableOutput("coef_by_group_table")
+          ), # End Summary tabPanel
+          tabPanel("Group differences",
+                   DT::dataTableOutput("coef_by_group_diff_table")
+          ) # End Group differences tabPanel
         ) # tabsetPanel
       ) # mainPanel
     ) # sidebarLayout

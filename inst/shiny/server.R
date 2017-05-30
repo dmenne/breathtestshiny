@@ -61,8 +61,7 @@ shinyServer(function(input, output, session) {
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
-      stan = stan_fit(data,
-                      chains = 1,
+      stan = stan_fit(data, chains = 1,
                 student_t_df = as.integer(input$student_t_df),
                 iter = as.integer(input$iter))
     )
@@ -74,19 +73,50 @@ shinyServer(function(input, output, session) {
     if (is.null(f)) return(NULL)
     cf = coef(f)
     if (is.null(cf)) return(NULL)
-    cf$value = signif(cf$value,4)
+    cf$value = signif(cf$value, as.integer(options("digits")))
     comment(cf) = comment(f$data)
     cf
   }
 
   # --------- outputs -------------------------------------
   output$coef_table = DT::renderDataTable({
-    cf = coef_fit()
+    cf =  coef_fit()
     DT::datatable(cf, rownames = FALSE, caption = comment(cf),
                   filter = "top",
                   options = list(paging = FALSE, searching = TRUE,
                                  search = list(regex = TRUE)))
   })
+
+  output$coef_by_group_table = DT::renderDataTable({
+    f = fit()
+    if (inherits(f, "breathtestnullfit"))
+      return(NULL)
+    cf =  coef_by_group(f)
+    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
+                  filter = "top",
+                  options = list(paging = FALSE, searching = TRUE,
+                                 search = list(regex = TRUE),
+                                 searchCols = list(
+                                   list(search = "t50"),
+                                   list(search = "oos$",
+                                        regex = TRUE,
+                                        smart = FALSE)
+   )))})
+
+  output$coef_by_group_diff_table = DT::renderDataTable({
+    f = fit()
+    if (inherits(f, "breathtestnullfit"))
+      return(NULL)
+    cf =   coef_diff_by_group(fit())
+    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
+                  filter = "top",
+                  options = list(paging = FALSE, searching = TRUE,
+                                 search = list(regex = TRUE),
+                                 searchCols = list(
+                                   list(search = "t50"),
+                                   list(search = "maes_ghoos$")
+  )))})
+
 
   plot_height = function(){
     n_patient = length(unique(get_data()$patient_id))
