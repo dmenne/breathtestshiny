@@ -80,42 +80,51 @@ shinyServer(function(input, output, session) {
 
   # --------- outputs -------------------------------------
   output$coef_table = DT::renderDataTable({
-    cf =  coef_fit()
+    cf =  coef_fit() %>%
+      mutate(
+        patient_id = as.factor(patient_id),
+        method = as.factor(method),
+        parameter = as.factor(parameter),
+        group = as.factor(group)
+      )
     DT::datatable(cf, rownames = FALSE, caption = comment(cf),
                   filter = "top",
-                  options = list(paging = FALSE, searching = TRUE,
-                                 search = list(regex = TRUE)))
+                  options = search_options)
+
   })
 
   output$coef_by_group_table = DT::renderDataTable({
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  coef_by_group(f)
+    cf =  coef_by_group(f) %>%
+      mutate(
+        method = as.factor(method),
+        parameter = as.factor(parameter),
+        group = as.factor(group)
+      )
+    # Converting to factor is required for data table smart filtering
     DT::datatable(cf, rownames = FALSE, caption = comment(cf),
                   filter = "top",
-                  options = list(paging = FALSE, searching = TRUE,
-                                 search = list(regex = TRUE),
-                                 searchCols = list(
-                                   list(search = "t50"),
-                                   list(search = "oos$",
-                                        regex = TRUE,
-                                        smart = FALSE)
-   )))})
+                  options = search_options)
+
+   })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =   coef_diff_by_group(fit())
+    cf =  coef_diff_by_group(fit()) %>%
+      mutate(
+        method = as.factor(method),
+        parameter = as.factor(parameter),
+        groups = as.factor(groups)
+      )
+
     DT::datatable(cf, rownames = FALSE, caption = comment(cf),
                   filter = "top",
-                  options = list(paging = FALSE, searching = TRUE,
-                                 search = list(regex = TRUE),
-                                 searchCols = list(
-                                   list(search = "t50"),
-                                   list(search = "maes_ghoos$")
-  )))})
+                  options = search_options)
+  })
 
 
   plot_height = function(){
@@ -137,14 +146,6 @@ shinyServer(function(input, output, session) {
     renderPrint({
       input[["table_rows_all"]]
     })
-
-  output$download_filtered =
-    downloadHandler(
-      filename = "Data.csv",
-      content = function(file){
-        write.csv(coef_fit()[input[["table_rows_all"]], ], file, row.names = FALSE)
-      }
-    )
 
 # --------------- Workspace-related functions -------------------------------
   data_dir = function(){

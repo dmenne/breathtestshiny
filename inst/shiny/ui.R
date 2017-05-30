@@ -25,10 +25,11 @@ shinyUI(
               "Mixed-model fit (nlme) " = "nlme",
               "Bayesian fit (Stan)" = "stan"
             ),
-          selected = "data_only"
+          selected = "nls"
         ),
         conditionalPanel("input.method_a == 'stan'",
-            selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000), selected = 200),
+            selectInput("iter", "Iterations", choices = c(200,500, 1000, 2000),
+                        selected = 200),
             selectInput("student_t_df", "Expected outliers",
                         choices = c("None - Gaussian" = 10,
                                     "Few - Student-t 5 df" = 5,
@@ -72,20 +73,17 @@ shinyUI(
             withSpinner(plotOutput("fit_plot", height = "auto")),
             hr(),
             bsModal("about_tab", "About breathtestshiny", "about",
-                    size = "large", HTML(about_text)),
-            downloadButton(outputId = "download_filtered",
-                           label = "Download"),
-            DT::dataTableOutput("coef_table"),
-            # Hide global search box
-            tags$head(tags$style(HTML("#DataTables_Table_0_filter{display: none;}")))
-
+                    size = "large", HTML(about_text))
           ),
-          # tabPanel
+          # Data tabPanels
+          tabPanel("Details",
+             DT::dataTableOutput("coef_table")
+          ),
           tabPanel("Summary",
-                   DT::dataTableOutput("coef_by_group_table")
+            withSpinner(DT::dataTableOutput("coef_by_group_table"))
           ), # End Summary tabPanel
           tabPanel("Group differences",
-                   DT::dataTableOutput("coef_by_group_diff_table")
+            withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
           ) # End Group differences tabPanel
         ) # tabsetPanel
       ) # mainPanel

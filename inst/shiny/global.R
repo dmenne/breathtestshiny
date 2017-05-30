@@ -152,3 +152,6 @@ version_info =
 
 about_text = paste(includeMarkdown("include/about.md"), version_info)
 
+search_options = list(paging = FALSE, searching = TRUE,
+     autoWidth = TRUE,
+     search = list(search = "t50"))
