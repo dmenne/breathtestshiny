@@ -116,11 +116,6 @@ shinyServer(function(input, output, session) {
   }, height = plot_height)
 
 
-  output$filtered_row <-
-    renderPrint({
-      input[["table_rows_all"]]
-    })
-
 # --------------- Workspace-related functions -------------------------------
   data_dir = function(){
     u = uid()
