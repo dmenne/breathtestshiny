@@ -80,50 +80,24 @@ shinyServer(function(input, output, session) {
 
   # --------- outputs -------------------------------------
   output$coef_table = DT::renderDataTable({
-    cf =  coef_fit() %>%
-      mutate(
-        patient_id = as.factor(patient_id),
-        method = as.factor(method),
-        parameter = as.factor(parameter),
-        group = as.factor(group)
-      )
-    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
-                  filter = "top",
-                  options = search_options)
-
+    cf =  coef_fit()
+    bt_datatable(cf)
   })
 
   output$coef_by_group_table = DT::renderDataTable({
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  coef_by_group(f) %>%
-      mutate(
-        method = as.factor(method),
-        parameter = as.factor(parameter),
-        group = as.factor(group)
-      )
-    # Converting to factor is required for data table smart filtering
-    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
-                  filter = "top",
-                  options = search_options)
-
-   })
+    cf =  coef_by_group(f)
+    bt_datatable(cf)
+  })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  coef_diff_by_group(fit()) %>%
-      mutate(
-        method = as.factor(method),
-        parameter = as.factor(parameter),
-        groups = as.factor(groups)
-      )
-
-    DT::datatable(cf, rownames = FALSE, caption = comment(cf),
-                  filter = "top",
-                  options = search_options)
+    cf =  coef_diff_by_group(fit())
+    bt_datatable(cf)
   })
 
 

@@ -120,6 +120,26 @@ format_data = function(data){
   d
 }
 
+bt_datatable = function (cf){
+  if (is.null(cf) || nrow(cf) ==0)
+    return (NULL)
+  search_options = list(paging = FALSE, searching = TRUE,
+                        autoWidth = TRUE,
+                        search = list(search = "t50"),
+                        dom = 'Bfrtip',
+                        buttons = c('copy', 'excel', 'pdf'))
+  # Converting to factor is required for data table smart filtering
+  cm = comment(cf)
+  cf = cf %>%
+    mutate_if(is.character, as.factor)
+  DT::datatable(cf, rownames = FALSE, caption = cm,
+                extensions  = 'Buttons',
+                filter = "top",
+                options = search_options)
+}
+
+# ------------------------------- Help text -----------------------------------------------
+
 ace_options =
   "ace.edit('edit_data').setOptions({tabSize:16,showInvisibles:true,useSoftTabs:false});"
 
@@ -152,6 +172,6 @@ version_info =
 
 about_text = paste(includeMarkdown("include/about.md"), version_info)
 
-search_options = list(paging = FALSE, searching = TRUE,
-     autoWidth = TRUE,
-     search = list(search = "t50"))
+clear_search_text = function(){
+  span(helpText("Clear search box to see all coefficients"), class = "help-block-right")
+}
