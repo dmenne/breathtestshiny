@@ -102,3 +102,6 @@ hr {
   font-size: 14px;
 }
 
+table.dataTable thead td {
+    padding: 10px 1px;
+}

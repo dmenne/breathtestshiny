@@ -120,6 +120,11 @@ format_data = function(data){
   d
 }
 
+clear_search_text = function(){
+  span(
+    helpText("Clear search box to see all coefficients"), class = "help-block-right")
+}
+
 bt_datatable = function (cf){
   if (is.null(cf) || nrow(cf) ==0)
     return (NULL)
@@ -172,6 +177,3 @@ version_info =
 
 about_text = paste(includeMarkdown("include/about.md"), version_info)
 
-clear_search_text = function(){
-  span(helpText("Clear search box to see all coefficients"), class = "help-block-right")
-}

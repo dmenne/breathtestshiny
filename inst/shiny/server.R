@@ -167,7 +167,19 @@ shinyServer(function(input, output, session) {
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 
-# ------------- Help-related functions --------------------
+  # ------------- Hide panel logic --------------------
+  observe({
+    has_fit = input$method_a != "data_only"
+    has_groups = ifelse(!has_fit, FALSE, length(unique(coef_fit()$group)) >1 )
+    toggle(condition = has_fit,
+      selector = list(
+        "#main_panel li a[data-value=details_panel]",
+        "#main_panel li a[data-value=summary_panel]"))
+    toggle(condition = has_groups,
+           selector = "#main_panel li a[data-value=group_differences_panel]")
+  })
+
+  # ------------- Help-related functions --------------------
 
   # Clear sample data selection when patient data are changed
   observeEvent(input$patient_test_data, {

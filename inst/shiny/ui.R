@@ -64,31 +64,28 @@ shinyUI(
         width = 3
       ),
       mainPanel(
-        tabsetPanel(
-          tabPanel(
-            "Data",
+        tabsetPanel(id = "main_panel",
+          tabPanel(title = "Data",
             aceEditor("edit_data", "", mode = "plain_text"),
             actionButton("clear_button", "Clear", icon = icon("eraser")),
             tags$script(type = "text/javascript",HTML(ace_options)),
             withSpinner(plotOutput("fit_plot", height = "auto")),
             hr(),
             bsModal("about_tab", "About breathtestshiny", "about",
-                    size = "large", HTML(about_text))
+                    size = "large", HTML(about_text)),
+            value = "data_panel"
           ),
           # Data tabPanels
-          tabPanel(
-            "Details",
+          tabPanel(title = "Details", value = "details_panel",
             clear_search_text(),
             withSpinner(DT::dataTableOutput("coef_table"))
           ),
-          tabPanel(
-            "Summary",
-            helpText(clear_text),
+          tabPanel(title = "Summary", value = "summary_panel",
+            clear_search_text(),
             withSpinner(DT::dataTableOutput("coef_by_group_table"))
           ), # End Summary tabPanel
-          tabPanel(
-            "Group differences",
-            helpText(clear_text),
+          tabPanel(title = "Group differences", value = "group_differences_panel",
+            clear_search_text(),
             withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
           ) # End Group differences tabPanel
         ) # tabsetPanel
