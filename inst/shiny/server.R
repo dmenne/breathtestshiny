@@ -6,6 +6,18 @@ library(ggplot2)
 
 shinyServer(function(input, output, session) {
 
+  btns = list("Details", "Summary", "Group differences")
+
+  info_observers = sapply(btns, function(btn_title){
+      btn = gsub(" ", "_", tolower(btn_title))
+      pnl = paste0(btn,"_button")
+      txt = includeMarkdown(paste0("include/", btn,".md"))
+      dlg = modalDialog(txt, title = btn_title,
+                        footer = modalButton("Close"),
+                        size = "m", easyClose = TRUE)
+      observeEvent(input[[pnl]], showModal(dlg))
+  })
+
   clear_editor = function(){
     updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
   }
@@ -216,6 +228,7 @@ shinyServer(function(input, output, session) {
   output$about = renderText({
     about_text
   })
+
 
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)

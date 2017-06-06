@@ -77,15 +77,15 @@ shinyUI(
           ),
           # Data tabPanels
           tabPanel(title = "Details", value = "details_panel",
-            clear_search_text(),
+            clear_search_text("details"),
             withSpinner(DT::dataTableOutput("coef_table"))
           ),
           tabPanel(title = "Summary", value = "summary_panel",
-            clear_search_text(),
+            clear_search_text("summary"),
             withSpinner(DT::dataTableOutput("coef_by_group_table"))
           ), # End Summary tabPanel
           tabPanel(title = "Group differences", value = "group_differences_panel",
-            clear_search_text(),
+            clear_search_text("group_differences"),
             withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
           ) # End Group differences tabPanel
         ) # tabsetPanel

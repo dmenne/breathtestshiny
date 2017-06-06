@@ -120,9 +120,11 @@ format_data = function(data){
   d
 }
 
-clear_search_text = function(){
+clear_search_text = function(id){
   span(
-    helpText("Clear search box to see all coefficients"), class = "help-block-right")
+    helpText(HTML("Clear search box below to see<br> all coefficients)"),
+             actionButton(paste0(id, "_button"), label = "Info", icon = icon("info"))),
+    class = "help-block-right")
 }
 
 bt_datatable = function (cf){
