@@ -175,7 +175,10 @@ pop_content = c(
 version_info =
   paste0("Packages breathtestcore (", packageVersion("breathtestcore"),
          "), breathteststan (", packageVersion("breathteststan"),
-         "), breathtestshiny (", packageVersion("breathtestshiny"), ")")
+         "), breathtestshiny (", packageVersion("breathtestshiny"),
+         "), rstan (", packageVersion("rstan"),
+         "), StanHeaders (", packageVersion("StanHeaders"),
+         ")")
 
 about_text = paste(includeMarkdown("include/about.md"), version_info)
 

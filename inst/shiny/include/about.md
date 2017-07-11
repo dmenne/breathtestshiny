@@ -8,4 +8,4 @@ This application was written by Dieter Menne at [Menne Biomed Consulting, Tübin
 - [R packages](http://cran.r-project.org/) shiny, rstan and nlme are used; for a full list, see [here](https://github.com/dmenne/breathtestcore/blob/master/DESCRIPTION) and [here](https://github.com/dmenne/breathteststan/blob/master/DESCRIPTION").
 - To avoid installation hassles, use the [Docker container](https://github.com/dmenne/gastro-docker) which bundles packages `dmenne/gastempt` and `dmenne/breathtestshiny`.
 
-Packages versions used: 
+Package versions used: 
