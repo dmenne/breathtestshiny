@@ -1,8 +1,8 @@
 library(shinyjs)
 library(shinyAce)
 library(breathtestcore)
-library(dplyr)
-library(ggplot2)
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(ggplot2))
 
 shinyServer(function(input, output, session) {
 
@@ -25,27 +25,27 @@ shinyServer(function(input, output, session) {
   # Copy patient test data to editor
   observe({
     # Retrieve data
-    td = input$patient_test_data
-    if (is.null(td)) {
+    data_source = input$data_source
+    data_subset = input$data_subset
+    manual_select_data = input$manual_select_data
+    #cat(data_source, "-", data_subset, "-", manual_select_data, "\n")
+
+    if (is.null(data_subset) | is.null(data_source)) {
       clear_editor()
       return(NULL)
     }
-    value = patient_test_data(td)
+    if (data_source == "sim_data"){
+      value = get_sim_data(data_subset)
+    } else {
+      value = get_patient_data(data_source, data_subset, manual_select_data)
+    }
     updateAceEditor(session, "edit_data", value = value)
-  })
-
-  # Copy sample test data to editor
-  observe({
-    td = input$sample_data
-    if (is.null(td) || td == "") return()
-    value = sample_data(td)
-    updateAceEditor(session, "edit_data", value = value )
   })
 
   # Clear editor when input button pressed
   observeEvent(input$clear_button, {
     clear_editor()
-    updateSelectInput(session, "patient_test_data", selected = NA)
+    updateSelectInput(session, "manual_select_data", selected = NA)
   })
 
   get_data = reactive({
@@ -69,6 +69,7 @@ shinyServer(function(input, output, session) {
     if (is.null(data))
       return(NULL)
     #save(data, file= "ndata.rda")
+    return(null_fit(data)) # *****
     switch(method,
       data_only = null_fit(data),
       nls = nls_fit(data),
@@ -174,6 +175,23 @@ shinyServer(function(input, output, session) {
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 
+  # ------------- Panel logic --------------------
+  observe({
+    data_source = input$data_source
+    if (!is.null(data_source))
+      updateSelectInput(session, "data_subset",
+                        choices = data_subsets[[data_source]] )
+  })
+
+  observe({
+    data_subset = input$data_subset
+    data_source = input$data_source
+    if (data_subset == "manual")
+      updateSelectInput(session, "manual_select_data",
+                        choices = manual_subsets[[data_source]] )
+  })
+
+
   # ------------- Hide panel logic --------------------
   observe({
     has_fit = input$method_a != "data_only"
@@ -189,8 +207,8 @@ shinyServer(function(input, output, session) {
   # ------------- Help-related functions --------------------
 
   # Clear sample data selection when patient data are changed
-  observeEvent(input$patient_test_data, {
-    updateSelectInput(session, "sample_data", selected = NA)
+  observeEvent(input$manual_select_data, {
+    updateSelectInput(session, "simulated_data", selected = NA)
   })
 
   observe({
@@ -222,7 +240,7 @@ shinyServer(function(input, output, session) {
 
   observe({
     input$method_a
-    pop_select(session, input,  "sample_data", "Sample data")
+    pop_select(session, input,  "data_subset", "Sample data")
   })
 
   output$about = renderText({
