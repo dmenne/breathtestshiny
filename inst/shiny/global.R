@@ -48,14 +48,14 @@ pop_control = function(session, input,  id, title, placement = "right" ) {
   }
 }
 
-get_sim_data = function(data_subset){
+get_simulated_data = function(data_subset){
   # Retrieves simulated data
   if (is.null(data_subset) | data_subset == "") return(NULL)
   cat("get_sim_data: ", data_subset, "\n")
   return(NULL)
   data("usz_13c", envir = environment())
   data = usz_13c  %>%
-    filter(patient_id %in% td) %>%
+    filter(patient_id %in% data_subset) %>%
     mutate(
       pdr = round(pdr, 1)
     )
@@ -63,7 +63,7 @@ get_sim_data = function(data_subset){
   #comment = str_replace_all(comment(data),"\\n", " ")
   comment = "Subset of USZ 13C data"
   writeLines(paste0("# ", comment), con = tc)
-  writeLines(paste0("# ", paste0(td, collapse = ", ")), con = tc)
+  writeLines(paste0("# ", paste0(data_subset, collapse = ", ")), con = tc)
   suppressWarnings(write.table(data, file = tc, append = TRUE,
                                row.names = FALSE, sep = "\t", quote = FALSE))
   dt = paste(dt, collapse = "\n")
@@ -71,51 +71,63 @@ get_sim_data = function(data_subset){
   dt
 }
 
+
 get_patient_data = function(data_source, data_subset, manual_select_data) {
   # Retrieves patient data
   if (is.null(data_source) | is.null(data_subset) | data_source == "" | data_subset == "" )
     return(NULL)
 
   cat("get_patient_data: ", data_source, " ", data_subset, " ", manual_select_data, "\n")
-  return(NULL)
+  if (data_source == "usz_13c") {
+    data = usz_13c_data(data_subset, manual_select_data)
+  } else
+    data = NULL
+  if (is.null(data)) return(NULL)
+  print(str(data))
+  data$pdr = round(data$pdr,1)
+  tc = textConnection("dt", "w")
+  write.table(data, file = tc, col.names = data_subset != "no_header",
+            row.names = FALSE, sep = "\t", quote = FALSE)
+  dt = paste(dt, collapse = "\n")
+  close(tc)
+  dt
+}
+
+
+# Data from usz_13c (Misselwitz data)
+usz_13c_data = function(data_subset, manual_select_data){
   data("usz_13c", envir = environment())
-  if (td == "manual"){
+  if (data_subset == "manual"){
     data = usz_13c %>%
       filter(patient_id == "norm_001") ## *** Debug
 
-  } else if (td %in% c("no_header", "with_header")) {
+  } else if (data_subset %in% c("no_header", "with_header")) {
     data = usz_13c  %>%
       filter(patient_id == "norm_001", group == "liquid_normal") %>%
       select(minute, pdr)
-  } else if (td == "two_patients") {
+  } else if (data_subset == "two_patients") {
     data = usz_13c  %>%
       filter(patient_id %in% c("pat_001", "pat_002")) %>%
       select(patient_id, minute, pdr)
-  } else if  (td == "cross_over") {
+  } else if  (data_subset == "cross_over") {
     data = usz_13c  %>%
       filter(patient_id == "norm_007") %>%
       select(patient_id, group, minute, pdr)
-  } else if (td == "large_set") {
+  } else if (data_subset == "large_set") {
     set.seed(4711)
     use_id = sort(sample(unique(usz_13c$patient_id), 12))
     data = usz_13c %>%
       filter(patient_id %in% use_id) %>%
       select(patient_id, group, minute, pdr)
-  } else if (td == "very_large_set") {
+  } else if (data_subset == "very_large_set") {
     set.seed(41)
     use_id = sort(sample(unique(usz_13c$patient_id), 60))
     data = usz_13c %>%
       filter(patient_id %in% use_id) %>%
       select(patient_id, group, minute, pdr)
   }
-  data$pdr = round(data$pdr,1)
-  tc = textConnection("dt", "w")
-  write.table(data, file = tc, col.names = td != "no_header",
-            row.names = FALSE, sep = "\t", quote = FALSE)
-  dt = paste(dt, collapse = "\n")
-  close(tc)
-  dt
 }
+
 
 # Format data from editor into a data frame
 format_data = function(data){
@@ -203,7 +215,6 @@ data_subsets = list(
        "One record, no header" = "no_header",
        "One record with header" = "with_header",
        "Records from 2 patients" = "two_patients",
-       "With outliers" = "with_outliers",
        "Crossover from one patient" = "cross_over",
        "Larger data set" = "large_set",
        "Very large set" = "very_large_set"),

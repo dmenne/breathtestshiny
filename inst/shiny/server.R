@@ -35,7 +35,7 @@ shinyServer(function(input, output, session) {
       return(NULL)
     }
     if (data_source == "sim_data"){
-      value = get_sim_data(data_subset)
+      value = get_simulated_data(data_subset)
     } else {
       value = get_patient_data(data_source, data_subset, manual_select_data)
     }
