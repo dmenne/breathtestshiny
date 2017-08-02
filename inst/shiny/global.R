@@ -52,18 +52,25 @@ pop_control = function(session, input,  id, title, placement = "right" ) {
 get_simulated_data = function(data_subset){
   # Retrieves simulated data
   if (is.null(data_subset) | data_subset == "") return(NULL)
-  cat("get_sim_data: ", data_subset, "\n")
-  return(NULL)
-  data("usz_13c", envir = environment())
-  data = usz_13c  %>%
-    filter(patient_id %in% data_subset) %>%
-    mutate(
-      pdr = round(pdr, 1)
-    )
+  cov = # empirical covariance
+    structure(c(188, -0.026, -2.04, -0.026, 7.74e-06, 0.000477, -2.04, 0.000477, 0.182),
+              .Dim = c(3L, 3L), .Dimnames = list(c("m", "k","beta"), c("m", "k", "beta")))
+  if (data_subset == "nice_1") {
+    data = simulate_breathtest_data(7,  cov = cov, k_mean = 0.015)
+  } else if (data_subset == "nice_cross") {
+    data = list(group_a = simulate_breathtest_data(4, cov = cov, seed = 4711,  k_mean = 0.02),
+                group_b = simulate_breathtest_data(6, cov = cov, seed = 4712,  k_mean = 0.015))
+  } else if (data_subset == "rough_cross") {
+    data = list(
+      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2.5, cov = cov, seed = 4713,  k_mean = 0.02),
+      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2.5, cov = cov, seed = 4715,  k_mean = 0.015))
+  } else {
+    return(NULL)
+  }
+  data = cleanup_data(data)
   tc = textConnection("dt", "w")
-  #comment = str_replace_all(comment(data),"\\n", " ")
-  comment = "Subset of USZ 13C data"
-  writeLines(paste0("# ", comment), con = tc)
+  comment = comment(data)
+  #writeLines(paste0("# ", comment), con = tc)
   writeLines(paste0("# ", paste0(data_subset, collapse = ", ")), con = tc)
   suppressWarnings(write.table(data, file = tc, append = TRUE,
                                row.names = FALSE, sep = "\t", quote = FALSE))
@@ -78,7 +85,7 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
   if (is.null(data_source) | is.null(data_subset) | data_source == "" | data_subset == "" )
     return(NULL)
 
-  cat("get_patient_data: ", data_source, " ", data_subset, " ", manual_select_data, "\n")
+  #cat("get_patient_data: ", data_source, " ", data_subset, " ", manual_select_data, "\n")
   if (data_source == "usz_13c") {
       data = usz_13c_data(data_subset, manual_select_data)
   } else if (data_source == "usz_13c_a") {
@@ -86,9 +93,8 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
   } else if (data_source == "usz_13c_d") {
       data = usz_13c_d_data(data_subset, manual_select_data)
   } else {
-      data = NULL
+      return(NULL)
   }
-  if (is.null(data)) return(NULL)
   data$pdr = round(data$pdr,1)
   tc = textConnection("dt", "w")
   write.table(data, file = tc, col.names = data_subset != "no_header",
@@ -278,7 +284,10 @@ manual_subsets_d = function(){
 }
 
 data_subsets = list(
-  sim_data = list("simdata1", "simdata2"),
+  sim_data = list("Nice data, 1/subject" = "nice_1",
+                  "Nice data, crossover" = "nice_cross",
+                  "With outliers, crossover" = "rough_cross"
+                  ),
   usz_13c = list("Manual" = "manual",
                  "One record, no header" = "no_header",
                  "One record with header" = "with_header",
@@ -291,7 +300,7 @@ data_subsets = list(
 )
 
 manual_subsets = list(
-  sim_data = list("manual_1", "manual_2"),
+  sim_data = NULL,
   usz_13c =
     list(
       "Easy normals, solid and liquid" = c("norm_001", "norm_002", "norm_003"),

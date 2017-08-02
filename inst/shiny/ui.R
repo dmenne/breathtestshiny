@@ -26,7 +26,7 @@ shinyUI(
               "Bayesian fit (Stan)" = "stan",
               "Grouped Bayesian fit" = "stan_group"
             ),
-          selected = "nls"
+          selected = "data_only"
         ),
         conditionalPanel(
           "input.method_a == 'stan' |input.method_a == 'stan_group'",
@@ -57,7 +57,7 @@ shinyUI(
               "Crossover (usz_13c_d)" = "usz_13c_d",
               "Exotic (usz_13c_a)" = "usz_13c_a"
             ),
-            selected = "sim_data"
+            selected = "usz_13c"
           )
         ),
         conditionalPanel(
