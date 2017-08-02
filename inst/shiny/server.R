@@ -73,7 +73,6 @@ shinyServer(function(input, output, session) {
     if (is.null(data))
       return(NULL)
     #save(data, file= "ndata.rda")
-    return(null_fit(data)) # *****
     switch(method,
       data_only = null_fit(data),
       nls = nls_fit(data),
