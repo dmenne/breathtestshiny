@@ -3,6 +3,7 @@ library(stringr)
 library(breathtestcore)
 library(breathteststan)
 library(shinyBS)
+library(dplyr)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore/"
 options(shiny.reactlog = TRUE)
@@ -79,11 +80,15 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
 
   cat("get_patient_data: ", data_source, " ", data_subset, " ", manual_select_data, "\n")
   if (data_source == "usz_13c") {
-    data = usz_13c_data(data_subset, manual_select_data)
-  } else
-    data = NULL
+      data = usz_13c_data(data_subset, manual_select_data)
+  } else if (data_source == "usz_13c_a") {
+      data = usz_13c_a_data(data_subset, manual_select_data)
+  } else if (data_source == "usz_13c_d") {
+      data = usz_13c_d_data(data_subset, manual_select_data)
+  } else {
+      data = NULL
+  }
   if (is.null(data)) return(NULL)
-  print(str(data))
   data$pdr = round(data$pdr,1)
   tc = textConnection("dt", "w")
   write.table(data, file = tc, col.names = data_subset != "no_header",
@@ -93,14 +98,15 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
   dt
 }
 
-
 # Data from usz_13c (Misselwitz data)
 usz_13c_data = function(data_subset, manual_select_data){
   data("usz_13c", envir = environment())
   if (data_subset == "manual"){
+    # When selection is empty, use first
+    if (is.null(manual_select_data))
+      manual_select_data = usz_13c$patient_id[1]
     data = usz_13c %>%
-      filter(patient_id == "norm_001") ## *** Debug
-
+      filter(patient_id %in% manual_select_data)
   } else if (data_subset %in% c("no_header", "with_header")) {
     data = usz_13c  %>%
       filter(patient_id == "norm_001", group == "liquid_normal") %>%
@@ -126,6 +132,51 @@ usz_13c_data = function(data_subset, manual_select_data){
       filter(patient_id %in% use_id) %>%
       select(patient_id, group, minute, pdr)
   }
+  data
+}
+
+
+# Exotic data from usz_13c_a Kuyumcu et al
+usz_13c_a_data = function(data_subset, manual_select_data){
+  data("usz_13c_a", envir = environment())
+  if (data_subset == "manual"){
+    # When selection is empty, use first
+    if (is.null(manual_select_data))
+      manual_select_data = usz_13c_a$patient_id[1]
+    data = usz_13c_a %>%
+      filter(patient_id %in% manual_select_data)
+  } else if (data_subset == "random_14") {
+    set.seed(33)
+    rs = sample(unique(usz_13c_a$patient_id), 14)
+    data = usz_13c_a %>%
+      filter(patient_id %in% rs)
+  } else if (data_subset == "random_21") {
+    set.seed(334)
+    rs = sample(unique(usz_13c_a$patient_id), 21)
+    data = usz_13c_a %>%
+      filter(patient_id %in% rs)
+  }
+  data
+}
+
+# Data with known emptying time from MRI
+usz_13c_d_data = function(data_subset, manual_select_data){
+  data("usz_13c_d", envir = environment())
+  if (data_subset == "manual"){
+    # When selection is empty, use first
+    if (is.null(manual_select_data))
+      manual_select_data = usz_13c_d$patient_id[1]
+    data = usz_13c_d %>%
+      filter(patient_id %in% manual_select_data)
+  } else if (data_subset == "subjects_2") {
+    set.seed(33)
+    rs = sample(unique(usz_13c_d$patient_id), 2)
+    data = usz_13c_d %>%
+      filter(patient_id %in% rs)
+  } else if (data_subset == "all") {
+    data = usz_13c_d
+  }
+  data
 }
 
 
@@ -209,17 +260,34 @@ version_info =
 about_text = paste(includeMarkdown("include/about.md"), version_info)
 
 
+
+manual_subsets_a = function(){
+  data("usz_13c_a", envir = environment())
+  s = usz_13c_a %>%
+    select(group, patient_id) %>%
+    unique() %>%
+    mutate(
+      group = paste("Group",group)
+    )
+  split(s$patient_id, s$group)
+}
+
+manual_subsets_d = function(){
+  data("usz_13c_d", envir = environment())
+  as.list(unique(usz_13c_d$patient_id))
+}
+
 data_subsets = list(
   sim_data = list("simdata1", "simdata2"),
   usz_13c = list("Manual" = "manual",
-       "One record, no header" = "no_header",
-       "One record with header" = "with_header",
-       "Records from 2 patients" = "two_patients",
-       "Crossover from one patient" = "cross_over",
-       "Larger data set" = "large_set",
-       "Very large set" = "very_large_set"),
-  usz_13c_d = list("d_subset1", "d_subset2"),
-  usz_13c_a = list("a_subset1", "a_subset2")
+                 "One record, no header" = "no_header",
+                 "One record with header" = "with_header",
+                 "Records from 2 patients" = "two_patients",
+                 "Crossover from one patient" = "cross_over",
+                 "Larger data set" = "large_set",
+                 "Very large set" = "very_large_set"),
+  usz_13c_d = list("2 subjects" = "subjects_2", "All records" = "all", "Manual" = "manual"),
+  usz_13c_a = list("14 random" = "random_14", "21 random" = "random_21", "Manual" = "manual")
 )
 
 manual_subsets = list(
@@ -230,8 +298,7 @@ manual_subsets = list(
       "Easy patients" = c("pat_001", "pat_002", "pat_003"),
       "Difficult patients" = c("pat_051", "pat_016", "pat_033")
   ),
-  usz_13c_d = list("d_manual_1", "d_manuel_2"),
-  usz_13c_a = list("a_manual_1", "a_manual_2")
-
+  usz_13c_d = manual_subsets_d(),
+  usz_13c_a = manual_subsets_a()
 )
 

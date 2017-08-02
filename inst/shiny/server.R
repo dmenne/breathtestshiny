@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
   # Copy patient test data to editor
   observe({
     # Retrieve data
-    data_source = input$data_source
+    data_source = isolate(input$data_source)
     data_subset = input$data_subset
     manual_select_data = input$manual_select_data
     #cat(data_source, "-", data_subset, "-", manual_select_data, "\n")
@@ -33,6 +33,10 @@ shinyServer(function(input, output, session) {
     if (is.null(data_subset) | is.null(data_source)) {
       clear_editor()
       return(NULL)
+    }
+    # Clear manual selection if it is not manual mode
+    if (data_subset != "manual") {
+      updateSelectInput(session, "manual_select_data", selected = NA)
     }
     if (data_source == "sim_data"){
       value = get_simulated_data(data_subset)
