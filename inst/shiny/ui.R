@@ -80,10 +80,11 @@ shinyUI(
       checkboxInput("showsamples", "Show sample data sets", TRUE),
       textOutput("use_link"),
       actionLink("userid", ""),
+      textOutput("data_directory"),
       checkboxInput("show_pop", "Show popover help", value = TRUE),
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
-      #        bsButton("create_workspace", "Keep data"),
+      bsButton("create_workspace", "Keep data"),
       hr(),
       actionLink("about", "About"),
       width = 3

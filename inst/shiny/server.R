@@ -135,11 +135,25 @@ shinyServer(function(input, output, session) {
 # --------------- Workspace-related functions -------------------------------
   data_dir = function(){
     u = uid()
-    ifelse(is.null(u), NULL, file.path(data_root, u))
+    if(is.null(u))
+      return(NULL)
+    file.path(data_root, u)
   }
 
   output$use_link = reactive({
-    ifelse(is.null(uid()), "", "Use this link to recover data")
+    ifelse(is.null(uid()), "", "Boomark this to recover data")
+  })
+
+  output$data_directory = reactive({
+    if (is.null(uid())) {
+      removePopover(session, "data_directory")
+      return("")
+    }
+    if (input$show_pop)
+      addPopover(session, "data_directory", "Full path of data directory", normalizePath(data_dir()))
+    else
+      removePopover(session, "data_directory")
+    data_dir()
   })
 
   # Mark that named user workspace is valid
@@ -153,8 +167,10 @@ shinyServer(function(input, output, session) {
     updateActionButton(session, "userid", url() )
   })
 
-  # Create id for workspace
+  # Evnet handler to create id for workspace
   observeEvent(input$create_workspace, {
+    if (input$create_workspace == 0)
+      return(NULL)
     new_uid = paste0("?uid=", digest::digest(rnorm(1), "xxhash32" ))
     session$sendCustomMessage(type = 'replace_url',
                               message = new_uid )
@@ -175,6 +191,14 @@ shinyServer(function(input, output, session) {
     url1 = cd$url_hostname
     if (!is.null(cd$url_port))
       url1 = paste0(url1, ":", cd$url_port)
+    dd = data_dir()
+    if (!is.null(dd)){
+      safe_dir_create(data_root)
+      if (safe_dir_create(dd))
+         showModal(modalDialog(
+           paste0("A new data directory " , dd, " was created"),
+           size ="s", easyClose = TRUE, fade = FALSE))
+    }
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 

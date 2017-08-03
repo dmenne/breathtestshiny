@@ -6,6 +6,6 @@ This application was written by Dieter Menne at [Menne Biomed Consulting, Tübin
 - Code for the [Shiny web app](https://shiny.rstudio.com/) is under development and currently only on [github](https://github.com/dmenne/breathteststan). 
 - For a runnable demo of the web app (i.e. the program you are looking at), see [breathtestshiny](https://apps.menne-biomed.de/breathtestshiny).
 - [R packages](http://cran.r-project.org/) shiny, rstan and nlme are used; for a full list, see [here](https://github.com/dmenne/breathtestcore/blob/master/DESCRIPTION) and [here](https://github.com/dmenne/breathteststan/blob/master/DESCRIPTION").
-- To avoid installation hassles, use the [Docker container](https://github.com/dmenne/gastro-docker) which bundles packages `dmenne/gastempt` and `dmenne/breathtestshiny`.
+- To avoid installation hassles, use the Docker container on  [Docker hub](https://hub.docker.com/r/dmenne/gastro-docker/) or [github](https://github.com/dmenne/gastro-docker) which bundles packages `dmenne/gastempt` and `dmenne/breathtestshiny`.
 
 Package versions used: 

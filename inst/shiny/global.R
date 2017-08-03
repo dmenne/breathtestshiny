@@ -1,14 +1,14 @@
 suppressPackageStartupMessages(library(shiny))
 library(stringr)
+suppressPackageStartupMessages(library(dplyr))
 library(breathtestcore)
 library(breathteststan)
 library(shinyBS)
-library(dplyr)
 #options(shiny.error = browser)
-data_root = "~/breathtestcore/"
+data_root = "~/breathtestcore"
 options(shiny.reactlog = TRUE)
 options(digits = 3) # used in signif
-ncol_facetwrap = 7 # for facet_wrap, number of columns
+ncol_facetwrap = 5 # for facet_wrap, number of columns
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -58,12 +58,18 @@ get_simulated_data = function(data_subset){
   if (data_subset == "nice_1") {
     data = simulate_breathtest_data(7,  cov = cov, k_mean = 0.015)
   } else if (data_subset == "nice_cross") {
-    data = list(group_a = simulate_breathtest_data(4, cov = cov, seed = 4711,  k_mean = 0.02),
-                group_b = simulate_breathtest_data(6, cov = cov, seed = 4712,  k_mean = 0.015))
+    data = list(group_a = simulate_breathtest_data(4, cov = cov,  k_mean = 0.02),
+                group_b = simulate_breathtest_data(6, cov = cov,  k_mean = 0.015))
   } else if (data_subset == "rough_cross") {
     data = list(
-      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2.5, cov = cov, seed = 4713,  k_mean = 0.02),
-      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2.5, cov = cov, seed = 4715,  k_mean = 0.015))
+      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2., cov = cov, k_mean = 0.02),
+      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2., cov = cov, k_mean = 0.015))
+  } else if (data_subset == "missing") {
+    data = list(
+      group_a = simulate_breathtest_data(4, noise = 2.5, student_t = 5, cov = cov,
+                                         k_mean = 0.02, missing = 0.3 ),
+      group_b = simulate_breathtest_data(6, noise = 2, student_t = 5, cov = cov,
+                                         k_mean = 0.015, missing = 0.3))
   } else {
     return(NULL)
   }
@@ -286,8 +292,9 @@ manual_subsets_d = function(){
 data_subsets = list(
   sim_data = list("Nice data, 1/subject" = "nice_1",
                   "Nice data, crossover" = "nice_cross",
-                  "With outliers, crossover" = "rough_cross"
-                  ),
+                  "With outliers, crossover" = "rough_cross",
+                  "Missing, outliers" = "missing"
+  ),
   usz_13c = list("Manual" = "manual",
                  "One record, no header" = "no_header",
                  "One record with header" = "with_header",
