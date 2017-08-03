@@ -318,6 +318,16 @@ shinyServer(function(input, output, session) {
     about_text
   })
 
+  # Uploading files
+  observe({
+    inFile <- input$upload
+
+    if (is.null(inFile))
+      return(NULL)
+
+    print(inFile)
+    unlink(inFile$datapath)
+  })
 
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)

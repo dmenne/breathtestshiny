@@ -85,6 +85,8 @@ shinyUI(
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
       bsButton("create_workspace", "Keep data"),
+      fileInput("upload", "Drag file here", multiple = TRUE,
+                accept= c("text/plain", "text/csv")),
       hr(),
       actionLink("about", "About"),
       width = 3
