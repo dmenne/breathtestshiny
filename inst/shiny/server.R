@@ -5,20 +5,23 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
 
 shinyServer(function(input, output, session) {
-
   btns = list("Details", "Summary", "Group differences")
 
-  info_observers = sapply(btns, function(btn_title){
-      btn = gsub(" ", "_", tolower(btn_title))
-      pnl = paste0(btn,"_button")
-      txt = includeMarkdown(paste0("include/", btn,".md"))
-      dlg = modalDialog(txt, title = btn_title,
-                        footer = modalButton("Close"),
-                        size = "m", easyClose = TRUE)
-      observeEvent(input[[pnl]], showModal(dlg))
+  info_observers = sapply(btns, function(btn_title) {
+    btn = gsub(" ", "_", tolower(btn_title))
+    pnl = paste0(btn, "_button")
+    txt = includeMarkdown(paste0("include/", btn, ".md"))
+    dlg = modalDialog(
+      txt,
+      title = btn_title,
+      footer = modalButton("Close"),
+      size = "m",
+      easyClose = TRUE
+    )
+    observeEvent(input[[pnl]], showModal(dlg))
   })
 
-  clear_editor = function(){
+  clear_editor = function() {
     updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
   }
 
@@ -38,7 +41,7 @@ shinyServer(function(input, output, session) {
     if (data_subset != "manual") {
       updateSelectInput(session, "manual_select_data", selected = NA)
     }
-    if (data_source == "sim_data"){
+    if (data_source == "sim_data") {
       value = get_simulated_data(data_subset)
     } else {
       value = get_patient_data(data_source, data_subset, manual_select_data)
@@ -55,13 +58,20 @@ shinyServer(function(input, output, session) {
   get_data = reactive({
     data = input$edit_data
     d = format_data(data)
-    if (is.null(d)) return(NULL)
+    if (is.null(d))
+      return(NULL)
     validate(
-      need(input$method_a == "stan" || nrow(d) >= 10,
-           "At least 10 data values required."),
-      need(input$method_a != "nlme" ||
-             length(unique(paste(d$patient_id, d$group, sep = "_"))) >= 2,
-           "At least 2 records required. Try single-curve or Bayesian fit instead.")
+      need(
+        input$method_a == "stan" || nrow(d) >= 10,
+        "At least 10 data values required."
+      ),
+      need(
+        input$method_a != "nlme" ||
+          length(unique(
+            paste(d$patient_id, d$group, sep = "_")
+          )) >= 2,
+        "At least 2 records required. Try single-curve or Bayesian fit instead."
+      )
     )
     d
   })
@@ -73,22 +83,34 @@ shinyServer(function(input, output, session) {
     if (is.null(data))
       return(NULL)
     #save(data, file= "ndata.rda")
-    switch(method,
+    switch(
+      method,
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
-      stan = stan_fit(data, chains = 1,
-                student_t_df = as.integer(input$student_t_df),
-                iter = as.integer(input$iter))
+      stan = stan_fit( # in package breathteststan
+        data,
+        chains = 2,
+        student_t_df = as.integer(input$student_t_df),
+        iter = as.integer(input$iter)
+      ),
+      stan_group = stan_group_fit( # in package breathteststan
+        data,
+        chains = 2,
+        student_t_df = as.integer(input$student_t_df),
+        iter = as.integer(input$iter)
+      )
     )
   })
 
   # Returns coefficients of fit and comment
-  coef_fit = function(){
+  coef_fit = function() {
     f  = fit()
-    if (is.null(f)) return(NULL)
+    if (is.null(f))
+      return(NULL)
     cf = coef(f)
-    if (is.null(cf)) return(NULL)
+    if (is.null(cf))
+      return(NULL)
     cf$value = signif(cf$value, as.integer(options("digits")))
     comment(cf) = comment(f$data)
     cf
@@ -117,25 +139,26 @@ shinyServer(function(input, output, session) {
   })
 
 
-  plot_height = function(){
+  plot_height = function() {
     n_patient = length(unique(get_data()$patient_id))
     n_patient %/% ncol_facetwrap * 130L + 200L
   }
 
   output$fit_plot = renderPlot({
     f = fit()
-    if (is.null(f)) return(NULL)
+    if (is.null(f))
+      return(NULL)
     #capture.output(str(f), file = stderr())
     plot(f) +
-      facet_wrap(~patient_id, ncol = ncol_facetwrap) +
+      facet_wrap( ~ patient_id, ncol = ncol_facetwrap) +
       theme(aspect.ratio = 1)
   }, height = plot_height)
 
 
-# --------------- Workspace-related functions -------------------------------
-  data_dir = function(){
+  # --------------- Workspace-related functions -------------------------------
+  data_dir = function() {
     u = uid()
-    if(is.null(u))
+    if (is.null(u))
       return(NULL)
     file.path(data_root, u)
   }
@@ -150,7 +173,12 @@ shinyServer(function(input, output, session) {
       return("")
     }
     if (input$show_pop)
-      addPopover(session, "data_directory", "Full path of data directory", normalizePath(data_dir()))
+      addPopover(
+        session,
+        "data_directory",
+        "Full path of data directory",
+        normalizePath(data_dir())
+      )
     else
       removePopover(session, "data_directory")
     data_dir()
@@ -164,16 +192,16 @@ shinyServer(function(input, output, session) {
 
   # Display current workspace name
   observe({
-    updateActionButton(session, "userid", url() )
+    updateActionButton(session, "userid", url())
   })
 
   # Evnet handler to create id for workspace
   observeEvent(input$create_workspace, {
     if (input$create_workspace == 0)
       return(NULL)
-    new_uid = paste0("?uid=", digest::digest(rnorm(1), "xxhash32" ))
+    new_uid = paste0("?uid=", digest::digest(rnorm(1), "xxhash32"))
     session$sendCustomMessage(type = 'replace_url',
-                              message = new_uid )
+                              message = new_uid)
   })
 
   # When url is passed in browser, make it a valid id by replacing
@@ -192,12 +220,15 @@ shinyServer(function(input, output, session) {
     if (!is.null(cd$url_port))
       url1 = paste0(url1, ":", cd$url_port)
     dd = data_dir()
-    if (!is.null(dd)){
+    if (!is.null(dd)) {
       safe_dir_create(data_root)
       if (safe_dir_create(dd))
-         showModal(modalDialog(
-           paste0("A new data directory " , dd, " was created"),
-           size ="s", easyClose = TRUE, fade = FALSE))
+        showModal(modalDialog(
+          paste0("A new data directory " , dd, " was created"),
+          size = "s",
+          easyClose = TRUE,
+          fade = FALSE
+        ))
     }
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
@@ -205,9 +236,15 @@ shinyServer(function(input, output, session) {
   # ------------- Panel logic --------------------
   observe({
     data_source = input$data_source
-    if (!is.null(data_source))
+    data_subset = isolate(input$data_subset)
+    if (data_subset != "") {
       updateSelectInput(session, "data_subset",
-                        choices = data_subsets[[data_source]] )
+                        choices = data_subsets[[data_source]])
+    } else {
+      updateSelectInput(session, "data_subset",
+                        choices = data_subsets[[data_source]],
+                        selected = "cross_over_5")
+    }
   })
 
   observe({
@@ -215,18 +252,22 @@ shinyServer(function(input, output, session) {
     data_source = input$data_source
     if (data_subset == "manual")
       updateSelectInput(session, "manual_select_data",
-                        choices = manual_subsets[[data_source]] )
+                        choices = manual_subsets[[data_source]])
   })
 
 
   # ------------- Hide panel logic --------------------
   observe({
     has_fit = input$method_a != "data_only"
-    has_groups = ifelse(!has_fit, FALSE, length(unique(coef_fit()$group)) >1 )
-    toggle(condition = has_fit,
+    has_groups = ifelse(!has_fit, FALSE, length(unique(coef_fit()$group)) >
+                          1)
+    toggle(
+      condition = has_fit,
       selector = list(
         "#main_panel li a[data-value=details_panel]",
-        "#main_panel li a[data-value=summary_panel]"))
+        "#main_panel li a[data-value=summary_panel]"
+      )
+    )
     toggle(condition = has_groups,
            selector = "#main_panel li a[data-value=group_differences_panel]")
   })
@@ -239,7 +280,7 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    toggle("download_filtered", condition = !is.null(coef_fit()) )
+    toggle("download_filtered", condition = !is.null(coef_fit()))
   })
 
   observe({
@@ -247,7 +288,10 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    pop_control(session, input, "download_filtered", "Download coefficients as CSV-file")
+    pop_control(session,
+                input,
+                "download_filtered",
+                "Download coefficients as CSV-file")
   })
 
   observe({
@@ -260,7 +304,7 @@ shinyServer(function(input, output, session) {
     pop_control(session, input,  "iter", "Number of iterations Stan sampling")
   })
 
-# Select boxes with per-item description
+  # Select boxes with per-item description
   observe({
     pop_select(session, input,  "method_a", "Fitting method")
   })

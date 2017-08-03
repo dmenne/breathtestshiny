@@ -23,8 +23,8 @@ shinyUI(
               "No fit, data only" = "data_only",
               "Individual curve fit (nls)" = "nls",
               "Mixed-model fit (nlme) " = "nlme",
-              "Bayesian fit (Stan)" = "stan"
-              #,  "Grouped Bayesian fit" = "stan_group"
+              "Bayesian fit (Stan)" = "stan",
+              "Grouped Bayesian fit" = "stan_group"
             ),
           selected = "data_only"
         ),

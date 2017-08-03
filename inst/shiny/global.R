@@ -9,6 +9,8 @@ data_root = "~/breathtestcore"
 options(shiny.reactlog = TRUE)
 options(digits = 3) # used in signif
 ncol_facetwrap = 5 # for facet_wrap, number of columns
+# Behaviour of plot with 2 chains is strange
+chains = 1 # min(parallel::detectCores(logical = TRUE), 2)
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -130,6 +132,10 @@ usz_13c_data = function(data_subset, manual_select_data){
   } else if  (data_subset == "cross_over") {
     data = usz_13c  %>%
       filter(patient_id == "norm_007") %>%
+      select(patient_id, group, minute, pdr)
+  } else if  (data_subset == "cross_over_5") {
+    data = usz_13c  %>%
+      filter(patient_id <= "norm_005") %>%
       select(patient_id, group, minute, pdr)
   } else if (data_subset == "large_set") {
     set.seed(4711)
@@ -299,7 +305,8 @@ data_subsets = list(
                  "One record, no header" = "no_header",
                  "One record with header" = "with_header",
                  "Records from 2 patients" = "two_patients",
-                 "Crossover from one patient" = "cross_over",
+                 "Crossover one" = "cross_over",
+                 "Crossover 5" = "cross_over_5",
                  "Larger data set" = "large_set",
                  "Very large set" = "very_large_set"),
   usz_13c_d = list("2 subjects" = "subjects_2", "All records" = "all", "Manual" = "manual"),
