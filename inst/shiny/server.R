@@ -27,6 +27,10 @@ shinyServer(function(input, output, session) {
 
   # Copy patient test data to editor
   observe({
+    if (!is.null(uid())) {
+      clear_editor()
+      return(NULL)
+    }
     # Retrieve data
     data_source = isolate(input$data_source)
     data_subset = input$data_subset
@@ -169,26 +173,29 @@ shinyServer(function(input, output, session) {
 
   observe({
     updateCheckboxInput(session, "showsamples", value = is.null(uid()))
+    if (!is.null(uid()))
+      clear_editor()
   })
 
   observe({
     if (!input$showsamples)
       clear_editor()
   })
+
   output$data_directory = reactive({
     if (is.null(uid())) {
-      removePopover(session, "data_directory")
+      removeTooltip(session, "data_directory")
       return("")
     }
     if (input$show_pop)
-      addPopover(
+      addTooltip(
         session,
         "data_directory",
         "Full path of data directory",
-        normalizePath(data_dir())
+        normalizePath(data_dir(), mustWork = FALSE)
       )
     else
-      removePopover(session, "data_directory")
+      removeTooltip(session, "data_directory")
     data_dir()
   })
 
@@ -232,8 +239,9 @@ shinyServer(function(input, output, session) {
       safe_dir_create(data_root)
       if (safe_dir_create(dd))
         showModal(modalDialog(
-          paste0("A new data directory " , dd, " was created"),
-          size = "s",
+          HTML(paste0("A new workspace was created in<br><b>", normalizePath(dd))),
+          footer = modalButton("Ok"),
+          size = "m",
           easyClose = TRUE,
           fade = FALSE
         ))

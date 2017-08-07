@@ -10,7 +10,8 @@ shinyUI(
     tags$head(
       tags$style(HTML("
      .col-sm-3 { min-width: 250px;}
-     .col-sm-8 { width: 75%;}
+     .col-sm-8 { width: 70%;}
+     .shiny-input-container label {text-align: right}
 
     "))
     ),
@@ -88,13 +89,15 @@ shinyUI(
       textOutput("use_link"),
       actionLink("userid", ""),
       textOutput("data_directory"),
-      checkboxInput("show_pop", "Show popover help", value = TRUE),
+      hr(),
+      fileInput("upload", "Select or drag/drop to gray field", multiple = TRUE,
+                accept= c("text/plain", "text/csv"),
+                width = "300px", buttonLabel = "Upload"),
+      hr(),
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
-      bsButton("create_workspace", "Keep data"),
-      fileInput("upload", "Drag file here", multiple = TRUE,
-                accept= c("text/plain", "text/csv")),
-      hr(),
+      checkboxInput("show_pop", "Show popover help", value = TRUE),
+      actionLink("create_workspace", "Create Workspace"),
       actionLink("about", "About"),
       width = 3
     ),

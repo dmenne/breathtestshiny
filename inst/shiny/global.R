@@ -7,6 +7,7 @@ library(shinyBS)
 #options(shiny.error = browser)
 data_root = "~/breathtestcore"
 options(shiny.reactlog = TRUE)
+options(shiny.part = 4141)
 options(digits = 3) # used in signif
 ncol_facetwrap = 5 # for facet_wrap, number of columns
 # Behaviour of plot with 2 chains is strange
