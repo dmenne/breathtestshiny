@@ -7,6 +7,13 @@ library(shinycssloaders)
 
 shinyUI(
   fluidPage(
+    tags$head(
+      tags$style(HTML("
+     .col-sm-3 { min-width: 250px;}
+     .col-sm-8 { width: 75%;}
+
+    "))
+    ),
     theme = shinytheme("simplex"),
     useShinyjs(),
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
@@ -77,7 +84,7 @@ shinyUI(
           multiple = TRUE
         )
       ),
-      checkboxInput("showsamples", "Show sample data sets", TRUE),
+      checkboxInput("showsamples", "Show sample data sets", value = FALSE),
       textOutput("use_link"),
       actionLink("userid", ""),
       textOutput("data_directory"),

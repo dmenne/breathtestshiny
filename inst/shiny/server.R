@@ -163,10 +163,18 @@ shinyServer(function(input, output, session) {
     file.path(data_root, u)
   }
 
-  output$use_link = reactive({
-    ifelse(is.null(uid()), "", "Boomark this to recover data")
+  output$use_link = renderText({
+    ifelse(is.null(uid()), "", "Boomark to recover data")
   })
 
+  observe({
+    updateCheckboxInput(session, "showsamples", value = is.null(uid()))
+  })
+
+  observe({
+    if (!input$showsamples)
+      clear_editor()
+  })
   output$data_directory = reactive({
     if (is.null(uid())) {
       removePopover(session, "data_directory")
