@@ -7,55 +7,47 @@ library(shinycssloaders)
 
 shinyUI(
   fluidPage(
-    tags$head(
-      tags$style(HTML("
-     .col-sm-3 { min-width: 250px;}
-     .col-sm-8 { width: 70%;}
-     .shiny-input-container label {text-align: right}
-
-    "))
-    ),
     theme = shinytheme("simplex"),
     useShinyjs(),
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
     singleton(tags$head(tags$script(src = "message-handler.js"))),
     titlePanel("Gastric emptying from 13C Breath Test Data"),
-    sidebarLayout(
-      sidebarPanel(
-        h3("Analyze data"),
-        selectInput(
-          "method_a",
-          "Method",
-          choices =
-            c(
-              "No fit, data only" = "data_only",
-              "Individual curve fit (nls)" = "nls",
-              "Mixed-model fit (nlme) " = "nlme",
-              "Bayesian fit (Stan)" = "stan",
-              "Grouped Bayesian fit" = "stan_group"
-            ),
-          selected = "data_only"
-        ),
-        conditionalPanel(
-          "input.method_a == 'stan' |input.method_a == 'stan_group'",
+    sidebarLayout(sidebarPanel(
+      tabsetPanel(
+        tabPanel(
+          id = "demo_panel",
+          title = "Demo",
           selectInput(
-            "iter",
-            "Iterations",
-            choices = c(200, 500, 1000, 2000),
-            selected = 200
+            "method_a",
+            "Method",
+            choices =
+              c(
+                "No fit, data only" = "data_only",
+                "Individual curve fit (nls)" = "nls",
+                "Mixed-model fit (nlme) " = "nlme",
+                "Bayesian fit (Stan)" = "stan",
+                "Grouped Bayesian fit" = "stan_group"
+              ),
+            selected = "data_only"
           ),
-          selectInput(
-            "student_t_df",
-            "Expected outliers",
-            choices = c(
-              "None - Gaussian" = 10,
-              "Few - Student-t 5 df" = 5,
-              "Strong - Student-t 3 df" = 3
+          conditionalPanel(
+            "input.method_a == 'stan' |input.method_a == 'stan_group'",
+            selectInput(
+              "iter",
+              "Iterations",
+              choices = c(200, 500, 1000, 2000),
+              selected = 200
+            ),
+            selectInput(
+              "student_t_df",
+              "Expected outliers",
+              choices = c(
+                "None - Gaussian" = 10,
+                "Few - Student-t 5 df" = 5,
+                "Strong - Student-t 3 df" = 3
+              )
             )
-          )
-        ),
-        conditionalPanel(
-          "input.showsamples == 1",
+          ), # end conditionalPanel
           selectInput(
             "data_source",
             "Data source",
@@ -66,41 +58,46 @@ shinyUI(
               "Exotic (usz_13c_a)" = "usz_13c_a"
             ),
             selected = "usz_13c"
-          )
-        ),
-        conditionalPanel(
-          "input.showsamples == 1",
+          ),
           selectInput(
             "data_subset",
             "Data subset",
             choices = NULL,
             selected = NULL
+          ),
+          conditionalPanel(
+            "input.data_subset == 'manual'",
+            selectInput(
+              "manual_select_data",
+              "Select data",
+              choices = NULL,
+              multiple = TRUE
+            )
           )
-        ),
-        conditionalPanel("input.data_subset == 'manual' & input.showsamples == 1",
-        selectInput(
-          "manual_select_data",
-          "Select data",
-          choices = NULL,
-          multiple = TRUE
-        )
-      ),
-      checkboxInput("showsamples", "Show sample data sets", value = FALSE),
-      textOutput("use_link"),
-      actionLink("userid", ""),
-      textOutput("data_directory"),
-      hr(),
-      fileInput("upload", "Select or drag/drop to gray field", multiple = TRUE,
-                accept= c("text/plain", "text/csv"),
-                width = "300px", buttonLabel = "Upload"),
+        ), # end demo_panel
+        tabPanel(id = "uploads_panel",
+                 title = "Uploads",
+                 textOutput("use_link"),
+                 actionLink("userid", ""),
+                 textOutput("data_directory"),
+                 fileInput(
+                   "upload",
+                   "Select or drag/drop to gray field",
+                   multiple = TRUE,
+                   accept = c("text/plain", "text/csv"),
+                   width = "300px",
+                   buttonLabel = "Upload"
+                 )
+        ) # End uploads_panel
+      ), # End tabsetpanel
+      actionLink("create_workspace", "Create Workspace"),
       hr(),
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
-      checkboxInput("show_pop", "Show popover help", value = TRUE),
-      actionLink("create_workspace", "Create Workspace"),
+      checkboxInput("show_pop", "Show popover help", value = FALSE),
       actionLink("about", "About"),
       width = 3
-    ),
+    ), # end sidebarPanel
     mainPanel(
       tabsetPanel(
         id = "main_panel",
@@ -140,8 +137,8 @@ shinyUI(
           clear_search_text("group_differences"),
           withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
         ) # End Group differences tabPanel
-      ) # tabsetPanel
-    ) # mainPanel
-  ) # sidebarLayout
-) # fluidpage
+      ) # end tabsetPanel
+    ) # end mainPanel
+  ) # end sidebarLayout
+  ) # fluidpage
 ) # shinyUI

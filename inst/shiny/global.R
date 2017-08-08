@@ -11,7 +11,7 @@ options(shiny.part = 4141)
 options(digits = 3) # used in signif
 ncol_facetwrap = 5 # for facet_wrap, number of columns
 # Behaviour of plot with 2 chains is strange
-chains = 1 # min(parallel::detectCores(logical = TRUE), 2)
+chains = min(parallel::detectCores(logical = TRUE), 2)
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
@@ -52,6 +52,19 @@ pop_control = function(session, input,  id, title, placement = "right" ) {
   }
 }
 
+breathtestdata_to_editor_format = function(data, data_subset=NULL){
+  data = cleanup_data(data)
+  tc = textConnection("dt", "w")
+  comment = comment(data)
+  if (!is.null(data_subset))
+    writeLines(paste0("# ", paste0(data_subset, collapse = ", ")), con = tc)
+  suppressWarnings(write.table(data, file = tc, append = TRUE,
+                               row.names = FALSE, sep = "\t", quote = FALSE))
+  dt = paste(dt, collapse = "\n")
+  close(tc)
+  dt
+}
+
 get_simulated_data = function(data_subset){
   # Retrieves simulated data
   if (is.null(data_subset) | data_subset == "") return(NULL)
@@ -65,8 +78,10 @@ get_simulated_data = function(data_subset){
                 group_b = simulate_breathtest_data(6, cov = cov,  k_mean = 0.015))
   } else if (data_subset == "rough_cross") {
     data = list(
-      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2., cov = cov, k_mean = 0.02),
-      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2., cov = cov, k_mean = 0.015))
+      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2., cov = cov,
+                                         k_mean = 0.02),
+      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2., cov = cov,
+                                         k_mean = 0.015))
   } else if (data_subset == "missing") {
     data = list(
       group_a = simulate_breathtest_data(4, noise = 2.5, student_t = 5, cov = cov,
@@ -76,18 +91,8 @@ get_simulated_data = function(data_subset){
   } else {
     return(NULL)
   }
-  data = cleanup_data(data)
-  tc = textConnection("dt", "w")
-  comment = comment(data)
-  #writeLines(paste0("# ", comment), con = tc)
-  writeLines(paste0("# ", paste0(data_subset, collapse = ", ")), con = tc)
-  suppressWarnings(write.table(data, file = tc, append = TRUE,
-                               row.names = FALSE, sep = "\t", quote = FALSE))
-  dt = paste(dt, collapse = "\n")
-  close(tc)
-  dt
+  breathtestdata_to_editor_format(data, data_subset)
 }
-
 
 get_patient_data = function(data_source, data_subset, manual_select_data) {
   # Retrieves patient data
@@ -105,12 +110,7 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
       return(NULL)
   }
   data$pdr = round(data$pdr,1)
-  tc = textConnection("dt", "w")
-  write.table(data, file = tc, col.names = data_subset != "no_header",
-            row.names = FALSE, sep = "\t", quote = FALSE)
-  dt = paste(dt, collapse = "\n")
-  close(tc)
-  dt
+  breathtestdata_to_editor_format(data)
 }
 
 # Data from usz_13c (Misselwitz data)

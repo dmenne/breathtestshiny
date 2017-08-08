@@ -105,3 +105,19 @@ hr {
 table.dataTable thead td {
     padding: 10px 1px;
 }
+
+.shiny-output-error-validation {
+  color:red;
+}
+
+a:hover, a:focus{
+  color: #002200;
+}
+
+a {
+  color: #006400;
+}
+
+.col-sm-3 { min-width: 250px;}
+.col-sm-8 { width: 70%;}
+.shiny-input-container label {text-align: right}

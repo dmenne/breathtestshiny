@@ -172,13 +172,7 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    updateCheckboxInput(session, "showsamples", value = is.null(uid()))
     if (!is.null(uid()))
-      clear_editor()
-  })
-
-  observe({
-    if (!input$showsamples)
       clear_editor()
   })
 
@@ -334,15 +328,32 @@ shinyServer(function(input, output, session) {
     about_text
   })
 
-  # Uploading files
+  # --------------- Uploading files -----------------------------------------
   observe({
     inFile <- input$upload
 
     if (is.null(inFile))
       return(NULL)
-
-    print(inFile)
-    unlink(inFile$datapath)
+    inFile$status = NA
+    dt_list = list()
+    for (i in 1:nrow(inFile)){
+      # Restore original filename for better messaging
+      src_file = inFile[i,"datapath"]
+      dest_file = file.path(dirname(src_file),inFile[i,"name"])
+      suppressWarnings(file.remove(dest_file)) # In case it exists
+      file.rename(src_file, dest_file)
+      dt = try(read_any_breathtest(dest_file), silent = TRUE)
+      if (inherits(dt, "try-error")){
+        inFile[i,"status"] = str_replace(dt, dirname(src_file), "")
+      } else {
+        inFile[i, "status"] = "Ok"
+        dt_list = c(dt_list, dt)
+      }
+    }
+    if (length(dt_list) == 0)  return(NULL)
+    dt = dt_list %>%
+      breathtestdata_to_editor_format() # will do cleanup_data
+    updateAceEditor(session, "edit_data", value = dt)
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html
