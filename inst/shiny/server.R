@@ -66,17 +66,19 @@ shinyServer(function(input, output, session) {
       return(NULL)
     validate(
       need(
-        input$method_a == "stan" || nrow(d) >= 10,
-        "At least 10 data values required."
+        (input$method_a == "stan") || (nrow(d) >= 5),
+        "At least 5 data values required. Stan fit might work."
       ),
       need(
-        input$method_a != "nlme" ||
-          length(unique(
-            paste(d$patient_id, d$group, sep = "_")
-          )) >= 2,
+        (input$method_a != "nlme") ||
+        (length(unique(paste(d$patient_id, d$group, sep = "_"))) > 1L),
         "At least 2 records required. Try single-curve or Bayesian fit instead."
+      ),
+      need(
+        (input$method_a != "stan_group" ) || (length(unique(d$group)) > 1L),
+        "Multiple groups required. Try single-curve or Bayesian fit instead."
       )
-    )
+    ) # end validate
     d
   })
 

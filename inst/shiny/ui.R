@@ -13,23 +13,37 @@ shinyUI(
     singleton(tags$head(tags$script(src = "message-handler.js"))),
     titlePanel("Gastric emptying from 13C Breath Test Data"),
     sidebarLayout(sidebarPanel(
+      selectInput(
+        "method_a",
+        "Method",
+        choices =
+          c(
+            "No fit, data only" = "data_only",
+            "Individual curve fit (nls)" = "nls",
+            "Mixed-model fit (nlme) " = "nlme",
+            "Bayesian fit (Stan)" = "stan",
+            "Grouped Bayesian fit" = "stan_group"
+          ),
+        selected = "data_only"
+      ),
       tabsetPanel(
+        tabPanel(id = "uploads_panel",
+                 title = "Uploads",
+                 textOutput("use_link"),
+                 actionLink("userid", ""),
+                 textOutput("data_directory"),
+                 fileInput(
+                   "upload",
+                   "Select or drag/drop",
+                   multiple = TRUE,
+                   accept = c("text/plain", "text/csv"),
+                   buttonLabel = "Browse file",
+                   placeholder = "Drag file here"
+                 )
+        ), # End uploads_panel
         tabPanel(
           id = "demo_panel",
           title = "Demo",
-          selectInput(
-            "method_a",
-            "Method",
-            choices =
-              c(
-                "No fit, data only" = "data_only",
-                "Individual curve fit (nls)" = "nls",
-                "Mixed-model fit (nlme) " = "nlme",
-                "Bayesian fit (Stan)" = "stan",
-                "Grouped Bayesian fit" = "stan_group"
-              ),
-            selected = "data_only"
-          ),
           conditionalPanel(
             "input.method_a == 'stan' |input.method_a == 'stan_group'",
             selectInput(
@@ -74,23 +88,9 @@ shinyUI(
               multiple = TRUE
             )
           )
-        ), # end demo_panel
-        tabPanel(id = "uploads_panel",
-                 title = "Uploads",
-                 textOutput("use_link"),
-                 actionLink("userid", ""),
-                 textOutput("data_directory"),
-                 fileInput(
-                   "upload",
-                   "Select or drag/drop to gray field",
-                   multiple = TRUE,
-                   accept = c("text/plain", "text/csv"),
-                   width = "300px",
-                   buttonLabel = "Upload"
-                 )
-        ) # End uploads_panel
+        ) # end demo_panel
       ), # End tabsetpanel
-      actionLink("create_workspace", "Create Workspace"),
+      # actionLink("create_workspace", "Create Workspace"),
       hr(),
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
