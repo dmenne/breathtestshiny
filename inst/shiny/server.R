@@ -7,6 +7,19 @@ suppressPackageStartupMessages(library(ggplot2))
 shinyServer(function(input, output, session) {
   btns = list("Details", "Summary", "Group differences")
 
+  # Our dataset
+  data <- mtcars
+
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("data-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(data, file)
+    }
+  )
+
+
   info_observers = sapply(btns, function(btn_title) {
     btn = gsub(" ", "_", tolower(btn_title))
     pnl = paste0(btn, "_button")
