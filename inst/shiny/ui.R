@@ -14,8 +14,8 @@ shinyUI(
     titlePanel("Gastric emptying from 13C Breath Test Data"),
     sidebarLayout(sidebarPanel(
       selectInput(
-        "method_a",
-        "Method",
+        "fit_method",
+        "Fit Method",
         choices =
           c(
             "No fit, data only" = "data_only",
@@ -24,7 +24,7 @@ shinyUI(
             "Bayesian fit (Stan)" = "stan",
             "Grouped Bayesian fit" = "stan_group"
           ),
-        selected = "data_only"
+        selected = "nls"
       ),
       tabsetPanel(
         tabPanel(id = "uploads_panel",
@@ -45,7 +45,7 @@ shinyUI(
           id = "demo_panel",
           title = "Demo",
           conditionalPanel(
-            "input.method_a == 'stan' |input.method_a == 'stan_group'",
+            "input.method_a == 'stan' |input.fit_method == 'stan_group'",
             selectInput(
               "iter",
               "Iterations",
@@ -105,6 +105,7 @@ shinyUI(
           title = "Data",
           aceEditor("edit_data", "", mode = "plain_text"),
           actionButton("clear_button", "Clear", icon = icon("eraser")),
+          downloadButton("download_image_button", "Image"),
           tags$script(type = "text/javascript", HTML(ace_options)),
           withSpinner(plotOutput("fit_plot", height = "auto")),
           hr(),
@@ -122,12 +123,14 @@ shinyUI(
           title = "Details",
           value = "details_panel",
           clear_search_text("details"),
+          h2("Per Patient/Record results"),
           withSpinner(DT::dataTableOutput("coef_table"))
         ),
         tabPanel(
           title = "Summary",
           value = "summary_panel",
           clear_search_text("summary"),
+          h2("Per Group Means"),
           withSpinner(DT::dataTableOutput("coef_by_group_table"))
         ),
         # End Summary tabPanel
@@ -135,6 +138,7 @@ shinyUI(
           title = "Group differences",
           value = "group_differences_panel",
           clear_search_text("group_differences"),
+          h2("Differences between groups"),
           withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
         ) # End Group differences tabPanel
       ) # end tabsetPanel

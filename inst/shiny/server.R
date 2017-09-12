@@ -59,6 +59,29 @@ shinyServer(function(input, output, session) {
     updateSelectInput(session, "manual_select_data", selected = NA)
   })
 
+
+  # Download image on button press
+  output$download_image_button = downloadHandler(
+    filename = function() paste0('data-', Sys.Date(), '.png'),
+    content = function(file){
+      f = fit()
+      if (is.null(f)) return(NULL)
+      n_patient = length(unique(get_data()$patient_id))
+      if ((n_patient %% ncol_facetwrap) == 1)
+        ncol_facetwrap = ncol_facetwrap-1
+      width = min(n_patient, ncol_facetwrap) * 250 + 100 # Make this variable
+      png(filename = file, width = width,  height = plot_height()*1.5)
+      p = plot(f) +
+        facet_wrap(~patient_id, ncol = ncol_facetwrap) +
+        theme(legend.key.size = unit(2,"line")) +
+        guides(colour = guide_legend(override.aes = list(size = 2)))
+      save(p, file = "p.rdata")
+      print(p)
+      dev.off()
+    }
+  )
+
+  # Retrieve data from editor
   get_data = reactive({
     data = input$edit_data
     d = format_data(data)
@@ -66,16 +89,16 @@ shinyServer(function(input, output, session) {
       return(NULL)
     validate(
       need(
-        (input$method_a == "stan") || (nrow(d) >= 5),
+        (input$fit_method == "stan") || (nrow(d) >= 5),
         "At least 5 data values required. Stan fit might work."
       ),
       need(
-        (input$method_a != "nlme") ||
+        (input$fit_method != "nlme") ||
         (length(unique(paste(d$patient_id, d$group, sep = "_"))) > 1L),
         "At least 2 records required. Try single-curve or Bayesian fit instead."
       ),
       need(
-        (input$method_a != "stan_group" ) || (length(unique(d$group)) > 1L),
+        (input$fit_method != "stan_group" ) || (length(unique(d$group)) > 1L),
         "Multiple groups required. Try single-curve or Bayesian fit instead."
       )
     ) # end validate
@@ -84,7 +107,7 @@ shinyServer(function(input, output, session) {
 
   # Compute fit when button pressed or method changed
   fit = reactive({
-    method = input$method_a
+    method = input$fit_method
     data = get_data()
     if (is.null(data))
       return(NULL)
@@ -154,10 +177,9 @@ shinyServer(function(input, output, session) {
     f = fit()
     if (is.null(f))
       return(NULL)
-    #capture.output(str(f), file = stderr())
     plot(f) +
       facet_wrap( ~ patient_id, ncol = ncol_facetwrap) +
-      theme(aspect.ratio = 1)
+      theme(aspect.ratio = 0.8)
   }, height = plot_height)
 
 
@@ -270,9 +292,9 @@ shinyServer(function(input, output, session) {
 
   # ------------- Hide panel logic --------------------
   observe({
-    has_fit = input$method_a != "data_only"
-    has_groups = ifelse(!has_fit, FALSE, length(unique(coef_fit()$group)) >
-                          1)
+    has_fit = input$fit_method != "data_only"
+    has_groups = ifelse(!has_fit, FALSE,
+                        length(unique(coef_fit()$group)) > 1)
     toggle(
       condition = has_fit,
       selector = list(
@@ -307,22 +329,22 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    input$method_a
+    input$fit_method
     pop_control(session, input,  "student_t_df", "Outlier handling")
   })
 
   observe({
-    input$method_a
+    input$fit_method
     pop_control(session, input,  "iter", "Number of iterations Stan sampling")
   })
 
   # Select boxes with per-item description
   observe({
-    pop_select(session, input,  "method_a", "Fitting method")
+    pop_select(session, input,  "fit_method", "Fitting method")
   })
 
   observe({
-    input$method_a
+    input$fit_method
     pop_select(session, input,  "data_subset", "Sample data")
   })
 
@@ -331,21 +353,23 @@ shinyServer(function(input, output, session) {
   })
 
   # --------------- Uploading files -----------------------------------------
-  observe({
-    inFile <- input$upload
-
+  dt_list = reactive({
+    inFile <- input$upload # When upload changes
     if (is.null(inFile))
       return(NULL)
     inFile$status = NA
     dt_list = list()
-    for (i in 1:nrow(inFile)){
+    n_files = nrow(inFile)
+    if (n_files == 0) return(NULL)
+    for (i in 1:n_files) {
       # Restore original filename for better messaging
       src_file = inFile[i,"datapath"]
       dest_file = file.path(dirname(src_file),inFile[i,"name"])
       suppressWarnings(file.remove(dest_file)) # In case it exists
       file.rename(src_file, dest_file)
+      # Read file
       dt = try(read_any_breathtest(dest_file), silent = TRUE)
-      if (inherits(dt, "try-error")){
+      if (inherits(dt, "try-error")) {
         inFile[i,"status"] = str_replace(dt, dirname(src_file), "")
       } else {
         inFile[i, "status"] = "Ok"
@@ -353,9 +377,58 @@ shinyServer(function(input, output, session) {
       }
     }
     if (length(dt_list) == 0)  return(NULL)
-    dt = dt_list %>%
-      breathtestdata_to_editor_format() # will do cleanup_data
-    updateAceEditor(session, "edit_data", value = dt)
+    attr(dt_list, "n_files") = n_files
+    dt_list
+  })
+
+  observe({
+    dt_s = dt_list()
+    if (is.null(dt_s)) return(NULL)
+    selected_records = NULL
+    if (!is.null(input$ok_patient)) {
+      selected_records  = isolate(input$select_records)
+      if (!is.null(selected_records))
+        dt_s = dt_s[as.integer(selected_records)]
+    }
+    # Assume there are data
+    n_files = attr(dt_s, "n_files")
+    # When there is only one file, and it contains several records,
+    # let user select. Can happen with xml files from breathid
+    if (is.null(selected_records) && n_files == 1 && length(dt_s) > 1) {
+      showModal(patient_modal(dt_s))
+    } else {
+      dt = breathtestdata_to_editor_format(dt_s) # will do cleanup_data
+      updateAceEditor(session, "edit_data", value = dt)
+    }
+  })
+
+  patient_modal = function(dt_s, failed = FALSE){
+    pt = seq_along(dt_s)
+    names(pt) = paste("Patient", purrr::map_chr(dt_s, "patient_id"),
+               purrr::map_chr(dt_s, "record_date"),
+               purrr::map_chr(dt_s, "start_time"))
+    modalDialog(
+      span(
+        "The record contains data from several patients runs."),
+      checkboxGroupInput("select_records", "Select at least one",
+                         pt),
+      if (failed)
+        div(tags$b("You must select at least one record", style = "color: red;")),
+      footer = tagList(
+        actionButton("ok_patient", "Ok")
+      ),
+      size = "s"
+    )
+  }
+
+  observeEvent(input$ok_patient, {
+    selected_records  = as.integer(isolate(input$select_records))
+    # Must select
+    if (length(selected_records) == 0)
+      showModal(patient_modal(isolate(dt_list()), TRUE))
+    else {
+      removeModal()
+    }
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html
