@@ -68,16 +68,14 @@ shinyServer(function(input, output, session) {
       if (is.null(f)) return(NULL)
       n_patient = length(unique(get_data()$patient_id))
       if ((n_patient %% ncol_facetwrap) == 1)
-        ncol_facetwrap = ncol_facetwrap-1
-      width = min(n_patient, ncol_facetwrap) * 250 + 100 # Make this variable
-      png(filename = file, width = width,  height = plot_height()*1.5)
+        ncol_facetwrap = ncol_facetwrap - 1
+      width = min(n_patient, ncol_facetwrap)*3 + 1.5 # Make this variable
       p = plot(f) +
         facet_wrap(~patient_id, ncol = ncol_facetwrap) +
         theme(legend.key.size = unit(2,"line")) +
         guides(colour = guide_legend(override.aes = list(size = 2)))
-      save(p, file = "p.rdata")
-      print(p)
-      dev.off()
+      ggsave(file, plot = p, device = "png", width = width,
+             height = plot_height()/50)
     }
   )
 
