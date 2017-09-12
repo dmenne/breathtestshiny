@@ -92,6 +92,7 @@ shinyUI(
       ), # End tabsetpanel
       # actionLink("create_workspace", "Create Workspace"),
       hr(),
+      downloadLink("downloadData", "Download"),
       # The following should not be moved to the server
       bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
       checkboxInput("show_pop", "Show popover help", value = FALSE),
