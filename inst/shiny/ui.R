@@ -26,6 +26,15 @@ shinyUI(
           ),
         selected = "nls"
       ),
+      conditionalPanel(
+        "input.fit_method == 'stan' || input.fit_method == 'stan_group'",
+        selectInput(
+          "iter",
+          "Iterations",
+          choices = c(200, 500, 1000, 2000),
+          selected = 200
+        )
+      ),
       tabsetPanel(
         tabPanel(id = "uploads_panel",
                  title = "Uploads",
@@ -46,12 +55,6 @@ shinyUI(
           title = "Demo",
           conditionalPanel(
             "input.method_a == 'stan' |input.fit_method == 'stan_group'",
-            selectInput(
-              "iter",
-              "Iterations",
-              choices = c(200, 500, 1000, 2000),
-              selected = 200
-            ),
             selectInput(
               "student_t_df",
               "Expected outliers",
