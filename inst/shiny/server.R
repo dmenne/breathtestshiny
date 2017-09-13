@@ -62,7 +62,8 @@ shinyServer(function(input, output, session) {
 
   # Download image on button press
   output$download_image_button = downloadHandler(
-    filename = function() paste0('data-', Sys.Date(), '.png'),
+    filename = function()
+      paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(), '.png'),
     content = function(file){
       f = fit()
       if (is.null(f)) return(NULL)
