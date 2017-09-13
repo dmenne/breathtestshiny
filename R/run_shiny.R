@@ -1,11 +1,11 @@
 #' Run breathtestshiny app
 #'
 #' @export
-#' @import shiny
+#' @importFrom shiny runApp
 run_shiny = function() {
   appDir = system.file("shiny", package = "breathtestshiny")
   if (appDir == "") {
     stop("Could not Shiny app in breathtestshiny", call. = FALSE)
   }
-  shiny::runApp(appDir, display.mode = "normal")
+  runApp(appDir, display.mode = "normal")
 }
