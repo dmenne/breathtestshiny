@@ -182,7 +182,7 @@ shinyServer(function(input, output, session) {
   }, height = plot_height)
 
 
-  # --------------- Workspace-related functions -------------------------------
+  # Workspace-related functions -------------------------------
   data_dir = function() {
     u = uid()
     if (is.null(u))
@@ -227,7 +227,7 @@ shinyServer(function(input, output, session) {
     updateActionButton(session, "userid", url())
   })
 
-  # Evnet handler to create id for workspace
+  # Event handler to create id for workspace
   observeEvent(input$create_workspace, {
     if (input$create_workspace == 0)
       return(NULL)
@@ -266,7 +266,7 @@ shinyServer(function(input, output, session) {
     ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
   })
 
-  # ------------- Panel logic --------------------
+  # Panel logic --------------------
   observe({
     data_source = input$data_source
     data_subset = isolate(input$data_subset)
@@ -354,8 +354,7 @@ shinyServer(function(input, output, session) {
   # --------------- Uploading files -----------------------------------------
   dt_list = reactive({
     inFile <- input$upload # When upload changes
-    if (is.null(inFile))
-      return(NULL)
+    if (is.null(inFile)) return(NULL)
     inFile$status = NA
     dt_list = list()
     n_files = nrow(inFile)
@@ -384,13 +383,15 @@ shinyServer(function(input, output, session) {
     dt_s = dt_list()
     if (is.null(dt_s)) return(NULL)
     selected_records = NULL
+    n_files = attr(dt_s, "n_files")
     if (!is.null(input$ok_patient)) {
       selected_records  = isolate(input$select_records)
+      # clear for next run
+      updateCheckboxGroupInput(session, "select_records", selected = character(0) )
       if (!is.null(selected_records))
         dt_s = dt_s[as.integer(selected_records)]
     }
     # Assume there are data
-    n_files = attr(dt_s, "n_files")
     # When there is only one file, and it contains several records,
     # let user select. Can happen with xml files from breathid
     if (is.null(selected_records) && n_files == 1 && length(dt_s) > 1) {

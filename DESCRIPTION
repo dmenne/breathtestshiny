@@ -1,7 +1,6 @@
 Package: breathtestshiny
 Title: Shiny web app to fit 13C time series from breath tests
 Version: 0.2.1.9003
-Date: 2017-08-4
 Author: Dieter Menne
 Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
 Description: This package uses packages breathtestcore and breathteststan 
