@@ -94,11 +94,11 @@ shinyServer(function(input, output, session) {
       need(
         (input$fit_method != "nlme") ||
         (length(unique(paste(d$patient_id, d$group, sep = "_"))) > 1L),
-        "At least 2 records required. Try single-curve or Bayesian fit instead."
+        "At least 2 records required. Try individual curve fit or Bayesian fit instead."
       ),
       need(
         (input$fit_method != "stan_group" ) || (length(unique(d$group)) > 1L),
-        "Multiple groups required. Try single-curve or Bayesian fit instead."
+        "Multiple groups required. Try individual curve fit or Bayesian fit instead."
       )
     ) # end validate
     d
