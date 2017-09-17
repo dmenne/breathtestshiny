@@ -177,7 +177,7 @@ shinyServer(function(input, output, session) {
     if (is.null(f))
       return(NULL)
     plot(f) +
-      facet_wrap( ~ patient_id, ncol = ncol_facetwrap) +
+      facet_wrap(~patient_id, ncol = ncol_facetwrap) +
       theme(aspect.ratio = 0.8)
   }, height = plot_height)
 
@@ -337,6 +337,16 @@ shinyServer(function(input, output, session) {
     pop_control(session, input,  "iter", "Number of iterations Stan sampling")
   })
 
+  # Upload
+  observe({
+    pop_control(session, input,  "upload", "Upload breathtest data")
+  })
+  
+  # Append data
+  observe({
+    pop_control(session, input,  "append", "Append data in editor")
+  })
+  
   # Select boxes with per-item description
   observe({
     pop_select(session, input,  "fit_method", "Fitting method")
@@ -398,6 +408,13 @@ shinyServer(function(input, output, session) {
       showModal(patient_modal(dt_s))
     } else {
       dt = breathtestdata_to_editor_format(dt_s) # will do cleanup_data
+      # Append if required
+      if (isolate(input$append)) {
+        dt_old = unlist(isolate(input$edit_data))
+        # Remove header
+        dt = str_replace(dt,".*?\\n", "")
+        dt = str_c(dt_old, "\n", dt)
+      }
       updateAceEditor(session, "edit_data", value = dt)
     }
   })

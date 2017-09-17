@@ -41,15 +41,20 @@ shinyUI(
                  textOutput("use_link"),
                  actionLink("userid", ""),
                  textOutput("data_directory"),
-                 fileInput(
-                   "upload",
-                   "Select or drag/drop",
-                   multiple = TRUE,
-                   accept = c("text/plain", "text/csv"),
-                   buttonLabel = "Browse file",
-                   placeholder = "Drag file here"
+                 br(),
+                 popify(
+                   fileInput(
+                     "upload",
+                     "Select or drag/drop one or multiple files",
+                     multiple = TRUE,
+                     accept = c("text/plain", "text/csv"),
+                     buttonLabel = "Browse file",
+                     placeholder = "Drag file here"
+                   ), "Upload 13C files", pop_content["upload"],"right"
                  )
         ), # End uploads_panel
+
+        checkboxInput("append", "Append selected data", value = FALSE ),
         tabPanel(
           id = "demo_panel",
           title = "Demo",
