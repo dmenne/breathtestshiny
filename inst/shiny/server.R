@@ -462,6 +462,13 @@ shinyServer(function(input, output, session) {
     }
   })
 
+  # Required for RInno
+  session$onSessionEnded(function() {
+    stopApp()
+    if (Sys.getenv("RSTUDIO") != "1")
+     q("no")
+  })
+
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)
 
