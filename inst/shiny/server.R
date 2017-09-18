@@ -146,7 +146,7 @@ shinyServer(function(input, output, session) {
 
   # --------- outputs -------------------------------------
   output$coef_table = DT::renderDataTable({
-    cf =  coef_fit()
+    cf = coef_fit()
     bt_datatable(cf)
   })
 
@@ -154,7 +154,13 @@ shinyServer(function(input, output, session) {
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  coef_by_group(f)
+    cf =  try(coef_by_group(f), silent = TRUE )
+    validate(
+      need(
+        !is(cf, "try-error"),
+        "To estimate means, you need multiple data sets for some of the groups."
+      )
+    )
     bt_datatable(cf)
   })
 
@@ -162,7 +168,13 @@ shinyServer(function(input, output, session) {
     f = fit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  coef_diff_by_group(fit())
+    cf =  try(coef_diff_by_group(fit()), silent = TRUE)
+    validate(
+      need(
+        !is(cf, "try-error"),
+        "To estimate group differences, you need multiple data sets for some of the groups."
+      )
+    )
     bt_datatable(cf)
   })
 
@@ -292,8 +304,10 @@ shinyServer(function(input, output, session) {
   # ------------- Hide panel logic --------------------
   observe({
     has_fit = input$fit_method != "data_only"
+    cf = coef_fit()
+    if (is.null(cf)) return(NULL)
     has_groups = ifelse(!has_fit, FALSE,
-                        length(unique(coef_fit()$group)) > 1)
+                        length(unique(cf$group)) > 1)
     toggle(
       condition = has_fit,
       selector = list(
@@ -341,12 +355,12 @@ shinyServer(function(input, output, session) {
   observe({
     pop_control(session, input,  "upload", "Upload breathtest data")
   })
-  
+
   # Append data
   observe({
     pop_control(session, input,  "append", "Append data in editor")
   })
-  
+
   # Select boxes with per-item description
   observe({
     pop_select(session, input,  "fit_method", "Fitting method")
