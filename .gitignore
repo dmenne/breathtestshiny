@@ -5,3 +5,5 @@
 inst/data
 docaux/
 inst/doc
+inst/shiny/include/*.html
+vignettes/*.html

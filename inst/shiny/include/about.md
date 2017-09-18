@@ -1,4 +1,4 @@
-This application was written by Dieter Menne at [Menne Biomed Consulting, Tübingen](https://www.menne-biomed.de).
+This application was written by Dieter Menne at [Menne Biomed Consulting, Tübingen](https://www.menne-biomed.de), in cooperation with the Department of Gastroenterology of the University Hospital of Zürich and Claraspital Basel. Thanks to Benjamin Misselwitz, Mark Fox, Werner Schwizer and Andreas Steingötter.
 
 - All code is GPL-3 Open Source and available on github.
 - The core routines to fit data are in package [breathtestcore](https://github.com/dmenne/breathtestcore), also on [CRAN](https://cran.r-project.org/web/packages/breathtestcore/index.html). [Code examples](https://dmenne.github.io/breathtestcore/reference/nlme_fit.html) are provided to run an analysis under R.
