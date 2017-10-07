@@ -1,0 +1,17 @@
+template:
+  path: ./templates
+  default_assets: true
+  params:
+    bootswatch: cosmo
+
+reference:
+  - title: "Running shiny"
+    desc: "Package breathtestshiny uses functions provided by packages breathtestcore and breathteststan."
+    contents:
+      - run_shiny
+
+articles:
+   - title: "How to use"
+   - contents:
+     - how_to_use
+     - faq

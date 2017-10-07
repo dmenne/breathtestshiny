@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 docaux/
+docs/$
+^_pkgdown\.yml$
