@@ -3,3 +3,5 @@
 docaux/
 docs/$
 ^_pkgdown\.yml$
+Dockerfile
+deps.yaml

@@ -7,3 +7,5 @@ docaux/
 inst/doc
 inst/shiny/include/*.html
 vignettes/*.html
+Dockerfile
+deps.yaml
