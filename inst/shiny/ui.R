@@ -108,6 +108,7 @@ shinyUI(
         # End tabsetpanel
         # actionLink("create_workspace", "Create Workspace"),
         hr(),
+        HTML('<a href="https://dmenne.github.io/breathtestcore/articles/data_formats.html#vendor-specific-formats">Supported Formats</a>'),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
         checkboxInput("show_pop", "Show popover help", value = FALSE),
