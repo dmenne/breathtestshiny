@@ -11,7 +11,7 @@ shinyUI(
     useShinyjs(),
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),
     singleton(tags$head(tags$script(src = "message-handler.js"))),
-    titlePanel("Gastric emptying from 13C Breath Test Data"),
+    titlePanel("Gastric emptying from 13C Breath Test Data (async)"),
     sidebarLayout(
       sidebarPanel(
         selectInput(
