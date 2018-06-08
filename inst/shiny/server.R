@@ -3,6 +3,10 @@ library(shinyAce)
 library(breathtestcore)
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
+library(promises)
+library(future)
+plan(multiprocess)
+
 
 shinyServer(function(input, output, session) {
   btns = list("Details", "Summary", "Group differences")
@@ -65,7 +69,7 @@ shinyServer(function(input, output, session) {
     filename = function()
       paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(), '.png'),
     content = function(file){
-      f = fit()
+      f = reactiveFit()
       if (is.null(f)) return(NULL)
       n_patient = length(unique(get_data()$patient_id))
       if ((n_patient %% ncol_facetwrap) == 1)
@@ -104,14 +108,12 @@ shinyServer(function(input, output, session) {
     d
   })
 
-  # Compute fit when button pressed or method changed
-  fit = reactive({
-    method = input$fit_method
-    data = get_data()
-    if (is.null(data))
-      return(NULL)
-    #save(data, file= "ndata.rda")
-    switch(
+  fitFunction = function(method, data){
+    if (is.null(data)) {
+      return(promise_reject("no data"))
+    }
+
+    result = switch(
       method,
       data_only = null_fit(data),
       nls = nls_fit(data),
@@ -129,11 +131,20 @@ shinyServer(function(input, output, session) {
         iter = as.integer(input$iter)
       )
     )
+    promise_resolve(result)
+  }
+
+  # Compute fit when button pressed or method changed
+  reactiveFit = reactive({
+    method = input$fit_method
+    data = get_data()
+    #save(data, file= "ndata.rda")
+    fitFunction(method, data)
   })
 
   # Returns coefficients of fit and comment
   coef_fit = function() {
-    f  = fit()
+    f  = reactiveFit()
     if (is.null(f))
       return(NULL)
     cf = coef(f)
@@ -151,7 +162,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$coef_by_group_table = DT::renderDataTable({
-    f = fit()
+    f = reactiveFit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
     cf =  try(coef_by_group(f), silent = TRUE )
@@ -165,10 +176,10 @@ shinyServer(function(input, output, session) {
   })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
-    f = fit()
+    f = reactiveFit()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
-    cf =  try(coef_diff_by_group(fit()), silent = TRUE)
+    cf =  try(coef_diff_by_group(f), silent = TRUE)
     validate(
       need(
         !is(cf, "try-error"),
@@ -184,13 +195,20 @@ shinyServer(function(input, output, session) {
     n_patient %/% ncol_facetwrap * 130L + 200L
   }
 
-  output$fit_plot = renderPlot({
-    f = fit()
-    if (is.null(f))
-      return(NULL)
+  myPlot = function(f){
+    if (is.null(f)) stop("Null plot")
     plot(f) +
       facet_wrap(~patient_id, ncol = ncol_facetwrap) +
       theme(aspect.ratio = 0.8)
+  }
+
+  output$fit_plot = renderPlot({
+    reactiveFit() %...>% (function(val){
+      myPlot(val)
+    }) %...!%
+      {
+        message(conditionMessage(.))
+      }
   }, height = plot_height)
 
 

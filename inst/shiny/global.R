@@ -11,7 +11,7 @@ options(shiny.part = 4141)
 options(digits = 3) # used in signif
 ncol_facetwrap = 4 # for facet_wrap, number of columns
 # Behaviour of plot with 2 chains is strange
-chains = min(parallel::detectCores(logical = TRUE), 2)
+chains = min(parallel::detectCores(logical = TRUE), 1)
 
 cleanup_uid = function(uid){
   if (is.null(uid) || uid == '') return(NULL)
