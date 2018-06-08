@@ -5,7 +5,7 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
 library(promises)
 library(future)
-plan(multiprocess)
+plan(multiprocess, workers = 4)
 
 
 shinyServer(function(input, output, session) {
@@ -108,38 +108,36 @@ shinyServer(function(input, output, session) {
     d
   })
 
-  fitFunction = function(method, data){
-    if (is.null(data)) {
-      return(promise_reject("no data"))
-    }
-
-    result = switch(
+  fitFunction = function(data, method, student_t_df, iter){
+    if (is.null(data())) return(NULL)
+    switch(
       method,
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
       stan = stan_fit( # in package breathteststan
         data,
-        chains = 2,
-        student_t_df = as.integer(input$student_t_df),
-        iter = as.integer(input$iter)
+        chains = chains,
+        student_t_df = as.integer(student_t_df),
+        iter = as.integer(iter)
       ),
       stan_group = stan_group_fit( # in package breathteststan
         data,
-        chains = 2,
-        student_t_df = as.integer(input$student_t_df),
-        iter = as.integer(input$iter)
+        chains = chains,
+        student_t_df = as.integer(student_t_df),
+        iter = as.integer(iter)
       )
     )
-    promise_resolve(result)
   }
 
-  # Compute fit when button pressed or method changed
+  # Compute fit when button pressed or method changed. Returns a promise
   reactiveFit = reactive({
     method = input$fit_method
     data = get_data()
     #save(data, file= "ndata.rda")
-    fitFunction(method, data)
+    student_t_df = input$student_t_df
+    iter = input$iter
+    future({fitFunction(data, method, student_t_df, iter)})
   })
 
   # Returns coefficients of fit and comment
@@ -156,11 +154,34 @@ shinyServer(function(input, output, session) {
   }
 
   # --------- outputs -------------------------------------
-  output$coef_table = DT::renderDataTable({
+  # Plots
+  plot_height = function() {
+    n_patient = length(unique(get_data()$patient_id))
+    n_patient %/% ncol_facetwrap * 130L + 200L
+  }
+
+  seriesPlot = function(f){
+    if (is.null(f)) return(NULL)
+    plot(f) +
+      facet_wrap(~patient_id, ncol = ncol_facetwrap) +
+      theme(aspect.ratio = 0.8)
+  }
+
+  output$fit_plot = renderPlot({
+    reactiveFit() %...>%
+      {
+      seriesPlot(.)
+      } %...!%
+      message(conditionMessage(.))
+
+  }, height = plot_height)
+
+    output$coef_table = DT::renderDataTable({
     cf = coef_fit()
     bt_datatable(cf)
   })
 
+  # Tables
   output$coef_by_group_table = DT::renderDataTable({
     f = reactiveFit()
     if (inherits(f, "breathtestnullfit"))
@@ -188,28 +209,6 @@ shinyServer(function(input, output, session) {
     )
     bt_datatable(cf)
   })
-
-
-  plot_height = function() {
-    n_patient = length(unique(get_data()$patient_id))
-    n_patient %/% ncol_facetwrap * 130L + 200L
-  }
-
-  myPlot = function(f){
-    if (is.null(f)) stop("Null plot")
-    plot(f) +
-      facet_wrap(~patient_id, ncol = ncol_facetwrap) +
-      theme(aspect.ratio = 0.8)
-  }
-
-  output$fit_plot = renderPlot({
-    reactiveFit() %...>% (function(val){
-      myPlot(val)
-    }) %...!%
-      {
-        message(conditionMessage(.))
-      }
-  }, height = plot_height)
 
 
   # Workspace-related functions -------------------------------
