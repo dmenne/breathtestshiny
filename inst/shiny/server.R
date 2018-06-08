@@ -3,9 +3,6 @@ library(shinyAce)
 library(breathtestcore)
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
-library(promises)
-library(future)
-plan(multiprocess, workers = 4)
 
 
 shinyServer(function(input, output, session) {
