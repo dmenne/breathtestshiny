@@ -8,20 +8,6 @@ suppressPackageStartupMessages(library(ggplot2))
 shinyServer(function(input, output, session) {
   btns = list("Details", "Summary", "Group differences")
 
-  info_observers = sapply(btns, function(btn_title) {
-    btn = gsub(" ", "_", tolower(btn_title))
-    pnl = paste0(btn, "_button")
-    txt = includeMarkdown(paste0("include/", btn, ".md"))
-    dlg = modalDialog(
-      txt,
-      title = btn_title,
-      footer = modalButton("Close"),
-      size = "m",
-      easyClose = TRUE
-    )
-    observeEvent(input[[pnl]], showModal(dlg))
-  })
-
   clear_editor = function() {
     updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
   }
@@ -106,7 +92,7 @@ shinyServer(function(input, output, session) {
   })
 
   fitFunction = function(data, method, student_t_df, iter){
-    if (is.null(data())) return(NULL)
+    if (is.null(data))  return(NULL)
     switch(
       method,
       data_only = null_fit(data),
@@ -126,6 +112,7 @@ shinyServer(function(input, output, session) {
       )
     )
   }
+
 
   # Compute fit when button pressed or method changed. Returns a promise
   reactiveFit = reactive({
@@ -166,12 +153,9 @@ shinyServer(function(input, output, session) {
 
   output$fit_plot = renderPlot({
     reactiveFit() %...>%
-      {
-      seriesPlot(.)
-      } %...!%
-      message(conditionMessage(.))
-
-  }, height = plot_height)
+    seriesPlot() %...!%
+    message(conditionMessage(.))
+    }, height = plot_height)
 
     output$coef_table = DT::renderDataTable({
     cf = coef_fit()
