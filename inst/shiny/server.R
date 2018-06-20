@@ -52,7 +52,7 @@ shinyServer(function(input, output, session) {
     filename = function()
       paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(), '.png'),
     content = function(file){
-      f = reactiveFit()
+      f = fit_function_future()
       if (is.null(f)) return(NULL)
       n_patient = length(unique(get_data()$patient_id))
       if ((n_patient %% ncol_facetwrap) == 1)
@@ -91,7 +91,7 @@ shinyServer(function(input, output, session) {
     d
   })
 
-  fitFunction = function(data, method, student_t_df, iter){
+  fit_function = function(data, method, student_t_df, iter){
     if (is.null(data))  return(NULL)
     switch(
       method,
@@ -115,36 +115,39 @@ shinyServer(function(input, output, session) {
 
 
   # Compute fit when button pressed or method changed. Returns a promise
-  reactiveFit = reactive({
+  fit_function_future = reactive({
     method = input$fit_method
     data = get_data()
     #save(data, file= "ndata.rda")
     student_t_df = input$student_t_df
     iter = input$iter
-    future({fitFunction(data, method, student_t_df, iter)})
+    future({fit_function(data, method, student_t_df, iter)})
   })
 
   # Returns coefficients of fit and comment
-  coef_fit = function() {
-    f  = reactiveFit()
-    if (is.null(f))
-      return(NULL)
-    cf = coef(f)
-    if (is.null(cf))
-      return(NULL)
-    cf$value = signif(cf$value, as.integer(options("digits")))
-    comment(cf) = comment(f$data)
-    cf
-  }
+  coef_fit = reactive({
+    fit_function_future() %...>% (function(rf) {
+      if (is.null(rf)) return(NULL)
+      comment(rf) = comment(rf$data)
+      rf
+    }) %...>%
+    coef() %...>% (function(cf) {
+      if (is.null(cf))  return(NULL)
+      cf$value = signif(cf$value, as.integer(options("digits")))
+      ## comment(cf) =  TODO
+      cf
+    })  %...!%
+    message(conditionMessage(.))
+  })
 
-  # --------- outputs -------------------------------------
+  # --------- outputs -------
   # Plots
   plot_height = function() {
     n_patient = length(unique(get_data()$patient_id))
     n_patient %/% ncol_facetwrap * 130L + 200L
   }
 
-  seriesPlot = function(f){
+  series_plot = function(f){
     if (is.null(f)) return(NULL)
     plot(f) +
       facet_wrap(~patient_id, ncol = ncol_facetwrap) +
@@ -152,19 +155,21 @@ shinyServer(function(input, output, session) {
   }
 
   output$fit_plot = renderPlot({
-    reactiveFit() %...>%
-    seriesPlot() %...!%
+    # Can be simplified, explicit as example
+    fit_function_future() %...>% (function(rf) {
+      series_plot(rf)
+    })  %...!%
     message(conditionMessage(.))
     }, height = plot_height)
 
-    output$coef_table = DT::renderDataTable({
-    cf = coef_fit()
-    bt_datatable(cf)
+  # ---- Tables ----
+  output$coef_table = DT::renderDataTable({
+    coef_fit() %...>%
+    bt_datatable()
   })
 
-  # Tables
   output$coef_by_group_table = DT::renderDataTable({
-    f = reactiveFit()
+    f = fit_function_future()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
     cf =  try(coef_by_group(f), silent = TRUE )
@@ -178,7 +183,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
-    f = reactiveFit()
+    f = fit_function_future()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)
     cf =  try(coef_diff_by_group(f), silent = TRUE)
@@ -255,7 +260,8 @@ shinyServer(function(input, output, session) {
   })
 
 
-  # Watch for url name to identify workspace
+
+  # --- Watch for url name to identify workspace ----
   url = reactive({
     cd = session$clientData
     url1 = cd$url_hostname
