@@ -58,9 +58,11 @@ shinyServer(function(input, output, session) {
 
 
   # Download image on button press
+  # https://shiny.rstudio.com/articles/generating-reports.html
+
   output$download_image_button = downloadHandler(
     filename = function()
-      file.path(tempdir(), paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(),'.png')),
+      paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(),'.png'),
     content = function(file){
       f = fit()
       if (is.null(f)) return(NULL)
