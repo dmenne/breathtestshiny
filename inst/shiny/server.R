@@ -73,7 +73,7 @@ shinyServer(function(input, output, session) {
         facet_wrap(~patient_id, ncol = ncol_facetwrap) +
         theme(legend.key.size = unit(2,"line")) +
         guides(colour = guide_legend(override.aes = list(size = 2)))
-      png(file,  width = width, height = plot_height())
+      png(file,  width = width, height = plot_height()*2)
       print(p)
       dev.off() # turn the device off
     }
@@ -180,7 +180,7 @@ shinyServer(function(input, output, session) {
 
   plot_height = function() {
     n_patient = length(unique(get_data()$patient_id))
-    (n_patient %/% ncol_facetwrap * 130L + 200L)*2
+    n_patient %/% ncol_facetwrap * 130L + 200L
   }
 
   output$fit_plot = renderPlot({
