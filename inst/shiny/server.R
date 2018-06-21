@@ -57,8 +57,7 @@ shinyServer(function(input, output, session) {
   })
 
 
-  # Download image on button press
-  # https://shiny.rstudio.com/articles/generating-reports.html
+  # --- Download image on button press ----
 
   output$download_image_button = downloadHandler(
     filename = function()
@@ -69,13 +68,14 @@ shinyServer(function(input, output, session) {
       n_patient = length(unique(get_data()$patient_id))
       if ((n_patient %% ncol_facetwrap) == 1)
         ncol_facetwrap = ncol_facetwrap - 1
-      width = min(n_patient, ncol_facetwrap)*3 + 1.5 # Make this variable
+      width = (min(n_patient, ncol_facetwrap)*6 + 1.5)*50
       p = plot(f) +
         facet_wrap(~patient_id, ncol = ncol_facetwrap) +
         theme(legend.key.size = unit(2,"line")) +
         guides(colour = guide_legend(override.aes = list(size = 2)))
-      ggsave(file, plot = p, device = "png", width = width,
-             height = plot_height()/50)
+      png(file,  width = width, height = plot_height())
+      print(p)
+      dev.off() # turn the device off
     }
   )
 
@@ -180,7 +180,7 @@ shinyServer(function(input, output, session) {
 
   plot_height = function() {
     n_patient = length(unique(get_data()$patient_id))
-    n_patient %/% ncol_facetwrap * 130L + 200L
+    (n_patient %/% ncol_facetwrap * 130L + 200L)*2
   }
 
   output$fit_plot = renderPlot({
