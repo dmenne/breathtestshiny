@@ -47,25 +47,24 @@ shinyServer(function(input, output, session) {
   })
 
 
-  # Download image on button press
   output$download_image_button = downloadHandler(
     filename = function()
-      paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(), '.png'),
+      paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(),'.png'),
     content = function(file){
-      f = fit_function_future()
-      if (is.null(f)) return(NULL)
-      n_patient = length(unique(get_data()$patient_id))
-      if ((n_patient %% ncol_facetwrap) == 1)
-        ncol_facetwrap = ncol_facetwrap - 1
-      width = min(n_patient, ncol_facetwrap)*3 + 1.5 # Make this variable
-      p = plot(f) +
-        facet_wrap(~patient_id, ncol = ncol_facetwrap) +
-        theme(legend.key.size = unit(2,"line")) +
-        guides(colour = guide_legend(override.aes = list(size = 2)))
-      ggsave(file, plot = p, device = "png", width = width,
-             height = plot_height()/50)
-    }
+
+      fit_function_future() %...>% (function(f) {
+        if (is.null(f)) stop("err")
+        n_patient = length(unique(get_data()$patient_id))
+        if ((n_patient %% ncol_facetwrap) == 1)
+          ncol_facetwrap = ncol_facetwrap - 1
+        width = (min(n_patient, ncol_facetwrap)*6 + 1.5)*40
+        png(file, width = width, height = plot_height() )
+        print(series_plot(f))
+        dev.off() # turn the device off
+      })
+      }
   )
+
 
   # Retrieve data from editor
   get_data = reactive({
