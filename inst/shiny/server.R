@@ -27,10 +27,7 @@ shinyServer(function(input, output, session) {
 
   # Copy patient test data to editor
   observe({
-    if (!is.null(uid())) {
-      clear_editor()
-      return(NULL)
-    }
+    clear_editor()
     # Retrieve data
     data_source = isolate(input$data_source)
     data_subset = input$data_subset
@@ -193,90 +190,6 @@ shinyServer(function(input, output, session) {
       theme(aspect.ratio = 0.8)
   }, height = plot_height)
 
-
-  # Workspace-related functions -------------------------------
-  data_dir = function() {
-    u = uid()
-    if (is.null(u))
-      return(NULL)
-    file.path(data_root, u)
-  }
-
-  output$use_link = renderText({
-    ifelse(is.null(uid()), "", "Boomark to recover data")
-  })
-
-  observe({
-    if (!is.null(uid()))
-      clear_editor()
-  })
-
-  output$data_directory = reactive({
-    if (is.null(uid())) {
-      removeTooltip(session, "data_directory")
-      return("")
-    }
-    if (input$show_pop)
-      addTooltip(
-        session,
-        "data_directory",
-        "Full path of data directory",
-        normalizePath(data_dir(), mustWork = FALSE)
-      )
-    else
-      removeTooltip(session, "data_directory")
-    data_dir()
-  })
-
-  # Mark that named user workspace is valid
-  observe({
-    shinyjs::toggle("create_workspace", condition = is.null(uid()))
-    shinyjs::toggle("userid", condition = !is.null(uid()))
-  })
-
-  # Display current workspace name
-  observe({
-    updateActionButton(session, "userid", url())
-  })
-
-  # Event handler to create id for workspace
-  observeEvent(input$create_workspace, {
-    if (input$create_workspace == 0)
-      return(NULL)
-    new_uid = paste0("?uid=", digest::digest(rnorm(1), "xxhash32"))
-    session$sendCustomMessage(type = 'replace_url',
-                              message = new_uid)
-  })
-
-  # When url is passed in browser, make it a valid id by replacing
-  # non-alphanumeric characters
-  uid = reactive({
-    u = parseQueryString(session$clientData$url_search)[["uid"]]
-    # Make it a valid subdirectory name
-    cleanup_uid(u)
-  })
-
-
-  # Watch for url name to identify workspace
-  url = reactive({
-    cd = session$clientData
-    url1 = cd$url_hostname
-    if (!is.null(cd$url_port))
-      url1 = paste0(url1, ":", cd$url_port)
-    dd = data_dir()
-    if (!is.null(dd)) {
-      safe_dir_create(data_root)
-      if (safe_dir_create(dd))
-        showModal(modalDialog(
-          HTML(paste0("A new workspace was created in<br><b>", normalizePath(dd))),
-          footer = modalButton("Ok"),
-          size = "m",
-          easyClose = TRUE,
-          fade = FALSE
-        ))
-    }
-    ifelse(is.null(uid()), url1, paste0(url1, "/?uid=", uid()))
-  })
 
   # Panel logic --------------------
   observe({

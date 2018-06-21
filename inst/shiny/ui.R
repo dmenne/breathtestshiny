@@ -42,7 +42,6 @@ shinyUI(
             title = "Uploads",
             textOutput("use_link"),
             actionLink("userid", ""),
-            textOutput("data_directory"),
             br(),
             popify(
               fileInput(

@@ -13,14 +13,6 @@ ncol_facetwrap = 4 # for facet_wrap, number of columns
 # Behaviour of plot with 2 chains is strange
 chains = min(parallel::detectCores(logical = TRUE), 2)
 
-cleanup_uid = function(uid){
-  if (is.null(uid) || uid == '') return(NULL)
-  uid = str_replace_all(str_trim(tolower(uid)), " ","_")
-  uid = paste0(unlist(str_extract_all(uid, "[a-z0-9_]*")), collapse = "")
-  if (uid == "") return(NULL)
-  uid
-}
-
 safe_dir_create <- function(path)
 {
   dirTest <- function(x) !is.na(isdir <- file.info(x)$isdir) &
