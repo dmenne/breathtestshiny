@@ -40,9 +40,6 @@ shinyUI(
           tabPanel(
             id = "uploads_panel",
             title = "Uploads",
-            textOutput("use_link"),
-            actionLink("userid", ""),
-            textOutput("data_directory"),
             br(),
             popify(
               fileInput(
