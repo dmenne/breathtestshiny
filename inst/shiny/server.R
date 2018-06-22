@@ -9,7 +9,7 @@ shinyServer(function(input, output, session) {
   btns = list("Details", "Summary", "Group differences")
 
   clear_editor = function() {
-    updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
+    updateAceEditor(session, "edit_data", value = "")
   }
 
   # Copy patient test data to editor
@@ -151,10 +151,8 @@ shinyServer(function(input, output, session) {
   }
 
   output$fit_plot = renderPlot({
-    # Can be simplified, explicit as example
-    fit_function_future() %...>% (function(rf) {
-      series_plot(rf)
-    })  %...!%
+    fit_function_future()  %...>%
+    series_plot()  %...!%
     message(conditionMessage(.))
     }, height = plot_height)
 
@@ -165,17 +163,13 @@ shinyServer(function(input, output, session) {
   })
 
   output$coef_by_group_table = DT::renderDataTable({
-    f = fit_function_future()
-    if (inherits(f, "breathtestnullfit"))
-      return(NULL)
-    cf =  try(coef_by_group(f), silent = TRUE )
-    validate(
-      need(
-        !is(cf, "try-error"),
-        "To estimate means, you need multiple data sets for some of the groups."
-      )
-    )
-    bt_datatable(cf)
+    fit_function_future() %...>% (function(rf) {
+      if (inherits(rf, "breathtestnullfit")) return(NULL)
+      rf
+    }) %...>%
+    coef_by_group() %...>%
+    bt_datatable() %...!%
+      NULL
   })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
