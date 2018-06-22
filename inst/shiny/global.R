@@ -10,7 +10,6 @@ library(future)
 plan(multiprocess, workers = 4)
 
 #options(shiny.error = browser)
-data_root = "~/breathtestcore"
 options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif
 ncol_facetwrap = 4 # for facet_wrap, number of columns
