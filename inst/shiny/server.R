@@ -128,7 +128,13 @@ shinyServer(function(input, output, session) {
       rf
     }) %...>%
     coef() %...>% (function(cf) {
+      has_fit = input$fit_method != "data_only"
+      has_groups = ifelse(is.null(cf) | !has_fit, FALSE,
+                          length(unique(cf$group)) > 1)
+      toggle(condition = has_groups,
+             selector = "#main_panel li a[data-value=group_differences_panel]")
       if (is.null(cf))  return(NULL)
+
       cf$value = signif(cf$value, as.integer(options("digits")))
       ## comment(cf) =  TODO
       cf
@@ -170,21 +176,18 @@ shinyServer(function(input, output, session) {
     }) %...>%
     coef_by_group() %...>%
     bt_datatable() %...!%
-      NULL
+    message(conditionMessage(.))
   })
 
   output$coef_by_group_diff_table = DT::renderDT({
-    f = fit_function_future()
-    if (inherits(f, "breathtestnullfit"))
-      return(NULL)
-    cf =  try(coef_diff_by_group(f), silent = TRUE)
-    validate(
-      need(
-        !is(cf, "try-error"),
-        "To estimate group differences, you need multiple data sets for some of the groups."
-      )
-    )
-    bt_datatable(cf)
+    fit_function_future() %...>% (function(rf) {
+      if (inherits(rf, "breathtestnullfit")) return(NULL)
+      rf
+    }) %...>%
+    coef_diff_by_group() %...>%
+    bt_datatable() %...!% {
+      message("To estimate group differences, you need multiple data sets for some of the groups.")
+    }
   })
 
 
@@ -220,10 +223,6 @@ shinyServer(function(input, output, session) {
   # ------------- Hide panel logic --------------------
   observe({
     has_fit = input$fit_method != "data_only"
-    cf = coef_fit()
-    if (is.null(cf)) return(NULL)
-    has_groups = ifelse(!has_fit, FALSE,
-                        length(unique(cf$group)) > 1)
     toggle(
       condition = has_fit,
       selector = list(
@@ -231,8 +230,6 @@ shinyServer(function(input, output, session) {
         "#main_panel li a[data-value=summary_panel]"
       )
     )
-    toggle(condition = has_groups,
-           selector = "#main_panel li a[data-value=group_differences_panel]")
   })
 
   # ------------- Help-related functions --------------------

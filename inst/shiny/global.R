@@ -4,7 +4,7 @@ suppressPackageStartupMessages(library(dplyr))
 library(breathtestcore)
 library(breathteststan)
 library(shinyBS)
-library(DT)
+#library(DT)
 library(promises)
 library(future)
 plan(multiprocess, workers = 4)
@@ -143,7 +143,7 @@ usz_13c_data = function(data_subset, manual_select_data){
 # Exotic data from usz_13c_a Kuyumcu et al
 usz_13c_a_data = function(data_subset, manual_select_data){
   data("usz_13c_a", envir = environment())
-  if (data_subset == "manual"){
+  if (data_subset == "manual") {
     # When selection is empty, use first
     if (is.null(manual_select_data))
       manual_select_data = usz_13c_a$patient_id[1]
@@ -166,7 +166,7 @@ usz_13c_a_data = function(data_subset, manual_select_data){
 # Data with known emptying time from MRI
 usz_13c_d_data = function(data_subset, manual_select_data){
   data("usz_13c_d", envir = environment())
-  if (data_subset == "manual"){
+  if (data_subset == "manual") {
     # When selection is empty, use first
     if (is.null(manual_select_data))
       manual_select_data = usz_13c_d$patient_id[1]
@@ -210,7 +210,7 @@ clear_search_text = function(id){
 
 bt_datatable = function(cf){
   if (is.null(cf) || nrow(cf) == 0)
-    return (NULL)
+    return(NULL)
   search_options = list(paging = FALSE, searching = TRUE,
                         autoWidth = TRUE,
                         search = list(search = "t50"),
