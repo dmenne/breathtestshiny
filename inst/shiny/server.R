@@ -159,7 +159,8 @@ shinyServer(function(input, output, session) {
   # ---- Tables ----
   output$coef_table = DT::renderDT({
     coef_fit() %...>%
-    bt_datatable()
+    bt_datatable() %...!%
+    message(conditionMessage(.))
   })
 
   output$coef_by_group_table = DT::renderDT({

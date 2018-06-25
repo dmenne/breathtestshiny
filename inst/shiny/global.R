@@ -220,10 +220,8 @@ bt_datatable = function(cf){
   cm = comment(cf)
   cf = cf %>%
     mutate_if(is.character, as.factor)
-  DT::datatable(cf, rownames = FALSE, caption = cm,
-                extensions  = 'Buttons',
-                filter = "top",
-                options = search_options)
+  DT::datatable(cf, rownames = FALSE, caption = cm, extensions  = 'Buttons',
+      filter = "top",  options = search_options)
 }
 
 # ------------------------------- Help text -----------------------------------------------
