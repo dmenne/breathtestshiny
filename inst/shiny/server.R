@@ -157,12 +157,12 @@ shinyServer(function(input, output, session) {
     }, height = plot_height)
 
   # ---- Tables ----
-  output$coef_table = DT::renderDataTable({
+  output$coef_table = DT::renderDT({
     coef_fit() %...>%
     bt_datatable()
   })
 
-  output$coef_by_group_table = DT::renderDataTable({
+  output$coef_by_group_table = DT::renderDT({
     fit_function_future() %...>% (function(rf) {
       if (inherits(rf, "breathtestnullfit")) return(NULL)
       rf
@@ -172,7 +172,7 @@ shinyServer(function(input, output, session) {
       NULL
   })
 
-  output$coef_by_group_diff_table = DT::renderDataTable({
+  output$coef_by_group_diff_table = DT::renderDT({
     f = fit_function_future()
     if (inherits(f, "breathtestnullfit"))
       return(NULL)

@@ -139,14 +139,14 @@ shinyUI(
             value = "details_panel",
             clear_search_text("details"),
             h2("Per Patient/Record results"),
-            withSpinner(DT::dataTableOutput("coef_table"))
+            withSpinner(DTOutput("coef_table"))
           ),
           tabPanel(
             title = "Summary",
             value = "summary_panel",
             clear_search_text("summary"),
             h2("Per Group Means"),
-            withSpinner(DT::dataTableOutput("coef_by_group_table"))
+            withSpinner(DTOutput("coef_by_group_table"))
           ),
           # End Summary tabPanel
           tabPanel(
@@ -154,7 +154,7 @@ shinyUI(
             value = "group_differences_panel",
             clear_search_text("group_differences"),
             h2("Difference means between groups"),
-            withSpinner(DT::dataTableOutput("coef_by_group_diff_table"))
+            withSpinner(DTOutput("coef_by_group_diff_table"))
           ) # End Group differences tabPanel
         ) # end tabsetPanel
       ) # end mainPanel
