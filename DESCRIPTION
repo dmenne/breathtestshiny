@@ -18,7 +18,9 @@ Imports:
 Suggests: 
   breathtestcore (>= 0.4.0), 
   breathteststan (>= 0.4.0),
+  DT (>= 0.4.11),
   shinyjs,
+  htmlwidgets (>= 1.2.1),
   shinycssloaders,
   shinyBS,
   shinyAce, 
