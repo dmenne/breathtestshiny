@@ -1,6 +1,6 @@
 Package: breathtestshiny
 Title: Shiny web app to fit 13C time series from breath tests
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(
     person("Dieter", "Menne", , "dieter.menne@menne-biomed.de", role = c("aut", "cre")),
     person("Menne Biomed Consulting Tuebingen", role = c("cph")),
@@ -16,8 +16,8 @@ Depends: R (>= 3.2.0)
 Imports:
   shiny (>= 1.1.0)
 Suggests: 
-  breathtestcore (>= 0.4.0), 
-  breathteststan (>= 0.4.0),
+  breathtestcore (>= 0.4.1), 
+  breathteststan (>= 0.4.1),
   DT (>= 0.4.11),
   shinyjs,
   htmlwidgets (>= 1.2.1),
@@ -35,3 +35,4 @@ Remotes:
   dmenne/breathteststan
 RoxygenNote: 6.0.1.9000
 VignetteBuilder: knitr
+Encoding: UTF-8

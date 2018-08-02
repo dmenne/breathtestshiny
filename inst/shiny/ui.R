@@ -46,7 +46,9 @@ shinyUI(
                 "upload",
                 "Select or drag/drop one or multiple files",
                 multiple = TRUE,
-                accept = c("text/plain", "text/csv"),
+                accept = c("text/plain", "text/csv", "text/xml",
+                           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                           "application/vnd.ms-excel"),
                 buttonLabel = "Browse file",
                 placeholder = "Drag file here"
               ),
