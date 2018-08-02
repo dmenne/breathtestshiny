@@ -44,11 +44,11 @@ shinyUI(
             popify(
               fileInput(
                 "upload",
-                "Select or drag/drop one or multiple files",
+                "Select or drag/drop file(s)",
                 multiple = TRUE,
                 accept = c("text/plain", "text/csv", "text/xml",
-                           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           "application/vnd.ms-excel"),
+                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                 "application/vnd.ms-excel"),
                 buttonLabel = "Browse file",
                 placeholder = "Drag file here"
               ),
