@@ -5,24 +5,12 @@ library(breathtestcore)
 library(breathteststan)
 library(shinyBS)
 #options(shiny.error = browser)
-data_root = "~/breathtestcore"
-options(shiny.reactlog = TRUE)
-options(shiny.part = 4141)
+options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif
 ncol_facetwrap = 4 # for facet_wrap, number of columns
 # Behaviour of plot with 2 chains is strange
 chains = min(parallel::detectCores(logical = TRUE), 2)
 
-safe_dir_create <- function(path)
-{
-  dirTest <- function(x) !is.na(isdir <- file.info(x)$isdir) &
-    isdir
-  dt = !dirTest(path)
-  if (dt && !dir.create(path))
-    stop(gettextf("cannot create directory '%s'", path),
-         domain = NA)
-  dt
-}
 
 pop_select = function(session, input,  id, title, placement = "right" ){
   content = as.character(pop_content[input[[id]]])
@@ -150,7 +138,7 @@ usz_13c_data = function(data_subset, manual_select_data){
 # Exotic data from usz_13c_a Kuyumcu et al
 usz_13c_a_data = function(data_subset, manual_select_data){
   data("usz_13c_a", envir = environment())
-  if (data_subset == "manual"){
+  if (data_subset == "manual") {
     # When selection is empty, use first
     if (is.null(manual_select_data))
       manual_select_data = usz_13c_a$patient_id[1]
@@ -173,7 +161,7 @@ usz_13c_a_data = function(data_subset, manual_select_data){
 # Data with known emptying time from MRI
 usz_13c_d_data = function(data_subset, manual_select_data){
   data("usz_13c_d", envir = environment())
-  if (data_subset == "manual"){
+  if (data_subset == "manual") {
     # When selection is empty, use first
     if (is.null(manual_select_data))
       manual_select_data = usz_13c_d$patient_id[1]
@@ -217,7 +205,7 @@ clear_search_text = function(id){
 
 bt_datatable = function(cf){
   if (is.null(cf) || nrow(cf) == 0)
-    return (NULL)
+    return(NULL)
   search_options = list(paging = FALSE, searching = TRUE,
                         autoWidth = TRUE,
                         search = list(search = "t50"),
@@ -232,11 +220,9 @@ bt_datatable = function(cf){
                 filter = "top",
                 options = search_options)
 }
-
 # Javascript
 
 jsCode = "shinyjs.clearUpload = function(){$('#upload').parent().parent().next()[0].value = ''}"
-
 
 # ------------------------------- Help text -----------------------------------------------
 
@@ -245,7 +231,7 @@ ace_options =
 
 pop_content = c(
   append = "When unchecked, only the uploaded file or the uploaded files are displayed and fitted; the editor is automatically cleared before each upload. When checked, the editor is not cleared, data are appended to the exisiting ones. Note the slightly different behaviour of the grouping variable when no group name is given. ",
-  upload = "You can select or drag/drop multiple files of the same or mixed format at a time. Use the checkbox below if you prefer to add one file after the other.",
+  upload = "You can select or drag/drop multiple files of the same or mixed format at a time. Use the checkbox below if you prefer to add one file after the other.<br><b>When drag/drop does not respond (e.g. on Firefox), use another browser (e.g. Chrome) or the Browse button to select files.",
   data_only = "<code>No fit, data only</code> Select this before adding data or when changing data in the editor. With the others methods, any edit or selection triggers lengthy calculations.",
   nls = "<code>Individual curve fit (nls)</code> This is the method almost exclusively used in publications. It works for well-behaved breath test samples from healthy volunteers. For pathological records and when the recording time is too short compared to gastric emptying time, it can fail or give highly erratic results. Always use one of the population-based methods for clinical studies where multiple records are to be compared.",
   nlme = "<code>Mixed-model fit (nlme)</code>This method only works for multiple records that stabilize each other by borrowing strength. It can fail when many extreme records are included. Results are very stable even in presence of moderate outliers. If the algorithm converges, this is the recommended method for studies.",

@@ -178,7 +178,8 @@ shinyServer(function(input, output, session) {
     bt_datatable(cf)
   })
 
-
+  # --------- outputs -------
+  # Plots
   plot_height = function() {
     n_patient = length(unique(get_data()$patient_id))
     n_patient %/% ncol_facetwrap * 130L + 200L

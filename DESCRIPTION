@@ -14,11 +14,13 @@ Description: This package uses packages breathtestcore and breathteststan
   to fit gastric emptying 13C time series in a Shiny-based web app.
 Depends: R (>= 3.2.0)
 Imports:
-  shiny 
+  shiny (>= 1.1.0)
 Suggests: 
-  breathtestcore (>= 0.4.0), 
-  breathteststan (>= 0.4.0),
+  breathtestcore (>= 0.4.1), 
+  breathteststan (>= 0.4.1),
+  DT (>= 0.4.11),
   shinyjs,
+  htmlwidgets (>= 1.2.1),
   shinycssloaders,
   shinyBS,
   shinyAce, 
@@ -33,3 +35,4 @@ Remotes:
   dmenne/breathteststan
 RoxygenNote: 6.0.1.9000
 VignetteBuilder: knitr
+Encoding: UTF-8

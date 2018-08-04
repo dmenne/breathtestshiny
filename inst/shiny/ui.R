@@ -23,8 +23,8 @@ shinyUI(
               "No fit, data only" = "data_only",
               "Individual curve fit (nls)" = "nls",
               "Mixed-model fit (nlme) " = "nlme",
-              "Bayesian fit (Stan)" = "stan",
-              "Grouped Bayesian fit" = "stan_group"
+              "Bayesian fit (Stan)" = "stan"
+              #,"Grouped Bayesian fit" = "stan_group"
             ),
           selected = "nls"
         ),
@@ -41,15 +41,15 @@ shinyUI(
           tabPanel(
             id = "uploads_panel",
             title = "Uploads",
-            textOutput("use_link"),
-            actionLink("userid", ""),
             br(),
             popify(
               fileInput(
                 "upload",
-                "Select or drag/drop one or multiple files",
+                "Select or drag/drop file(s)",
                 multiple = TRUE,
-                accept = c("text/plain", "text/csv"),
+                accept = c("text/plain", "text/csv", "text/xml",
+                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                 "application/vnd.ms-excel"),
                 buttonLabel = "Browse file",
                 placeholder = "Drag file here"
               ),
