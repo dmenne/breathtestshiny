@@ -19,6 +19,7 @@ Suggests:
   breathtestcore (>= 0.4.1), 
   breathteststan (>= 0.4.1),
   DT (>= 0.4.11),
+  V8 (>= 1.5),
   shinyjs,
   htmlwidgets (>= 1.2.1),
   shinycssloaders,
@@ -33,6 +34,6 @@ License: GPL-3
 Remotes:
   dmenne/breathtestcore,
   dmenne/breathteststan
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8
