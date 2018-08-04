@@ -223,6 +223,9 @@ bt_datatable = function(cf){
   DT::datatable(cf, rownames = FALSE, caption = cm, extensions  = 'Buttons',
       filter = "top",  options = search_options)
 }
+# Javascript
+
+jsCode = "shinyjs.clearUpload = function(){$('#upload').parent().parent().next()[0].value = ''}"
 
 # ------------------------------- Help text -----------------------------------------------
 
