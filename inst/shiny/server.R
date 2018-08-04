@@ -22,7 +22,8 @@ shinyServer(function(input, output, session) {
   })
 
   clear_editor = function() {
-    updateAceEditor(session, "edit_data", value = 1) # Funny method to clear
+    updateAceEditor(session, "edit_data", value = "")
+    js$clearUpload()
   }
 
   # Copy patient test data to editor

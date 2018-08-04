@@ -233,6 +233,11 @@ bt_datatable = function(cf){
                 options = search_options)
 }
 
+# Javascript
+
+jsCode = "shinyjs.clearUpload = function(){$('#upload').parent().parent().next()[0].value = ''}"
+
+
 # ------------------------------- Help text -----------------------------------------------
 
 ace_options =
