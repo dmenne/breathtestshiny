@@ -135,3 +135,9 @@ a {
   color:white;
   height: 80px;
 }
+
+.shiny-notification {
+             position:fixed;
+             top: calc(30%);
+             left: 10px;
+             }

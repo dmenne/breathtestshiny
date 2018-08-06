@@ -307,8 +307,12 @@ shinyServer(function(input, output, session) {
       suppressWarnings(file.remove(dest_file)) # In case it exists
       file.rename(src_file, dest_file)
       # Read file
-      dt = try(read_any_breathtest(dest_file), silent = TRUE)
-      if (inherits(dt, "try-error")) {
+      dt = try(read_any_breathtest(dest_file), silent = FALSE)
+      if (length(dt) == 0) {
+        showNotification(paste("File", inFile, "format is not valid"),
+                         type = "error")
+        js$clearUpload()
+      } else if (inherits(dt, "try-error")) {
         inFile[i,"status"] = str_replace(dt, dirname(src_file), "")
       } else {
         inFile[i, "status"] = "Ok"
