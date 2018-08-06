@@ -309,7 +309,7 @@ shinyServer(function(input, output, session) {
       # Read file
       dt = try(read_any_breathtest(dest_file), silent = FALSE)
       if (length(dt) == 0) {
-        showNotification(paste("File", inFile, "format is not valid"),
+        showNotification(paste("File", inFile[i, 1], "format is not valid"),
                          type = "error")
         js$clearUpload()
       } else if (inherits(dt, "try-error")) {
