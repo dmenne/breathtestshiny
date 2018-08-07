@@ -1,0 +1,454 @@
+{
+  "input": {
+    "about": 0,
+    "about_tab": false,
+    "append": false,
+    "clear_button": 0,
+    "data_source": "usz_13c_a",
+    "data_subset": "random_14",
+    "details_button": 0,
+    "edit_data": "patient_id\tgroup\tminute\tpdr\ns_01\th\t1\t0.7\ns_01\th\t15\t2.6\ns_01\th\t30\t8.5\ns_01\th\t45\t11.6\ns_01\th\t60\t14.4\ns_01\th\t75\t16.1\ns_01\th\t90\t17.7\ns_01\th\t105\t19.1\ns_01\th\t120\t19.3\ns_01\th\t135\t17.9\ns_01\th\t150\t15.8\ns_01\th\t165\t13.6\ns_01\th\t180\t11.7\ns_01\th\t195\t11.7\ns_01\th\t210\t10.2\ns_01\th\t225\t9\ns_01\th\t240\t8.7\ns_06\th\t1\t-0.4\ns_06\th\t15\t2.1\ns_06\th\t30\t6.2\ns_06\th\t45\t6.9\ns_06\th\t60\t8.5\ns_06\th\t75\t9.5\ns_06\th\t90\t10.6\ns_06\th\t105\t12.7\ns_06\th\t120\t13.1\ns_06\th\t135\t12.5\ns_06\th\t150\t13.5\ns_06\th\t165\t15.6\ns_06\th\t180\t15.6\ns_06\th\t195\t15.6\ns_06\th\t210\t13.6\ns_06\th\t225\t11.9\ns_06\th\t240\t11\ns_11\th\t1\t-0.6\ns_11\th\t15\t2.9\ns_11\th\t30\t6\ns_11\th\t45\t7.8\ns_11\th\t60\t8.4\ns_11\th\t75\t8.7\ns_11\th\t90\t9.6\ns_11\th\t105\t10.5\ns_11\th\t120\t11.3\ns_11\th\t135\t10.7\ns_11\th\t150\t11.1\ns_11\th\t165\t10.4\ns_11\th\t180\t9.6\ns_11\th\t195\t9.9\ns_11\th\t210\t9.3\ns_11\th\t225\t6.9\ns_11\th\t240\t6\ns_13\th\t1\t0.2\ns_13\th\t15\t0.3\ns_13\th\t30\t0.2\ns_13\th\t45\t0.1\ns_13\th\t60\t0.1\ns_13\th\t75\t0.1\ns_13\th\t90\t0.4\ns_13\th\t105\t0.4\ns_13\th\t120\t0.3\ns_13\th\t135\t1.1\ns_13\th\t150\t0.7\ns_13\th\t165\t0.9\ns_13\th\t180\t0.9\ns_13\th\t195\t0.8\ns_13\th\t210\t1\ns_13\th\t225\t0.7\ns_13\th\t240\t0.8\ns_16\th\t1\t0.5\ns_16\th\t15\t0.3\ns_16\th\t30\t0.2\ns_16\th\t45\t0.7\ns_16\th\t60\t0.1\ns_16\th\t75\t0.9\ns_16\th\t90\t0.3\ns_16\th\t105\t1.1\ns_16\th\t120\t0.8\ns_16\th\t135\t1.5\ns_16\th\t150\t1.3\ns_16\th\t165\t2.3\ns_16\th\t180\t1.4\ns_16\th\t195\t3.6\ns_16\th\t210\t2.5\ns_16\th\t225\t2.4\ns_16\th\t240\t1.9\ns_18\th\t1\t0.4\ns_18\th\t15\t0.2\ns_18\th\t30\t0.1\ns_18\th\t45\t0.6\ns_18\th\t60\t1\ns_18\th\t75\t1.2\ns_18\th\t90\t1.6\ns_18\th\t105\t1.9\ns_18\th\t120\t1.5\ns_18\th\t135\t2.2\ns_18\th\t150\t2.6\ns_18\th\t165\t1.4\ns_18\th\t180\t2.4\ns_18\th\t195\t3.2\ns_18\th\t210\t2.4\ns_18\th\t225\t1.2\ns_18\th\t240\t2.1\ns_23\ta\t1\t0.2\ns_23\ta\t15\t3.1\ns_23\ta\t30\t5.7\ns_23\ta\t45\t7.9\ns_23\ta\t60\t8.9\ns_23\ta\t75\t10.3\ns_23\ta\t90\t10.3\ns_23\ta\t105\t11.6\ns_23\ta\t120\t12.5\ns_23\ta\t135\t13.5\ns_23\ta\t150\t14.3\ns_23\ta\t165\t12.7\ns_23\ta\t180\t13.4\ns_23\ta\t195\t14.3\ns_23\ta\t210\t13.5\ns_23\ta\t225\t13.2\ns_23\ta\t240\t12.2\ns_26\ta\t1\t0.3\ns_26\ta\t15\t2.2\ns_26\ta\t30\t4.6\ns_26\ta\t45\t7\ns_26\ta\t60\t8.3\ns_26\ta\t75\t9.7\ns_26\ta\t90\t9.8\ns_26\ta\t105\t10.6\ns_26\ta\t120\t10.4\ns_26\ta\t135\t11.2\ns_26\ta\t150\t11.5\ns_26\ta\t165\t12.9\ns_26\ta\t180\t13.5\ns_26\ta\t195\t13.7\ns_26\ta\t210\t13.6\ns_26\ta\t225\t11.9\ns_26\ta\t240\t11.2\ns_28\ta\t1\t0.3\ns_28\ta\t15\t0.7\ns_28\ta\t30\t0.7\ns_28\ta\t45\t0.7\ns_28\ta\t60\t0.6\ns_28\ta\t75\t0.7\ns_28\ta\t90\t0.5\ns_28\ta\t105\t0.5\ns_28\ta\t120\t0.6\ns_28\ta\t135\t0.9\ns_28\ta\t150\t0.8\ns_28\ta\t165\t0.8\ns_28\ta\t180\t0.8\ns_28\ta\t195\t1.1\ns_28\ta\t210\t0.8\ns_28\ta\t225\t0\ns_28\ta\t240\t0.4\ns_34\ta\t1\t-0.9\ns_34\ta\t15\t0.4\ns_34\ta\t30\t0.4\ns_34\ta\t45\t0.7\ns_34\ta\t60\t0.7\ns_34\ta\t75\t0.6\ns_34\ta\t90\t0.8\ns_34\ta\t105\t1\ns_34\ta\t120\t1.1\ns_34\ta\t135\t1.1\ns_34\ta\t150\t1.2\ns_34\ta\t165\t1.4\ns_34\ta\t180\t1.6\ns_34\ta\t195\t1.4\ns_34\ta\t210\t1.4\ns_34\ta\t225\t0.8\ns_34\ta\t240\t0.9\ns_47\to\t1\t-0.4\ns_47\to\t15\t0.7\ns_47\to\t30\t0.6\ns_47\to\t45\t0.5\ns_47\to\t60\t0.2\ns_47\to\t75\t0.6\ns_47\to\t90\t0.5\ns_47\to\t105\t0.9\ns_47\to\t120\t0.4\ns_47\to\t135\t2.1\ns_47\to\t150\t2.7\ns_47\to\t165\t2.5\ns_47\to\t180\t1.5\ns_47\to\t195\t2.2\ns_47\to\t210\t2.2\ns_47\to\t225\t0.6\ns_47\to\t240\t1.5\ns_52\to\t1\t0.5\ns_52\to\t15\t0.3\ns_52\to\t30\t0.1\ns_52\to\t45\t0.7\ns_52\to\t60\t1.3\ns_52\to\t75\t4.6\ns_52\to\t90\t4.2\ns_52\to\t105\t3.4\ns_52\to\t120\t3.8\ns_52\to\t135\t5.2\ns_52\to\t150\t5.8\ns_52\to\t165\t5.9\ns_52\to\t180\t5.7\ns_52\to\t195\t5.7\ns_52\to\t210\t5.3\ns_52\to\t225\t4.3\ns_52\to\t240\t5.3\ns_57\to\t1\t1.2\ns_57\to\t15\t0.6\ns_57\to\t30\t0.7\ns_57\to\t45\t1\ns_57\to\t60\t0.8\ns_57\to\t75\t1.2\ns_57\to\t90\t1.2\ns_57\to\t105\t1.7\ns_57\to\t120\t1.2\ns_57\to\t135\t2.4\ns_57\to\t150\t2.1\ns_57\to\t165\t2.3\ns_57\to\t180\t1.8\ns_57\to\t195\t3.1\ns_57\to\t210\t2.5\ns_57\to\t225\t1.2\ns_57\to\t240\t1.3\ns_59\to\t1\t-0.1\ns_59\to\t15\t0.1\ns_59\to\t30\t0\ns_59\to\t45\t0.8\ns_59\to\t60\t-0.2\ns_59\to\t75\t-0.1\ns_59\to\t90\t0.3\ns_59\to\t105\t0.3\ns_59\to\t120\t0.1\ns_59\to\t135\t0.4\ns_59\to\t150\t1.1\ns_59\to\t165\t0.3\ns_59\to\t180\t0.3\ns_59\to\t195\t0.6\ns_59\to\t210\t0.6\ns_59\to\t225\t-0.2\ns_59\to\t240\t0.2",
+    "fit_method": "nls",
+    "group_differences_button": 0,
+    "iter": "200",
+    "main_panel": "data_panel",
+    "manual_select_data": null,
+    "samples_panel": "demo_panel",
+    "show_pop": false,
+    "student_t_df": "10",
+    "summary_button": 0,
+    "upload": null
+  },
+  "output": {
+    "fit_plot": {
+      "src": "[image data sha1: 661a3d127d36ea9845d3e048e075426ade544f70]",
+      "width": 810,
+      "height": 590,
+      "coordmap": [
+        {
+          "panel": 1,
+          "row": 1,
+          "col": 1,
+          "panel_vars": {
+            "panelvar1": "s_01"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 107.61301369863,
+            "right": 250.994863013699,
+            "bottom": 155.431506849315,
+            "top": 40.7260273972603
+          }
+        },
+        {
+          "panel": 2,
+          "row": 1,
+          "col": 2,
+          "panel_vars": {
+            "panelvar1": "s_06"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 250.994863013699,
+            "right": 394.376712328767,
+            "bottom": 155.431506849315,
+            "top": 40.7260273972603
+          }
+        },
+        {
+          "panel": 3,
+          "row": 1,
+          "col": 3,
+          "panel_vars": {
+            "panelvar1": "s_11"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 394.376712328767,
+            "right": 537.758561643836,
+            "bottom": 155.431506849315,
+            "top": 40.7260273972603
+          }
+        },
+        {
+          "panel": 4,
+          "row": 1,
+          "col": 4,
+          "panel_vars": {
+            "panelvar1": "s_13"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 537.758561643836,
+            "right": 681.140410958904,
+            "bottom": 155.431506849315,
+            "top": 40.7260273972603
+          }
+        },
+        {
+          "panel": 5,
+          "row": 2,
+          "col": 1,
+          "panel_vars": {
+            "panelvar1": "s_16"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 107.61301369863,
+            "right": 250.994863013699,
+            "bottom": 288.904109589041,
+            "top": 174.198630136986
+          }
+        },
+        {
+          "panel": 6,
+          "row": 2,
+          "col": 2,
+          "panel_vars": {
+            "panelvar1": "s_18"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 250.994863013699,
+            "right": 394.376712328767,
+            "bottom": 288.904109589041,
+            "top": 174.198630136986
+          }
+        },
+        {
+          "panel": 7,
+          "row": 2,
+          "col": 3,
+          "panel_vars": {
+            "panelvar1": "s_23"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 394.376712328767,
+            "right": 537.758561643836,
+            "bottom": 288.904109589041,
+            "top": 174.198630136986
+          }
+        },
+        {
+          "panel": 8,
+          "row": 2,
+          "col": 4,
+          "panel_vars": {
+            "panelvar1": "s_26"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 537.758561643836,
+            "right": 681.140410958904,
+            "bottom": 288.904109589041,
+            "top": 174.198630136986
+          }
+        },
+        {
+          "panel": 9,
+          "row": 3,
+          "col": 1,
+          "panel_vars": {
+            "panelvar1": "s_28"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 107.61301369863,
+            "right": 250.994863013699,
+            "bottom": 422.376712328767,
+            "top": 307.671232876712
+          }
+        },
+        {
+          "panel": 10,
+          "row": 3,
+          "col": 2,
+          "panel_vars": {
+            "panelvar1": "s_34"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 250.994863013699,
+            "right": 394.376712328767,
+            "bottom": 422.376712328767,
+            "top": 307.671232876712
+          }
+        },
+        {
+          "panel": 11,
+          "row": 3,
+          "col": 3,
+          "panel_vars": {
+            "panelvar1": "s_47"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 394.376712328767,
+            "right": 537.758561643836,
+            "bottom": 422.376712328767,
+            "top": 307.671232876712
+          }
+        },
+        {
+          "panel": 12,
+          "row": 3,
+          "col": 4,
+          "panel_vars": {
+            "panelvar1": "s_52"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 537.758561643836,
+            "right": 681.140410958904,
+            "bottom": 422.376712328767,
+            "top": 307.671232876712
+          }
+        },
+        {
+          "panel": 13,
+          "row": 4,
+          "col": 1,
+          "panel_vars": {
+            "panelvar1": "s_57"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 107.61301369863,
+            "right": 250.994863013699,
+            "bottom": 555.849315068493,
+            "top": 441.143835616438
+          }
+        },
+        {
+          "panel": 14,
+          "row": 4,
+          "col": 2,
+          "panel_vars": {
+            "panelvar1": "s_59"
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "domain": {
+            "left": -7.09615388751774,
+            "right": 360.903848263405,
+            "bottom": -1.91,
+            "top": 20.31
+          },
+          "mapping": {
+            "x": "minute",
+            "y": "pdr",
+            "colour": "group",
+            "panelvar1": "patient_id"
+          },
+          "range": {
+            "left": 250.994863013699,
+            "right": 394.376712328767,
+            "bottom": 555.849315068493,
+            "top": 441.143835616438
+          }
+        }
+      ]
+    }
+  },
+  "export": {
+
+  }
+}

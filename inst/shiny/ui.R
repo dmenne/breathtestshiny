@@ -39,7 +39,6 @@ shinyUI(
         ),
         tabsetPanel(
           tabPanel(
-            id = "uploads_panel",
             title = "Uploads",
             br(),
             popify(
@@ -57,12 +56,12 @@ shinyUI(
               pop_content["upload"],
               "right"
             ),
-            checkboxInput("append", "Append selected data", value = FALSE)
+            checkboxInput("append", "Append selected data", value = FALSE),
+            value = "uploads_panel"
           ),
           # End uploads_panel
 
           tabPanel(
-            id = "demo_panel",
             title = "Demo",
             conditionalPanel(
               "input.method_a == 'stan' |input.fit_method == 'stan_group'",
@@ -102,8 +101,10 @@ shinyUI(
                 choices = NULL,
                 multiple = TRUE
               )
-            )
-          ) # end demo_panel
+            ),
+            value = "demo_panel"
+          ), # end demo_panel
+          id = "samples_panel"
         ),
         # End tabsetpanel
         # actionLink("create_workspace", "Create Workspace"),
