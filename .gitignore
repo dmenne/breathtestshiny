@@ -6,6 +6,7 @@ inst/data
 docaux/
 inst/doc
 inst/shiny/include/*.html
+inst/shiny/tests/*.png
 vignettes/*.html
 Dockerfile
 deps.yaml

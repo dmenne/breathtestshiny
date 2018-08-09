@@ -1,7 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-docaux/
-docs/$
 ^_pkgdown\.yml$
 Dockerfile
 deps.yaml
+.travis.yml
+^docs$
+^docaux$
+^templates$
+
