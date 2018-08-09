@@ -26,4 +26,7 @@ To generate a new test set, use the following sequence:
 
 During Check and on Travis CI, only the `json` files are compared to the `expected, because images can look different on different platforms.
 
+For testing on Travis CI, it is important to generated the expected output on a Linux machine, since plots use different left/right ranges. However, this also give slightly different ranges, so that testing with shinytest __currently is not possible__.
+
+
  
