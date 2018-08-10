@@ -4,7 +4,10 @@
 \alias{run_shiny}
 \title{Run breathtestshiny app}
 \usage{
-run_shiny()
+run_shiny(port = 3838)
+}
+\arguments{
+\item{port}{Port for runApp, default 3838}
 }
 \description{
 Run breathtestshiny app
