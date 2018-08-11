@@ -7,4 +7,4 @@ deps.yaml
 ^docs$
 ^docaux$
 ^templates$
-*.cmd
+^*\.cmd$
