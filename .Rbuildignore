@@ -7,4 +7,5 @@ deps.yaml
 ^docs$
 ^docaux$
 ^templates$
-*.cmd
+run_docker.cmd
+build_docker.cmd
