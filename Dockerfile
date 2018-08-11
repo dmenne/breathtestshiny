@@ -8,8 +8,7 @@ RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
   && rm -rf /var/lib/apt/lists/*
 
-# Already done in r-base:latest
-#EXPOSE 3838 
+EXPOSE 3838 
 
 CMD ["R", "-e", "breathtestshiny::run_shiny()"]
 

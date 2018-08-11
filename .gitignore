@@ -9,3 +9,4 @@ inst/shiny/include/*.html
 inst/shiny/tests/*.png
 vignettes/*.html
 deps.yaml
+*.cmd
