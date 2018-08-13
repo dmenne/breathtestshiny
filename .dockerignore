@@ -1,4 +1,3 @@
 *
 !Dockerfile
-Makevars
-Rprofile.site
+!shiny-server.sh
