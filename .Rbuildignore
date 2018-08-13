@@ -7,5 +7,8 @@ deps.yaml
 ^docs$
 ^docaux$
 ^templates$
-run_docker.cmd
-build_docker.cmd
+^run_docker.cmd
+^build_docker.cmd
+^docker-compose.yml
+^shiny-server.conf
+^shiny-server.sh
