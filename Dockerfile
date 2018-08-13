@@ -2,10 +2,15 @@ FROM dmenne/stanverse:latest
 
 MAINTAINER Dieter Menne "dieter.menne@menne-biomed.de"
 
+RUN install2.r --error  devtools
+
 RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
-  c( 'breathtestcore', 'breathtestshiny', 'breathteststan')))" \
-  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
-  && rm -rf /var/lib/apt/lists/*
+  c( 'breathtestcore', 'breathtestshiny')))"
+
+RUN Rscript -e "devtools::install_github('dmenne/breathteststan')"
+
+#  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
+#  && rm -rf /var/lib/apt/lists/*
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
 
