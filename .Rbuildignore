@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
 Dockerfile
+^.dockerignore
 deps.yaml
 .travis.yml
 ^docs$
