@@ -1,0 +1,16 @@
+# Does not work on Windows
+# Assuming this file is in the directory
+# docker-compose up . 
+version: "3"
+services:
+  breathtestshiny:
+    image: dmenne/breathtestshiny
+    ports:
+      - "3839:3838"
+  watchtower:
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 300
+ 

@@ -2,3 +2,4 @@
 !Dockerfile
 !shiny-server.sh
 !shiny-server.conf
+!docker-compose.yml
