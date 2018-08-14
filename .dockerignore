@@ -3,3 +3,4 @@
 !shiny-server.sh
 !shiny-server.conf
 !docker-compose.yml
+!README_docker_breathtestshiny.md
