@@ -12,6 +12,8 @@ RUN Rscript -e "devtools::install_github('dmenne/breathteststan')" \
   && rm -rf /var/lib/apt/lists/*
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
+# https://github.com/rocker-org/shiny/issues/32
+RUN ["chmod", "+x", "/usr/bin/shiny-server.sh"]
 COPY shiny-server.conf /etc/shiny-server
 
 # Remove apps

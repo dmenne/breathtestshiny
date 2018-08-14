@@ -5,9 +5,12 @@ version: "3"
 services:
   breathtestshiny:
     image: dmenne/breathtestshiny
+    user: 'root'
     ports:
       - "3839:3838"
-  watchtower:
+    volumes:
+      - 'shiny_logs:/var/log/shiny-server'  
+ watchtower:
     image: v2tec/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
