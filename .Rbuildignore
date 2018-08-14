@@ -13,4 +13,5 @@ deps.yaml
 ^docker-compose.yml
 ^shiny-server.conf
 ^shiny-server.sh
-^*.md$
+^.*\.md
+
