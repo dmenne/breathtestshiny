@@ -10,10 +10,12 @@ services:
       - "3839:3838"
     volumes:
       - 'shiny_logs:/var/log/shiny-server'  
- watchtower:
-    image: v2tec/watchtower breathtestshiny
+  watchtower:
+    image: v2tec/watchtower 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
-    command: --interval 300
- 
+    command: --interval 300 breathtestshiny
+
+volumes: 
+   shiny_logs:
