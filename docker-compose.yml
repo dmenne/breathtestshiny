@@ -11,7 +11,7 @@ services:
     volumes:
       - 'shiny_logs:/var/log/shiny-server'  
  watchtower:
-    image: v2tec/watchtower
+    image: v2tec/watchtower breathtestshiny
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
