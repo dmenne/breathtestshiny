@@ -49,9 +49,11 @@ Manually copy the file `docker-compose.yml` to your work directory, and start th
 By default, in this installation port 3839 is used, to avoid clashes with a Shiny server running on your server.
 Use [localhost:3839](`localhost:3839`) in your browser, or edit the file `docker-compose.yml`.
 
+The `docker-compose` based installation works under Linux only and uses watchtower to automatically update the Docker image when a new version of `breathtestshiny` has is available. 
+
 ## Shinytest
 
-A test to be used with [shinytest](https://github.com/rstudio/shinytest) is included.
+A test for use with packate [shinytest](https://github.com/rstudio/shinytest) is included.
 
 To generate a new test set, use the following sequence:
 
@@ -63,7 +65,7 @@ To generate a new test set, use the following sequence:
 
 During Check and on Travis CI, only the `json` files are compared because images can look different on different platforms.
 
-For testing on Travis CI, it is important to generate the expected output on a Linux machine, since plots use different left/right ranges. This also give slightly different ranges, so that testing with shinytest on Travis CI __currently is skipped__.
+For testing on Travis CI, it is important to generate the expected output on a Linux machine, since plots under Windows result in different left/right displayed ranges. On Travis CI, testing __currently is skipped__.
 
 
 
