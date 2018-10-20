@@ -28,7 +28,6 @@ When used online, no data are stored after you close the browser, or when you st
 - For Windows 10, you can get the installer from the [Docker store](https://store.docker.com/editions/community/docker-ce-desktop-windows). For earlier versions of Windows, use the [Docker toolbox](https://www.docker.com/products/docker-toolbox). For installation details, see [here](https://docs.docker.com/docker-for-windows/install/).  
 - Linux users know how to install Docker anyway. 
 - Docker should have at least 2 GB of memory; on Windows, use Settings from the Docker tray icon. 
-- Have plenty of memory available to Docker when you want to build the package from sources; 10 GB might be required. When you see segmentation faults during C++ builds, this indicates a lack of memory.
 
 ### Installing `breathtestshiny` 
 
@@ -37,8 +36,8 @@ When used online, no data are stored after you close the browser, or when you st
 ```
 docker run --name breathtestshiny  -p 3838:3838 -d dmenne/breathtestshiny
 ```
-- The first startup needs some time because 3 GB of applications are downloaded. Subsequent startups require only a few seconds.
-- Connect to the apps with your browser: [localhost:3838](`localhost:3838`). <- This link does not work when your read this from github or the Docker hub, only on your local installation.
+- The first startup needs some time because 1 GB has to be downloaded. Subsequent startups require only a few seconds.
+- Connect to the app with your browser: [localhost:3838](`localhost:3838`). <- This link does not work when your read this from github or the Docker hub, only on your local installation.
 
 ### Using docker-compose
 
@@ -47,13 +46,13 @@ Manually copy the file `docker-compose.yml` to your work directory, and start th
 `# docker-compose up -d` 
 
 By default, in this installation port 3839 is used, to avoid clashes with a Shiny server running on your server.
-Use [localhost:3839](`localhost:3839`) in your browser, or edit the file `docker-compose.yml`.
+Use [localhost:3839](`localhost:3839`) in your browser, or edit the file `docker-compose.yml` when you want to use a different port. 
 
 The `docker-compose` based installation works under Linux only and uses watchtower to automatically update the Docker image when a new version of `breathtestshiny` has is available. 
 
 ## Shinytest
 
-A test for use with packate [shinytest](https://github.com/rstudio/shinytest) is included.
+A test for use with package [shinytest](https://github.com/rstudio/shinytest) is included.
 
 To generate a new test set, use the following sequence:
 

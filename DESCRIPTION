@@ -1,5 +1,5 @@
 Package: breathtestshiny
-Title: Shiny web app to fit 13C time series from breath tests
+Title: Shiny Web App to Fit 13c Time Series from Breath Tests
 Version: 0.4.4.9000
 Authors@R: c(
     person("Dieter", "Menne", , "dieter.menne@menne-biomed.de", role = c("aut", "cre")),

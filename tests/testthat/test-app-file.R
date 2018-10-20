@@ -5,6 +5,7 @@ library(shinytest)
 # in lower decimals
 
 test_that("default_demo_test works", {
+  skip()
   skip_on_cran()
   skip_on_travis()
   appdir <- system.file(package = "breathtestshiny", "shiny")
