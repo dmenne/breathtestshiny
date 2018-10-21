@@ -267,18 +267,19 @@ about_text = paste(includeMarkdown("include/about.md"), version_info)
 
 
 manual_subsets_a = function(){
-  data("usz_13c_a", envir = environment())
+  data("usz_13c_a", package = "breathtestcore", envir = environment())
   s = usz_13c_a %>%
     select(group, patient_id) %>%
-    unique() %>%
-    mutate(
-      group = paste("Group",group)
-    )
+    unique()
+  # Strange error message when using mutate in the following
+  # error in cnd(.subclass, ..., message = message) :
+  # VECTOR_ELT() can only be applied to a 'list', not a 'language'
+  s$group = str_c("Group_", s$group)
   split(s$patient_id, s$group)
 }
 
 manual_subsets_d = function(){
-  data("usz_13c_d", envir = environment())
+  data("usz_13c_d", package = "breathtestcore", envir = environment())
   as.list(unique(usz_13c_d$patient_id))
 }
 

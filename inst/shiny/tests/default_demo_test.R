@@ -1,3 +1,5 @@
+# Set working directory to source file when starting this manually
+library(shinytest) # Only needed to run locally
 app <- ShinyDriver$new("../", seed = 1, phantomTimeout = 10000)
 app$snapshotInit("default_demo_test")
 app$setWindowSize(1200, 800)
