@@ -111,7 +111,7 @@ shinyServer(function(input, output, session) {
     if (is.null(data))
       return(NULL)
     #save(data, file= "ndata.rda")
-    switch(
+    ret = try(switch(
       method,
       data_only = null_fit(data),
       nls = nls_fit(data),
@@ -128,7 +128,8 @@ shinyServer(function(input, output, session) {
         student_t_df = as.integer(input$student_t_df),
         iter = as.integer(input$iter)
       )
-    )
+    ), silent = TRUE)
+    ret
   })
 
   # Returns coefficients of fit and comment

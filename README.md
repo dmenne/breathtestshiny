@@ -1,11 +1,10 @@
 breathtestshiny: Web application to fit 13C time series for gastric emptying
 ===========================================
 
-Dieter Menne   
-Menne Biomed Consulting Tübingen, Germany    
-http://www.menne-biomed.de   
-
-dieter.menne@menne-biomed.de 
+Dieter Menne  
+Menne Biomed Consulting Tübingen, Germany  
+http://www.menne-biomed.de  
+dieter.menne@menne-biomed.de   
 
 The software is being developed in cooperation with the ETH, the Department of Gastroenterology of the University Hospital of Zürich, and Claraspital Basel. Thanks to Andreas Steingötter, Benjamin Misselwitz, Mark Fox and Werner Schwizer.
 
