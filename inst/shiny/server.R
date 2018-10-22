@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
         iter = as.integer(input$iter)
       )
     ), silent = TRUE)
-    ret
+    ifelse(class(ret) == "try-error", NULL, ret)
   })
 
   # Returns coefficients of fit and comment
