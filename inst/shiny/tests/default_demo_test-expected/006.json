@@ -27,9 +27,437 @@
   },
   "output": {
     "fit_plot": {
-      "message": "'x' is a list, but does not have components 'x' and 'y'",
-      "call": "xy.coords(x, y, xlabel, ylabel, log)",
-      "type": null
+      "src": "[image data sha1: 72bf962aa5cdad01443727335704b781a08d8e8b]",
+      "width": 810,
+      "height": 590,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "s_01"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 107.36301369863,
+              "right": 250.119863013699,
+              "bottom": 155.931506849315,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 2,
+            "row": 1,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "s_06"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 250.119863013699,
+              "right": 392.876712328767,
+              "bottom": 155.931506849315,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 3,
+            "row": 1,
+            "col": 3,
+            "panel_vars": {
+              "panelvar1": "s_11"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 392.876712328767,
+              "right": 535.633561643836,
+              "bottom": 155.931506849315,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 4,
+            "row": 1,
+            "col": 4,
+            "panel_vars": {
+              "panelvar1": "s_13"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 535.633561643836,
+              "right": 678.390410958904,
+              "bottom": 155.931506849315,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 5,
+            "row": 2,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "s_16"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 107.36301369863,
+              "right": 250.119863013699,
+              "bottom": 288.904109589041,
+              "top": 174.698630136986
+            }
+          },
+          {
+            "panel": 6,
+            "row": 2,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "s_18"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 250.119863013699,
+              "right": 392.876712328767,
+              "bottom": 288.904109589041,
+              "top": 174.698630136986
+            }
+          },
+          {
+            "panel": 7,
+            "row": 2,
+            "col": 3,
+            "panel_vars": {
+              "panelvar1": "s_23"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 392.876712328767,
+              "right": 535.633561643836,
+              "bottom": 288.904109589041,
+              "top": 174.698630136986
+            }
+          },
+          {
+            "panel": 8,
+            "row": 2,
+            "col": 4,
+            "panel_vars": {
+              "panelvar1": "s_26"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 535.633561643836,
+              "right": 678.390410958904,
+              "bottom": 288.904109589041,
+              "top": 174.698630136986
+            }
+          },
+          {
+            "panel": 9,
+            "row": 3,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "s_28"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 107.36301369863,
+              "right": 250.119863013699,
+              "bottom": 421.876712328767,
+              "top": 307.671232876712
+            }
+          },
+          {
+            "panel": 10,
+            "row": 3,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "s_34"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 250.119863013699,
+              "right": 392.876712328767,
+              "bottom": 421.876712328767,
+              "top": 307.671232876712
+            }
+          },
+          {
+            "panel": 11,
+            "row": 3,
+            "col": 3,
+            "panel_vars": {
+              "panelvar1": "s_47"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 392.876712328767,
+              "right": 535.633561643836,
+              "bottom": 421.876712328767,
+              "top": 307.671232876712
+            }
+          },
+          {
+            "panel": 12,
+            "row": 3,
+            "col": 4,
+            "panel_vars": {
+              "panelvar1": "s_52"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 535.633561643836,
+              "right": 678.390410958904,
+              "bottom": 421.876712328767,
+              "top": 307.671232876712
+            }
+          },
+          {
+            "panel": 13,
+            "row": 4,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "s_57"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 107.36301369863,
+              "right": 250.119863013699,
+              "bottom": 554.849315068493,
+              "top": 440.643835616438
+            }
+          },
+          {
+            "panel": 14,
+            "row": 4,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "s_59"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -7.09615388751773,
+              "right": 360.903848263404,
+              "bottom": -1.91,
+              "top": 20.31
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 250.119863013699,
+              "right": 392.876712328767,
+              "bottom": 554.849315068493,
+              "top": 440.643835616438
+            }
+          }
+        ],
+        "dims": {
+          "width": 810,
+          "height": 590
+        }
+      }
     }
   },
   "export": {

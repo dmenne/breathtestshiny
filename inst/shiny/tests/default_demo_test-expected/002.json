@@ -27,9 +27,167 @@
   },
   "output": {
     "fit_plot": {
-      "message": "'x' is a list, but does not have components 'x' and 'y'",
-      "call": "xy.coords(x, y, xlabel, ylabel, log)",
-      "type": null
+      "src": "[image data sha1: f5d08ca378c90178cb7042efe5c1dce4a2e5e79c]",
+      "width": 810,
+      "height": 330,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "norm_001"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -4.82,
+              "right": 244.82,
+              "bottom": -1.315,
+              "top": 27.615
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 77.5517808219178,
+              "right": 224.024383561644,
+              "bottom": 158.904109589041,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 2,
+            "row": 1,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "norm_002"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -4.82,
+              "right": 244.82,
+              "bottom": -1.315,
+              "top": 27.615
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 224.024383561644,
+              "right": 370.49698630137,
+              "bottom": 158.904109589041,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 3,
+            "row": 1,
+            "col": 3,
+            "panel_vars": {
+              "panelvar1": "norm_003"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -4.82,
+              "right": 244.82,
+              "bottom": -1.315,
+              "top": 27.615
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 370.49698630137,
+              "right": 516.969589041096,
+              "bottom": 158.904109589041,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 4,
+            "row": 1,
+            "col": 4,
+            "panel_vars": {
+              "panelvar1": "norm_004"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -4.82,
+              "right": 244.82,
+              "bottom": -1.315,
+              "top": 27.615
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 516.969589041096,
+              "right": 663.442191780822,
+              "bottom": 158.904109589041,
+              "top": 41.7260273972603
+            }
+          },
+          {
+            "panel": 5,
+            "row": 2,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "norm_005"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -4.82,
+              "right": 244.82,
+              "bottom": -1.315,
+              "top": 27.615
+            },
+            "mapping": {
+              "x": "minute",
+              "y": "pdr",
+              "colour": "group",
+              "panelvar1": "patient_id"
+            },
+            "range": {
+              "left": 77.5517808219178,
+              "right": 224.024383561644,
+              "bottom": 294.849315068493,
+              "top": 177.671232876712
+            }
+          }
+        ],
+        "dims": {
+          "width": 810,
+          "height": 330
+        }
+      }
     }
   },
   "export": {
