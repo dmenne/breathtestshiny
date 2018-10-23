@@ -34,7 +34,8 @@ URL: https://github.com/dmenne/breathtestshiny
 License: GPL-3
 Remotes:
   dmenne/breathtestcore,
-  dmenne/breathteststan
+  dmenne/breathteststan,
+  DT (>= 0.4.11)
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8
