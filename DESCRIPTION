@@ -20,7 +20,7 @@ Suggests:
   breathteststan (>= 0.4.5),
   DT (>= 0.4.11),
   shinyjs,
-  htmlwidgets (>= 1.3),
+  htmlwidgets,
   shinycssloaders,
   shinyBS,
   shinyAce, 
