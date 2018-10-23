@@ -28,8 +28,7 @@ Suggests:
   testthat, 
   knitr,
   rmarkdown,
-  shinytest,
-  V8
+  shinytest
 URL: https://github.com/dmenne/breathtestshiny
 License: GPL-3
 Remotes:
