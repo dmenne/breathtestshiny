@@ -35,7 +35,7 @@ License: GPL-3
 Remotes:
   dmenne/breathtestcore,
   dmenne/breathteststan,
-  DT (>= 0.4.11)
+  DT
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8
