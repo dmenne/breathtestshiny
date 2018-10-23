@@ -2,8 +2,6 @@ FROM dmenne/stanverse:latest
 
 MAINTAINER Dieter Menne "dieter.menne@menne-biomed.de"
 
-RUN install2.r --error  devtools
-
 RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
   c( 'breathtestcore', 'breathtestshiny')))"
 
