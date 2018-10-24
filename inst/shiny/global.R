@@ -1,9 +1,9 @@
 suppressPackageStartupMessages(library(shiny))
-library(stringr)
+suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(dplyr))
-library(breathtestcore)
-library(breathteststan)
-library(shinyBS)
+suppressPackageStartupMessages(library(breathtestcore))
+suppressPackageStartupMessages(library(breathteststan))
+suppressPackageStartupMessages(library(shinyBS))
 #options(shiny.error = browser)
 options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif

@@ -1,6 +1,6 @@
-library(shinyjs)
-library(shinyAce)
-library(breathtestcore)
+suppressPackageStartupMessages(library(shinyjs))
+suppressPackageStartupMessages(library(shinyAce))
+suppressPackageStartupMessages(library(breathtestcore))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
 
@@ -75,7 +75,6 @@ shinyServer(function(input, output, session) {
         theme(legend.key.size = unit(2,"line")) +
         guides(colour = guide_legend(override.aes = list(size = 2)))
       png(file,  width = width, height = plot_height()*2)
-      print(p)
       dev.off() # turn the device off
     }
   )
@@ -138,6 +137,7 @@ shinyServer(function(input, output, session) {
     f  = fit()
     if (is.null(f))
       return(NULL)
+    cat(file = stderr(), str(f,1))
     cf = coef(f)
     if (is.null(cf))
       return(NULL)
