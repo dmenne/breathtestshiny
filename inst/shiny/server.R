@@ -135,9 +135,8 @@ shinyServer(function(input, output, session) {
   # Returns coefficients of fit and comment
   coef_fit = function() {
     f  = fit()
-    if (is.null(f))
+    if (is.null(f) || inherits(f, "try-error"))
       return(NULL)
-    cat(file = stderr(), str(f,1))
     cf = coef(f)
     if (is.null(cf))
       return(NULL)
