@@ -137,7 +137,6 @@ shinyServer(function(input, output, session) {
     f  = fit()
     if (is.null(f))
       return(NULL)
-    cat(file = stderr(), str(f,1))
     cf = coef(f)
     if (is.null(cf))
       return(NULL)
