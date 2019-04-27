@@ -260,6 +260,7 @@ version_info =
          "), breathtestshiny (", packageVersion("breathtestshiny"),
          "), rstan (", packageVersion("rstan"),
          "), StanHeaders (", packageVersion("StanHeaders"),
+         "), Shiny (", packageVersion("shiny"),
          ")")
 
 about_text = paste(includeMarkdown("include/about.md"), version_info)
