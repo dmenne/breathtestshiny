@@ -1,4 +1,3 @@
-# Does not work on Windows
 # Assuming this file is in the directory
 # docker-compose up . 
 version: "3"
@@ -10,18 +9,6 @@ services:
       - "3839:3838"
     volumes:
       - 'shiny_logs:/var/log/shiny-server'  
-    restart: unless-stopped
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-
-  watchtower:
-    image: v2tec/watchtower 
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json
-    command: --interval 604800 --label-enable  --cleanup
     restart: unless-stopped
 
 volumes: 

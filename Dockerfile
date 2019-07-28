@@ -1,6 +1,49 @@
-FROM dmenne/stanverse:latest
+FROM rocker/shiny-verse:latest
 
-MAINTAINER Dieter Menne "dieter.menne@menne-biomed.de"
+LABEL maintainer="dieter.menne@menne-biomed.de"
+
+RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+ libxml2-dev \ 
+ libsqlite-dev \ 
+ libmariadbd-dev \ 
+ libmariadb-client-lgpl-dev \ 
+ libpq-dev \
+ libssh2-1-dev \
+ libssl-dev  \
+ libv8-3.14 # for V8
+
+RUN install2.r --error --ncpus 2 \
+    devtools \
+    PKI \
+    caTools \
+    DT \
+    dygraphs \
+    gtools \ 
+    shinyjs \ 
+    shinythemes \ 
+    shinyBS \ 
+    shinyAce \
+    shinycssloaders \
+    colourpicker \
+    xts \
+    rsconnect \
+    V8 \
+    BH 
+
+RUN install2.r --error --ncpus 2 \
+   Rcpp \
+   RcppEigen
+
+RUN install2.r --error --ncpus 2 \
+   rstan \
+   bayesplot \
+   rstantools 
+
+# For gitlab    
+RUN install2.r --error --ncpus 2 \
+    ggfittext\
+    signal \
+    multcomp 
 
 RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
   c( 'breathtestcore', 'breathtestshiny')))"
