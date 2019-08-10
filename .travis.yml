@@ -24,10 +24,10 @@ r_github_packages:
   - dmenne/breathteststan
 
 before_install:
-  - mkdir -p ~/.R
-  - echo "CXX14FLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function >> ~/.R/Makevars
+  - mkdir -p ~/.R/
+  - echo "CXX14FLAGS=-O3 -march=native -mtune=native -fPIC" >> ~/.R/Makevars
   - echo "g++  -std=gnu++14 -fPIC" >> ~/.R/Makevars
-  - echo ${CXX} --version
+  - echo "CXX14=g++" >> ~/.R/Makevars
 
 after_success:
   - travis_wait 59 Rscript -e 'covr::coveralls(line_exclusions="src/init.cpp")'
