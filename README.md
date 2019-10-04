@@ -12,7 +12,7 @@ Shiny web app to fit 13C data with R package [breathtestcore](https://github.com
 
 ## Where to find the code
 
-![BreathtestShiny Hex Sticker](https://raw.githubusercontent.com/dmenne/breathtestshiny/master/vignettes/BreathTestShiny.png)
+![](vignettes/BreathTestShiny.png)
 
 - On Github: https://github.com/dmenne/breathtestshiny
 
