@@ -6,13 +6,13 @@ Menne Biomed Consulting
 http://www.menne-biomed.de  
 dieter.menne@menne-biomed.de   
 
+![](vignettes/BreathTestShiny.png)
+
 The software is being developed in cooperation with the ETH, the Department of Gastroenterology of the University Hospital of Zürich, and Claraspital Basel. Thanks to Andreas Steingötter, Benjamin Misselwitz, Mark Fox and Werner Schwizer.
 
 Shiny web app to fit 13C data with R package [breathtestcore](https://github.com/dmenne/breathtestcore). You can try the [web app](https://apps.menne-biomed.de/breathtestshiny/) online. No data are stored in this online version, but you can download all results and group-pairwise comparisons for studies.
 
 ## Where to find the code
-
-![](vignettes/BreathTestShiny.png)
 
 - On Github: https://github.com/dmenne/breathtestshiny
 
