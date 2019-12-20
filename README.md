@@ -29,7 +29,7 @@ The image cannot be compiled on the Docker hub because the build runs out of mem
 ### Installing Docker 
 - For Windows 10, you can get the installer from the [Docker store](https://store.docker.com/editions/community/docker-ce-desktop-windows). For earlier versions of Windows, use the [Docker toolbox](https://www.docker.com/products/docker-toolbox). For installation details, see [here](https://docs.docker.com/docker-for-windows/install/).  
 - Linux users know how to install Docker anyway. 
-- Docker should have at least 2 GB of memory; on Windows, use Settings from the Docker tray icon. If you want to build the Docker image, you need at least 4 GB and 2 cores; strange error messages will confused you horribly when memory is low. 
+- Docker should have at least 2 GB of memory; on Windows, use Settings from the Docker tray icon. If you want to build the Docker image, you need at least 4 GB and 2 cores; confusing error messages are being emitted when memory is low.
 
 ### Installing `breathtestshiny` 
 
