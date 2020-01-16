@@ -3,13 +3,14 @@ FROM rocker/shiny-verse:latest
 LABEL maintainer="dieter.menne@menne-biomed.de"
 
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
- libxml2-dev \ 
- libsqlite-dev \ 
- libmariadbd-dev \ 
- libmariadb-client-lgpl-dev \ 
+ libxml2-dev \
+ libsqlite-dev \
+ libmariadbd-dev \
+ libmariadb-client-lgpl-dev \
  libpq-dev \
  libssh2-1-dev \
  libssl-dev  \
+ curl \
  libv8-3.14 # for V8
 
 RUN install2.r --error --ncpus 2 \
@@ -18,17 +19,17 @@ RUN install2.r --error --ncpus 2 \
     caTools \
     DT \
     dygraphs \
-    gtools \ 
-    shinyjs \ 
-    shinythemes \ 
-    shinyBS \ 
+    gtools \
+    shinyjs \
+    shinythemes \
+    shinyBS \
     shinyAce \
     shinycssloaders \
     colourpicker \
     xts \
     rsconnect \
     V8 \
-    BH 
+    BH
 
 RUN install2.r --error --ncpus 2 \
    Rcpp \
@@ -37,13 +38,13 @@ RUN install2.r --error --ncpus 2 \
 RUN install2.r --error --ncpus 2 \
    rstan \
    bayesplot \
-   rstantools 
+   rstantools
 
-# For gitlab    
+# For gitlab
 RUN install2.r --error --ncpus 2 \
     ggfittext\
     signal \
-    multcomp 
+    multcomp
 
 RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
   c( 'breathtestcore', 'breathtestshiny')))"
@@ -62,7 +63,7 @@ RUN rm -R /srv/shiny-server
 # Links to breathtestshiny
 RUN ln -s  /usr/local/lib/R/site-library/breathtestshiny/shiny /srv/shiny-server
 # EXPOSE 3838 # already in stanverse
-HEALTHCHECK --interval=3600s CMD curl --fail http://localhost:3838 || exit 1
+HEALTHCHECK --interval=600s CMD curl --fail http://localhost:3838 || exit 1
 
 CMD ["/usr/bin/shiny-server.sh"]
 
