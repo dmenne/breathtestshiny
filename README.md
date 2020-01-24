@@ -36,7 +36,7 @@ The image cannot be compiled on the Docker hub because the build runs out of mem
 - From the command line, enter the following to start the container
 
 ```
-docker run --name breathtestshiny  -p 3838:3838 -d dmenne/breathtestshiny
+docker run --name breathtestshiny  --restart unless-stopped -p 3838:3838 -d dmenne/breathtestshiny
 ```
 - The first startup needs some time because 1 GB has to be downloaded. Subsequent startups require only a few seconds.
 - Connect to the app with your browser: [localhost:3838](`localhost:3838`). <- This link does not work when your read this from github or the Docker hub, only on your local installation.
