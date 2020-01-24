@@ -63,7 +63,7 @@ RUN rm -R /srv/shiny-server
 # Links to breathtestshiny
 RUN ln -s  /usr/local/lib/R/site-library/breathtestshiny/shiny /srv/shiny-server
 # EXPOSE 3838 # already in stanverse
-HEALTHCHECK --interval=600s CMD curl --fail http://localhost:3838 || exit 1
+HEALTHCHECK --interval=60s CMD curl --fail http://localhost:3838 || exit 1
 
 CMD ["/usr/bin/shiny-server.sh"]
 
