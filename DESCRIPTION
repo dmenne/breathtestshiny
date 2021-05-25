@@ -33,6 +33,6 @@ License: GPL-3
 Remotes:
   dmenne/breathtestcore,
   dmenne/breathteststan
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1.9001
 VignetteBuilder: knitr
 Encoding: UTF-8

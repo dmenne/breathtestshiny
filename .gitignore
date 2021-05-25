@@ -10,3 +10,4 @@ inst/shiny/tests/*.png
 vignettes/*.html
 deps.yaml
 *.cmd
+.Renviron
