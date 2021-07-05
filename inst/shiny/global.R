@@ -3,8 +3,6 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(breathtestcore))
 suppressPackageStartupMessages(library(breathteststan))
-suppressPackageStartupMessages(library(shinyBS))
-#options(shiny.error = browser)
 options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif
 ncol_facetwrap = 4 # for facet_wrap, number of columns

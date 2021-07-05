@@ -5,7 +5,7 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
 
 shinyServer(function(input, output, session) {
-  btns = list("Details", "Summary", "Group differences")
+  btns = list("Details")
 
   info_observers = sapply(btns, function(btn_title) {
     btn = gsub(" ", "_", tolower(btn_title))

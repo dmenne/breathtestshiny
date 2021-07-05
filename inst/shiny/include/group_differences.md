@@ -1,2 +1,0 @@
-# Hallo, group differences
-asdf

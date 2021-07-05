@@ -10,7 +10,6 @@ RUN install2.r --error --ncpus 2 --deps TRUE --skipinstalled \
     gtools \
     shinyjs \
     shinythemes \
-    shinyBS \
     shinyAce \
     shinycssloaders
 
