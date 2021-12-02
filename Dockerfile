@@ -1,46 +1,46 @@
-FROM rocker/shiny-verse:latest
+FROM rocker/r-base:latest
+
 
 LABEL maintainer="dieter.menne@menne-biomed.de"
 
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  libv8-dev
+  libv8-dev \
+  libxml2-dev \
+  libcurl4-openssl-dev
 
-RUN install2.r --error --ncpus 2 --deps TRUE --skipinstalled \
+RUN install2.r --error --ncpus 3 --skipinstalled \
     DT \
     gtools \
+    shiny \
     shinyjs \
     shinythemes \
+    tidyverse \
     shinyAce \
-    shinycssloaders
+    shinyBS \
+    shinycssloaders \
+	curl \
+	xml2 \
+	V8 \
+	httr \
+    remotes 
 
 RUN mkdir -p ~/.R
 RUN echo "CXX14FLAGS=-O3 -Wno-unused-variable -Wno-unused-function  -Wno-macro-redefined -Wno-deprecated-declarations -Wno-ignored-attributes" >> ~/.R/Makevars
 
-
-RUN install2.r --error --ncpus 2 --deps TRUE --skipinstalled \
+RUN install2.r --error --ncpus 3 --deps TRUE --skipinstalled \
    rstan \
    bayesplot \
    rstantools
 
-
-RUN Rscript -e "devtools::install_github(paste0('dmenne/', \
+RUN Rscript -e "remotes::install_github(paste0('dmenne/', \
   c( 'breathtestcore', 'breathtestshiny')))"
 
-RUN Rscript -e "devtools::install_github('dmenne/breathteststan')" \
+RUN Rscript -e "remotes::install_github('dmenne/breathteststan')" \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
   && rm -rf /var/lib/apt/lists/*
 
-COPY shiny-server.sh /usr/bin/shiny-server.sh
-# https://github.com/rocker-org/shiny/issues/32
-RUN ["chmod", "+x", "/usr/bin/shiny-server.sh"]
-COPY shiny-server.conf /etc/shiny-server
+EXPOSE 3838 # already in stanverse
+#HEALTHCHECK --interval=60s CMD curl --fail http://localhost:3838 || exit 1
 
-# Remove apps
-RUN rm -R /srv/shiny-server
-# Links to breathtestshiny
-RUN ln -s  /usr/local/lib/R/site-library/breathtestshiny/shiny /srv/shiny-server
-# EXPOSE 3838 # already in stanverse
-HEALTHCHECK --interval=60s CMD curl --fail http://localhost:3838 || exit 1
-
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["R", "-e", "breathtestshiny::run_shiny()"]
 
