@@ -12,8 +12,7 @@ chains = min(parallel::detectCores(logical = TRUE), 2)
 
 pop_select = function(session, input,  id, title, placement = "right" ){
   content = as.character(pop_content[input[[id]]])
-  if (is.na(content))
-    content = ""
+  if (is.na(content)) content = ""
   if (input$show_pop ) {
     addPopover(session, id, title, content, placement)
   }
@@ -23,6 +22,7 @@ pop_select = function(session, input,  id, title, placement = "right" ){
 }
 
 pop_control = function(session, input,  id, title, placement = "right" ) {
+#  cat(id, input$show_pop, "\n")
   if (input$show_pop) {
     addPopover(session, id, title, pop_content[[id]])
   } else {
@@ -56,15 +56,15 @@ get_simulated_data = function(data_subset){
                 group_b = simulate_breathtest_data(6, cov = cov,  k_mean = 0.015))
   } else if (data_subset == "rough_cross") {
     data = list(
-      group_a = simulate_breathtest_data(4, noise = 1.5, student_t = 2., cov = cov,
+      group_a = simulate_breathtest_data(4, noise = 1.5, student_t_df = 2., cov = cov,
                                          k_mean = 0.02),
-      group_b = simulate_breathtest_data(6, noise = 1.5, student_t = 2., cov = cov,
+      group_b = simulate_breathtest_data(6, noise = 1.5, student_t_df = 2., cov = cov,
                                          k_mean = 0.015))
   } else if (data_subset == "missing") {
     data = list(
-      group_a = simulate_breathtest_data(4, noise = 2.5, student_t = 5, cov = cov,
+      group_a = simulate_breathtest_data(4, noise = 2.5, student_t_df = 5, cov = cov,
                                          k_mean = 0.02, missing = 0.3 ),
-      group_b = simulate_breathtest_data(6, noise = 2, student_t = 5, cov = cov,
+      group_b = simulate_breathtest_data(6, noise = 2, student_t_df = 5, cov = cov,
                                          k_mean = 0.015, missing = 0.3))
   } else {
     return(NULL)
@@ -94,7 +94,7 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
 # Data from usz_13c (Misselwitz data)
 usz_13c_data = function(data_subset, manual_select_data){
   data("usz_13c", envir = environment())
-  if (data_subset == "manual"){
+  if (data_subset == "manual") {
     # When selection is empty, use first
     if (is.null(manual_select_data))
       manual_select_data = usz_13c$patient_id[1]
@@ -235,7 +235,7 @@ pop_content = c(
   nlme = "<code>Mixed-model fit (nlme)</code>This method only works for multiple records that stabilize each other by borrowing strength. It can fail when many extreme records are included. Results are very stable even in presence of moderate outliers. If the algorithm converges, this is the recommended method for studies.",
   stan = "<code>Bayesian fit (Stan)</code>Most flexible method, but slow. It can be used with a single record, but really shows with multiple records from clinical studies. May need a few minutes to give accurate results; for a fast overview, select fewer iterations in the box below.",
   stan_group = "<code>Grouped Bayesian fit (Stan)</code>. This is an experimental variant, and in theory the most reliable one for studies when there are multiple groups with several records in each group. It uses a multi-level Bayesian model, but post-hoc tests shown in Details are not fully Bayesian. Use this with caution.",
-  patient_test_data = "<code>Sample test data</code>, <br>13C records from University Hospital of Zürichz collection (usz_13c). Data from healthy volunteers (normals) are pairs from a cross-over study, for a liquid and a solid meal. <Easy> patient data can be fit by individual curves fits. <Difficult> patient data do not give valid results with individual fits, may converge using the nlme population fits, and do converge with Bayesian methods. ",
+  usz_13c = "<code>Sample test data</code>, <br>13C records from University Hospital of Zürich collection (usz_13c). Data from healthy volunteers (normals) are pairs from a cross-over study, for a liquid and a solid meal. <i>Easy</i> patient data can be fit by individual curves fits. <i>Difficult</i> patient data do not give valid results with individual fits, may converge using the nlme population fits, and always converge with Bayesian methods. ",
   no_header = "Single record with two columns for minute and pdr without header. This is the simplest data format accepted, but cannot be used for more than one record.",
   with_header = "Single records with two columns and headers <code>minute</code> and <code>pdr</code>. The results are the same as those from the two-column data set without headers.",
   two_patients = "With multiple records, the first column must have the header <code>patient_id</code>, followed by <code>minute</code> and <code>pdr</code>.",
@@ -246,7 +246,20 @@ pop_content = c(
   student_t_df = "With outliers in the data set, the fits are more robust when the residual data are modelled by the Student-t distribution than with normal (Gaussian) residuals. Computation time is somewhat longer with non-Gaussian options.",
   iter = "Number of iterations for Bayesian Stan sampling. More iteration give higher precision of the estimate. The default value of 200 is nice for a first look; use at least 500 iterations for a publishable result.",
   download_filtered = "Download the visible coefficients as CSV file which is readable from Excel. <br>If you only want some of the coefficients, use the filter boxes above the columns.
-  <ul><li>To only return coefficient <code>m</code>, enter 'm' into the <code>parameter</code> search box. </li><li>Partial matching is allowed, e.g. <code>os</code> for <code>maes_ghoos</code> and <code>maes_goos_scint</code>.</li><li>Regular expressions are supported, most importantly a <code>$</code> for 'end-of-string'. For example, to suppress <code>maes_goos_scint</code>, use <code>maes_ghoos$</code>  or short <code>os$</code>.</li><li>To only return half-emptying times computed by the <code>maes_ghoos</code> method, enter <code>t50</code> in the parameter search box, and <code>os$</code> in the method box.</li></ul>"
+  <ul><li>To only return coefficient <code>m</code>, enter 'm' into the <code>parameter</code> search box. </li><li>Partial matching is allowed, e.g. <code>os</code> for <code>maes_ghoos</code> and <code>maes_goos_scint</code>.</li><li>Regular expressions are supported, most importantly a <code>$</code> for 'end-of-string'. For example, to suppress <code>maes_goos_scint</code>, use <code>maes_ghoos$</code>  or short <code>os$</code>.</li><li>To only return half-emptying times computed by the <code>maes_ghoos</code> method, enter <code>t50</code> in the parameter search box, and <code>os$</code> in the method box.</li></ul>",
+  sim_data = "Simulated data created by function <br><code>simulate_breathtest_data/breathtestcore</code>; the base curve is an exponential beta function as used by Maes/Ghoos. Details see in data set dropdown below.",
+  nice_1 =  "One group generated with <br><code>simulate_breathtest_data(7,  k_mean = 0.015)</code>",
+  nice_cross = "Two groups simulated by <br><code>simulate_breathtest_data(4, k_mean = 0.02)</code><br><code>simulate_breathtest_data(6, k_mean = 0.015)</code>",
+  rough_cross = "Two groups with noise and strong outliers generated by<br><code>simulate_breathtest_data(4, noise = 1.5, student_t_df = 2, k_mean = 0.02)</code><br><code>simulate_breathtest_data(6, noise = 1.5, student_t_df = 2., k_mean = 0.015)</code>.",
+  missing = "Two groups with moderate outliers and 30% missing data generated by <br><code>simulate_breathtest_data(4, noise = 2.5, student_t_df = 5, k_mean = 0.02, missing = 0.3)</code> <br><code>simulate_breathtest_data(6, noise = 2, student_t_df = 5, k_mean = 0.015, missing = 0.3)</code>",
+  usz_13c_d = "Subset of <code>usz_13c</code> data from USZ data (Kuyumcu et al., Gastric secretion...). For this data set, gastric emptying times from MRI measurements are attached and can be used to estimate the reliability of the 13C method.",
+  cross_over_5 = "Five records with two meals; this example has been chosen because is does not converge with the mixed-model fit, which indicates that single curve fit might also be unreliable.",
+  manual = "Select individual records from the dropdown below",
+  subjects_2 = "Two subjects with 3 and 2 meals in cross-over",
+  all = "All records from USZ study with 3 meals, some are missing",
+  usz_13c_a = "13C time series PDR data from three different groups in a randomized (= not-crossover) design from Gastroenterology and Hepatology, University Hospital Zurich. These time series present a challenge for algorithms. Try the Bayesian mode, but do not trust such data nevertheless.",
+  random_14 = "14 random records from <code>usz_13c_a</code>",
+  random_21 = "21 random records from <code>usz_13c_a</code>"
 )
 
 ## end popup

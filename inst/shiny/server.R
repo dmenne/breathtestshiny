@@ -250,43 +250,17 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    pop_control(session, input, "edit_data", "Data entry from clipboard")
-  })
-
-  observe({
-    pop_control(session,
-                input,
-                "download_filtered",
+    input$fit_method
+    input$show_pop
+    pop_control(session, input, "download_filtered",
                 "Download coefficients as CSV-file")
-  })
-
-  observe({
-    input$fit_method
+    pop_control(session, input, "edit_data", "Data entry from clipboard")
     pop_control(session, input,  "student_t_df", "Outlier handling")
-  })
-
-  observe({
-    input$fit_method
     pop_control(session, input,  "iter", "Number of iterations Stan sampling")
-  })
-
-  # Upload
-  observe({
     pop_control(session, input,  "upload", "Upload breathtest data")
-  })
-
-  # Append data
-  observe({
     pop_control(session, input,  "append", "Append data in editor")
-  })
-
-  # Select boxes with per-item description
-  observe({
     pop_select(session, input,  "fit_method", "Fitting method")
-  })
-
-  observe({
-    input$fit_method
+    pop_select(session, input, "data_source", "Data source")
     pop_select(session, input,  "data_subset", "Sample data")
   })
 

@@ -104,7 +104,8 @@ shinyUI(
             ),
             value = "demo_panel"
           ), # end demo_panel
-          id = "samples_panel"
+          id = "samples_panel",
+          selected = "uploads_panel"
         ),
         # End tabsetpanel
         # actionLink("create_workspace", "Create Workspace"),
@@ -112,7 +113,7 @@ shinyUI(
         HTML('<a href="https://dmenne.github.io/breathtestcore/articles/data_formats.html#vendor-specific-formats">Supported Formats</a>'),
         # The following should not be moved to the server
         bsPopover("show_pop",  "Enable/disable all popups", "", "right"),
-        checkboxInput("show_pop", "Show popover help", value = FALSE),
+        checkboxInput("show_pop", "Show popover help", value = TRUE),
         actionLink("about", "About"),
         width = 3
       ),

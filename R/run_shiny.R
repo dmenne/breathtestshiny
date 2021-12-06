@@ -7,5 +7,5 @@ run_shiny = function(port = 3838) {
   if (appDir == "") {
     stop("Could not Shiny app in breathtestshiny", call. = FALSE)
   }
-  runApp(appDir, port = port, display.mode = "normal")
+  runApp(appDir, port = port, host = "0.0.0.0")
 }

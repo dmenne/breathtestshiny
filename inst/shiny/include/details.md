@@ -1,4 +1,4 @@
-The _Details_ panel displays per-curve fit results. To perfom your own statistical analysis, you can download the displayed parameters as Excel file or to the clipboard.    
+The _Details_ panel displays per-curve fit results. To perform your own statistical analysis, you can download the displayed parameters as Excel file or to the clipboard.    
 
 ![Details](details.png)
 
@@ -9,7 +9,7 @@ By default, the Search box in the top right corner contains the text `t50` which
 * To display all parameters, clear the text in `Search` box.
 
 ### Primary fit parameters
-Each curve has 3 primary fit parameter for the exponentional beta function labeled as method `exp_beta`.
+Each curve has 3 primary fit parameter for the exponential beta function labeled as method `exp_beta`.
 
 * __m__: Effectively metabolized fraction of <sup>13</sup>C as percentage, computed from the area under the PDF curve from 0 to infinity. This parameter depends on body weight and height, and may be badly defined if these are not given. Since some of the assumptions on metabolics are not well defined, it is rarely interpreted. The half-emptying time does not depend on `m`, but only on `beta` and `k`. In the current implementation, it is also assumed that the dose is 100 mg for all records.
 * __k__: Time constant of the beta-exponential in units of 1/min; 1/k is sometimes quoted as the emptying time t<sub>empt</sub>. Both k and t<sub>empt</sub> are rarely interpreted directly, because the derived quantities `t50` and `tlag` have a better defined meaning.
@@ -33,7 +33,7 @@ A second parameter often used to describe the lag in gastric emptying is `tlag`,
 
 The Wagner-Nelson method is semi-parametric fit that seemingly does not require a fit, so it was used for PDR time series for which the single-curve fit failed. The approach is valid for the rising slope of the PDR curve, but uses a fixed value for the trailing part of the curve which has little basis. In the legacy package [d13cbreath](https://github.com/dmenne/d13cbreath) I have implemented a method to replace the fixed estimate for the trailing slope by a Bluck-Coward fit, but I do not recommend the method any longer.
 
-With the population-based methods and the Bayesian (Stan) method, all curves can be fitted successfully. Do not use the Wagner-Nelson method, it does not give any 'better' values. Double-peaked excretion curves for which the Wagner-Nelson method was introduced cannot be meaningfully quantified by half-times. The problems of using ^13^C PDR time series as surrogates for gastric emptying are much more basic.  
+With the population-based methods and the Bayesian (Stan) method, all curves can be fitted successfully. __Do not use the Wagner-Nelson method__, it does not give any 'better' values. Double-peaked excretion curves for which the Wagner-Nelson method was introduced cannot be meaningfully quantified by half-times. The problems of using ^13^C PDR time series as surrogates for gastric emptying are much more basic.  
 
 _Sanaka, Yamamoto, Tsutsumi, Abe, Kuyama_ (2005) Wagner-Nelson method for analysing the atypical double-peaked excretion curve in the [13c]-octanoate gastric emptying breath test in humans. Clinical and experimental pharmacology and physiology 32, 590-594.  
 
