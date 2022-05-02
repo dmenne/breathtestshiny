@@ -2,12 +2,11 @@
 suppressPackageStartupMessages(library(shinyjs))
 library(shinyAce)
 library(shinyBS)
-library(shinythemes)
 library(shinycssloaders)
+
 
 shinyUI(
   fluidPage(
-    theme = shinytheme("simplex"),
     useShinyjs(),
     extendShinyjs(text = jsCode, functions = c("clearUpload")),
     tags$link(rel = "stylesheet", type = "text/css", href = "breathtestshiny.css"),

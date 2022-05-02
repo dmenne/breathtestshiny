@@ -5,6 +5,7 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
 
 shinyServer(function(input, output, session) {
+
   btns = list("Details")
 
   info_observers = sapply(btns, function(btn_title) {

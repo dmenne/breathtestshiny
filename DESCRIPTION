@@ -19,6 +19,7 @@ Suggests:
   breathtestcore (>= 0.8.0), 
   breathteststan (>= 0.8.0),
   DT,
+  ragg,
   shinyjs (>= 2.0.0),
   htmlwidgets,
   shinycssloaders,

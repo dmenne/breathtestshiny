@@ -3,12 +3,16 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(breathtestcore))
 suppressPackageStartupMessages(library(breathteststan))
+
 options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif
 ncol_facetwrap = 4 # for facet_wrap, number of columns
+
 # Behaviour of plot with 2 chains is strange
 chains = min(parallel::detectCores(logical = TRUE), 2)
 
+# https://github.com/rstudio/shiny/issues/3626
+options(shiny.useragg = TRUE)
 
 pop_select = function(session, input,  id, title, placement = "right" ){
   content = as.character(pop_content[input[[id]]])
