@@ -10,7 +10,13 @@ deps.yaml
 ^templates$
 ^run_docker.cmd
 ^build_docker.cmd
-^push_to_docker.cmd
 ^docker-compose.yml
 ^shiny-server.conf
 ^shiny-server.sh
+^build_docker.sh
+^Rprofile.site
+^push_to_docker_hub.cmd
+
+
+^doc$
+^Meta$
