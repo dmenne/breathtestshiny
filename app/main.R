@@ -1,17 +1,223 @@
-suppressPackageStartupMessages(library(shinyjs))
-suppressPackageStartupMessages(library(shinyAce))
-suppressPackageStartupMessages(library(breathtestcore))
-suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(ggplot2))
+# library functions
+box::use(
+  shiny[...],
+  shinyjs[useShinyjs, js, extendShinyjs, toggle],
+  shinycssloaders[withSpinner],
+  shinyBS[popify, bsPopover, bsModal],
+  shinyAce[aceEditor, updateAceEditor],
+  breathtestcore[null_fit, nls_fit, nlme_fit, read_any_breathtest,
+                 coef_by_group, coef_diff_by_group],
+  breathteststan[stan_fit],
+  dplyr[...],
+  ggplot2[facet_wrap, theme, guides],
+  stats[coef],
+  stringr[str_c, str_replace],
+  utils[str],
+  glue[glue],
+  methods[is]
+)
 
-shinyServer(function(input, output, session) {
+# constants
+box::use(
+  app/logic[about_text, pop_content, data_subsets,
+            manual_subsets, ncol_facetwrap, chains],
+  app/logic/breathtestdata_to_editor_format[breathtestdata_to_editor_format],
+  app/logic/bt_datatable[bt_datatable]
 
-  btns = list("Details")
+)
 
-  info_observers = sapply(btns, function(btn_title) {
+# https://github.com/Appsilon/rhino/discussions/279
+shiny::addResourcePath("sbs", system.file("www", package = "shinyBS"))
+
+
+# local functions
+box::use(
+  app/logic/clear_search_text[clear_search_text],
+  app/logic/format_data[...],
+  app/logic/popup[...],
+  app/logic/datasets[get_patient_data, get_simulated_data],
+
+)
+
+
+#' @export
+ui = function(id) {
+  ns = NS(id)
+  shinyUI(
+  fluidPage(
+    useShinyjs(),
+    extendShinyjs(
+      text = "shinyjs = { ...shinyjs, ...App.extensions }",
+      functions = c("clearUpload")),
+    titlePanel("Gastric emptying from 13C Breath Test Data"),
+    sidebarLayout(
+      sidebarPanel(
+        selectInput(
+          ns("fit_method"),
+          "Fit Method",
+          choices =
+            c(
+              "No fit, data only" = "data_only",
+              "Individual curve fit (nls)" = "nls",
+              "Mixed-model fit (nlme) " = "nlme",
+              "Bayesian fit (Stan)" = "stan"
+              #,"Grouped Bayesian fit" = "stan_group"
+            ),
+          selected = "nls"
+        ),
+        conditionalPanel(
+          "input.fit_method == 'stan' || input.fit_method == 'stan_group'",
+          ns = ns,
+          selectInput(
+            ns("iter"),
+            "Iterations",
+            choices = c(200, 500, 1000, 2000),
+            selected = 200
+          )
+        ),
+        tabsetPanel(
+          tabPanel(
+            title = "Uploads",
+            br(),
+            popify(
+              fileInput(
+                ns("upload"),
+                "Select or drag/drop file(s)",
+                multiple = TRUE,
+                accept = c("text/plain", "text/csv", "text/xml",
+                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                  "application/vnd.ms-excel"),
+                buttonLabel = "Browse file",
+                placeholder = "Drag file here"
+              ),
+              "Upload 13C files",
+              pop_content["upload"],
+              "right"
+            ),
+            checkboxInput(ns("append"), "Append selected data", value = FALSE),
+            value = "uploads_panel"
+          ),
+          # End uploads_panel
+
+          tabPanel(
+            title = "Demo",
+            conditionalPanel(
+              "input.fit_method == 'stan' || input.fit_method == 'stan_group'",
+              ns = ns,
+              selectInput(
+                ns("student_t_df"),
+                "Expected outliers",
+                choices = c(
+                  "None - Gaussian" = 10,
+                  "Few - Student-t 5 df" = 5,
+                  "Strong - Student-t 3 df" = 3
+                )
+              )
+            ),
+            # end conditionalPanel
+            selectInput(
+              ns("data_source"),
+              "Data source",
+              choices = c(
+                "Simulated data " = "sim_data",
+                "Partial crossover (usz_13c)" = "usz_13c",
+                "Crossover (usz_13c_d)" = "usz_13c_d",
+                "Exotic (usz_13c_a)" = "usz_13c_a"
+              ),
+              selected = "usz_13c"
+            ),
+            selectInput(
+              ns("data_subset"),
+              "Data subset",
+              choices = data_subsets["usz_13c"],
+              selected = "cross_over_5"
+            ),
+            conditionalPanel(
+              "input.data_subset == 'manual'",
+              ns = ns,
+              selectInput(
+                ns("manual_select_data"),
+                "Select data",
+                choices = NULL,
+                multiple = TRUE
+              )
+            ),
+            value = "demo_panel"
+          ), # end demo_panel
+          id = ns("samples_panel"),
+          selected = "demo_panel"
+        ),
+        # End tabsetpanel
+        hr(),
+        HTML('<a href="https://dmenne.github.io/breathtestcore/articles/data_formats.html#vendor-specific-formats">Supported Formats</a>'),
+        # The following should not be moved to the server
+        bsPopover(ns("show_pop"),  "Enable/disable all popups", "", "right"),
+        checkboxInput(ns("show_pop"), "Show popover help", value = TRUE),
+        actionLink(ns("about"), "About"),
+        width = 3
+      ),
+      # end sidebarPanel
+      mainPanel(
+        tabsetPanel(
+          id = ns("main_panel"),
+          tabPanel(
+            title = "Data",
+            aceEditor(ns("edit_data"), "", mode = "plain_text", tabSize = 16,
+                      useSoftTabs = FALSE, showInvisibles = FALSE,
+                      setBehavioursEnabled = FALSE,
+                      placeholder = "Paste columns from Excel here"),
+            actionButton(ns("clear_button"), "Clear", icon = icon("eraser")),
+            downloadButton(ns("download_image_button"), "Image"),
+            withSpinner(plotOutput(ns("fit_plot"), height = "auto")),
+            hr(),
+            value = ns("data_panel")
+          ),
+          # Data tabPanels
+          tabPanel(
+            title = "Details",
+            value = ns("details_panel"),
+            clear_search_text(ns("details")),
+            h2("Per Patient/Record results"),
+            withSpinner(DT::dataTableOutput(ns("coef_table")))
+          ),
+          tabPanel(
+            title = "Summary",
+            value = ns("summary_panel"),
+            clear_search_text("summary"),
+            h2("Per Group Means"),
+            withSpinner(DT::dataTableOutput(ns("coef_by_group_table")))
+          ),
+          # End Summary tabPanel
+          tabPanel(
+            title = "Group differences",
+            value = ns("group_differences_panel"),
+            clear_search_text("group_differences"),
+            h2("Difference means between groups"),
+            withSpinner(DT::dataTableOutput(ns("coef_by_group_diff_table")))
+          ) # End Group differences tabPanel
+        ), # end tabsetPanel
+        bsModal(
+          id = ns("about_tab"),
+          title = "About breathtestshiny",
+          trigger = ns("about"),
+          size = "large",
+          HTML(about_text)
+        )
+      ) # end mainPanel
+    ) # end sidebarLayout
+  ) # fluidpage
+) # shinyUI
+} # module function
+
+#' @export
+server = function(id) {
+  moduleServer(id, function(input, output, session) {
+  ns = session$ns
+  sapply(list("Details"), function(btn_title) {
     btn = gsub(" ", "_", tolower(btn_title))
     pnl = paste0(btn, "_button")
-    txt = includeMarkdown(paste0("include/", btn, ".md"))
+    app_root = rprojroot::find_root(rprojroot::has_file("app.R"))
+    txt = includeMarkdown(paste0(app_root, "/app/include/", btn, ".md"))
     dlg = modalDialog(
       txt,
       title = btn_title,
@@ -24,8 +230,16 @@ shinyServer(function(input, output, session) {
 
   clear_editor = function() {
     updateAceEditor(session, "edit_data", value = "")
-    js$clearUpload()
+    clear_upload()
   }
+
+  clear_upload = function(){
+    js$clearUpload(id)
+  }
+
+  observeEvent(input$about, {
+    #shinyBS::toggleModal(session, ns("about"))
+  })
 
   # Copy patient test data to editor
   observe({
@@ -36,7 +250,7 @@ shinyServer(function(input, output, session) {
     manual_select_data = input$manual_select_data
     #cat(data_source, "-", data_subset, "-", manual_select_data, "\n")
 
-    if (is.null(data_subset) | is.null(data_source)) {
+    if (is.null(data_subset) || is.null(data_source)) {
       clear_editor()
       return(NULL)
     }
@@ -49,6 +263,8 @@ shinyServer(function(input, output, session) {
     } else {
       value = get_patient_data(data_source, data_subset, manual_select_data)
     }
+    pop_control(session, input,  "edit_data", "Data entry from clipboard",
+                placement = "bottom", add_head = attr(value, "data_head"))
     updateAceEditor(session, "edit_data", value = value)
   })
 
@@ -84,6 +300,7 @@ shinyServer(function(input, output, session) {
   # Retrieve data from editor
   get_data = reactive({
     data = input$edit_data
+    req(data)
     d = format_data(data)
     if (is.null(d))
       return(NULL)
@@ -94,7 +311,7 @@ shinyServer(function(input, output, session) {
       ),
       need(
         (input$fit_method != "nlme") ||
-        (length(unique(paste(d$patient_id, d$group, sep = "_"))) > 1L),
+          (length(unique(paste(d$patient_id, d$group, sep = "_"))) > 1L),
         "At least 2 records required. Try individual curve fit or Bayesian fit instead."
       ),
       need(
@@ -108,10 +325,9 @@ shinyServer(function(input, output, session) {
   # Compute fit when button pressed or method changed
   fit = reactive({
     method = input$fit_method
+    updateTabsetPanel(inputId = "main_panel", selected = ns("data_panel"))
     data = get_data()
-    if (is.null(data))
-      return(NULL)
-    #save(data, file= "ndata.rda")
+    req(data)
     ret = try(switch(
       method,
       data_only = null_fit(data),
@@ -129,9 +345,8 @@ shinyServer(function(input, output, session) {
         student_t_df = as.integer(input$student_t_df),
         iter = as.integer(input$iter)
       )
-    ), silent = TRUE)
+    ), silent = FALSE)
     ret
-#    ifelse(class(ret) == "try-error", NULL, ret)
   })
 
   # Returns coefficients of fit and comment
@@ -155,29 +370,17 @@ shinyServer(function(input, output, session) {
 
   output$coef_by_group_table = DT::renderDataTable({
     f = fit()
-    if (inherits(f, "breathtestnullfit"))
-      return(NULL)
+    req(!inherits(f, "breathtestnullfit"))
     cf =  try(coef_by_group(f), silent = TRUE )
-    validate(
-      need(
-        !is(cf, "try-error"),
-        "To estimate means, you need multiple data sets for some of the groups."
-      )
-    )
+    req(!inherits(cf, "try-error"))
     bt_datatable(cf)
   })
 
   output$coef_by_group_diff_table = DT::renderDataTable({
     f = fit()
-    if (inherits(f, "breathtestnullfit"))
-      return(NULL)
+    req(!inherits(f, "breathtestnullfit"))
     cf =  try(coef_diff_by_group(fit()), silent = TRUE)
-    validate(
-      need(
-        !is(cf, "try-error"),
-        "To estimate group differences, you need multiple data sets for some of the groups."
-      )
-    )
+    req(!inherits(cf, "try-error"))
     bt_datatable(cf)
   })
 
@@ -190,8 +393,7 @@ shinyServer(function(input, output, session) {
 
   output$fit_plot = renderPlot({
     f = fit()
-    if (is.null(f))
-      return(NULL)
+    req(f)
     plot(f) +
       facet_wrap(~patient_id, ncol = ncol_facetwrap) +
       theme(aspect.ratio = 0.8)
@@ -200,21 +402,19 @@ shinyServer(function(input, output, session) {
 
   # Panel logic --------------------
   observe({
+    req(input$data_source)
     data_source = input$data_source
     data_subset = isolate(input$data_subset)
-    if (data_subset != "") {
-      updateSelectInput(session, "data_subset",
-                        choices = data_subsets[[data_source]])
-    } else {
-      updateSelectInput(session, "data_subset",
+    updateSelectInput(session, "data_subset",
                         choices = data_subsets[[data_source]],
                         selected = "cross_over_5")
-    }
   })
 
+  # TODO Join with above?
   observe({
     data_subset = input$data_subset
-    data_source = input$data_source
+    data_source = isolate(input$data_source)
+    req(data_subset, data_source)
     if (data_subset == "manual")
       updateSelectInput(session, "manual_select_data",
                         choices = manual_subsets[[data_source]])
@@ -223,20 +423,20 @@ shinyServer(function(input, output, session) {
 
   # ------------- Hide panel logic --------------------
   observe({
-    has_fit = input$fit_method != "data_only"
     cf = coef_fit()
-    if (is.null(cf)) return(NULL)
-    has_groups = ifelse(!has_fit, FALSE,
-                        length(unique(cf$group)) > 1)
+    has_fit = input$fit_method != "data_only" && !is.null(cf)
+
     toggle(
       condition = has_fit,
       selector = list(
-        "#main_panel li a[data-value=details_panel]",
-        "#main_panel li a[data-value=summary_panel]"
+        glue("a[data-value={ns('details_panel')}]"),
+        glue("a[data-value={ns('summary_panel')}]")
       )
     )
+    has_groups = ifelse(!has_fit || is.null(cf), FALSE,
+                        length(unique(cf$group)) > 1)
     toggle(condition = has_groups,
-           selector = "#main_panel li a[data-value=group_differences_panel]")
+           selector = glue("a[data-value={ns('group_differences_panel')}]"))
   })
 
   # ------------- Help-related functions --------------------
@@ -247,27 +447,23 @@ shinyServer(function(input, output, session) {
   })
 
   observe({
-    toggle("download_filtered", condition = !is.null(coef_fit()))
+    shinyjs::toggle("download_filtered", condition = !is.null(coef_fit()))
   })
 
   observe({
-    input$fit_method
-    input$show_pop
+    pop_control(session, input,  "iter", "Number of iterations Stan sampling")
     pop_control(session, input, "download_filtered",
                 "Download coefficients as CSV-file")
-    pop_control(session, input, "edit_data", "Data entry from clipboard")
     pop_control(session, input,  "student_t_df", "Outlier handling")
-    pop_control(session, input,  "iter", "Number of iterations Stan sampling")
     pop_control(session, input,  "upload", "Upload breathtest data")
     pop_control(session, input,  "append", "Append data in editor")
+
     pop_select(session, input,  "fit_method", "Fitting method")
     pop_select(session, input, "data_source", "Data source")
     pop_select(session, input,  "data_subset", "Sample data")
-  })
+  }) %>%
+  bindEvent(input$show_pop, input$fit_method, input$data_subset, input$data_source)
 
-  output$about = renderText({
-    about_text
-  })
 
   # --------------- Uploading files -----------------------------------------
   dt_list = reactive({
@@ -288,7 +484,7 @@ shinyServer(function(input, output, session) {
       if (length(dt) == 0) {
         showNotification(paste("File", inFile[i, 1], "format is not valid"),
                          type = "error")
-        js$clearUpload()
+        clear_upload()
       } else if (inherits(dt, "try-error")) {
         inFile[i,"status"] = str_replace(dt, dirname(src_file), "")
       } else {
@@ -334,8 +530,8 @@ shinyServer(function(input, output, session) {
   patient_modal = function(dt_s, failed = FALSE){
     pt = seq_along(dt_s)
     names(pt) = paste("Patient", purrr::map_chr(dt_s, "patient_id"),
-               purrr::map_chr(dt_s, "record_date"),
-               purrr::map_chr(dt_s, "start_time"))
+                      purrr::map_chr(dt_s, "record_date"),
+                      purrr::map_chr(dt_s, "start_time"))
     modalDialog(
       span(
         "The record contains data from several patients runs."),
@@ -364,10 +560,11 @@ shinyServer(function(input, output, session) {
   session$onSessionEnded(function() {
     stopApp()
     if (Sys.getenv("RSTUDIO") != "1")
-     q("no")
+      q("no")
   })
 
   # https://shiny.rstudio.com/articles/reconnecting.html
   session$allowReconnect(TRUE)
 
 })
+} # Server
