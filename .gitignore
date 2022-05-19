@@ -13,3 +13,4 @@ deps.yaml
 .Renviron
 /doc/
 /Meta/
+renv/
