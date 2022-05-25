@@ -36,15 +36,15 @@ pop_control = function(session, input,  id, title, placement = "right" ) {
 
 breathtestdata_to_editor_format = function(data, data_subset=NULL){
   data = cleanup_data(data)
-  tc = textConnection("dt", "w")
+  tc = textConnection("dt", "w", local = TRUE)
   comment = comment(data)
   if (!is.null(data_subset))
     writeLines(paste0("# ", paste0(data_subset, collapse = ", ")), con = tc)
   suppressWarnings(write.table(data, file = tc, append = TRUE,
                                row.names = FALSE, sep = "\t", quote = FALSE))
-  dt = paste(dt, collapse = "\n")
+  dt_ed = paste(dt, collapse = "\n")
   close(tc)
-  dt
+  dt_ed
 }
 
 get_simulated_data = function(data_subset){
