@@ -12,7 +12,7 @@ box::use(
 #' @export
 
 # Exotic data from usz_13c_a Kuyumcu et al
-usz_13c_a_data = function(data_subset, manual_select_data){
+usz_13c_a_data = function(data_subset, manual_select_data) {
   data("usz_13c_a", package = "breathtestcore", envir = environment())
   if (data_subset == "manual") {
     # When selection is empty, use first
@@ -36,7 +36,7 @@ usz_13c_a_data = function(data_subset, manual_select_data){
 
 #' @export
 # Data with known emptying time from MRI
-usz_13c_d_data = function(data_subset, manual_select_data){
+usz_13c_d_data = function(data_subset, manual_select_data) {
   data("usz_13c_d", package = "breathtestcore", envir = environment())
   if (data_subset == "manual") {
     # When selection is empty, use first
@@ -57,7 +57,7 @@ usz_13c_d_data = function(data_subset, manual_select_data){
 
 #' @export
 # Data from usz_13c (Misselwitz data)
-usz_13c_data = function(data_subset, manual_select_data){
+usz_13c_data = function(data_subset, manual_select_data) {
   data("usz_13c", package = "breathtestcore", envir = environment())
   if (data_subset == "manual") {
     # When selection is empty, use first
@@ -98,7 +98,7 @@ usz_13c_data = function(data_subset, manual_select_data){
 }
 
 #' @export
-manual_subsets_a = function(){
+manual_subsets_a = function() {
   box::use(utils[data])
   data("usz_13c_a", package = "breathtestcore", envir = environment())
   s = usz_13c_a %>%
@@ -112,7 +112,7 @@ manual_subsets_a = function(){
 }
 
 #' @export
-manual_subsets_d = function(){
+manual_subsets_d = function() {
   box::use(utils[data])
   data("usz_13c_d", package = "breathtestcore", envir = environment())
   as.list(unique(usz_13c_d$patient_id))
@@ -122,7 +122,7 @@ manual_subsets_d = function(){
 get_patient_data = function(data_source, data_subset, manual_select_data) {
   # Retrieves patient data
   if (is.null(data_source) || is.null(data_subset) ||
-      data_source == "" || data_subset == "" )
+      data_source == "" || data_subset == "")
     return(NULL)
 
   #cat("get_patient_data: ", data_source, " ", data_subset, " ", manual_select_data, "\n")
@@ -135,18 +135,18 @@ get_patient_data = function(data_source, data_subset, manual_select_data) {
   } else {
     return(NULL)
   }
-  data$pdr = round(data$pdr,1)
+  data$pdr = round(data$pdr, 1)
   breathtestdata_to_editor_format(data)
 }
 
 
 #' @export
-get_simulated_data = function(data_subset){
+get_simulated_data = function(data_subset) {
   # Retrieves simulated data
   if (is.null(data_subset) || data_subset == "") return(NULL)
   cov = # empirical covariance
     structure(c(188, -0.026, -2.04, -0.026, 7.74e-06, 0.000477, -2.04, 0.000477, 0.182),
-              .Dim = c(3L, 3L), .Dimnames = list(c("m", "k","beta"), c("m", "k", "beta")))
+              .Dim = c(3L, 3L), .Dimnames = list(c("m", "k", "beta"), c("m", "k", "beta")))
   if (data_subset == "nice_1") {
     data = simulate_breathtest_data(7,  cov = cov, k_mean = 0.015)
   } else if (data_subset == "nice_cross") {
@@ -161,7 +161,7 @@ get_simulated_data = function(data_subset){
   } else if (data_subset == "missing") {
     data = list(
       group_a = simulate_breathtest_data(4, noise = 2.5, student_t_df = 5, cov = cov,
-                                         k_mean = 0.02, missing = 0.3 ),
+                                         k_mean = 0.02, missing = 0.3),
       group_b = simulate_breathtest_data(6, noise = 2, student_t_df = 5, cov = cov,
                                          k_mean = 0.015, missing = 0.3))
   } else {
@@ -169,4 +169,3 @@ get_simulated_data = function(data_subset){
   }
   breathtestdata_to_editor_format(data, data_subset)
 }
-

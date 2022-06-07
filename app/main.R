@@ -39,6 +39,7 @@ box::use(
 
 )
 
+# TODO: hello
 
 #' @export
 ui = function(id) {
@@ -213,7 +214,7 @@ ui = function(id) {
 server = function(id) {
   moduleServer(id, function(input, output, session) {
   ns = session$ns
-  sapply(list("Details"), function(btn_title) {
+  lapply(list("Details"), function(btn_title) {
     btn = gsub(" ", "_", tolower(btn_title))
     pnl = paste0(btn, "_button")
     app_root = rprojroot::find_root(rprojroot::has_file("app.R"))
@@ -233,7 +234,7 @@ server = function(id) {
     clear_upload()
   }
 
-  clear_upload = function(){
+  clear_upload = function() {
     js$clearUpload(id)
   }
 
@@ -279,8 +280,8 @@ server = function(id) {
 
   output$download_image_button = downloadHandler(
     filename = function()
-      paste0('breathtest_', get_data()$patient_id[1], "_", Sys.Date(),'.png'),
-    content = function(file){
+      paste0("breathtest_", get_data()$patient_id[1], "_", Sys.Date(), ".png"),
+    content = function(file) {
       f = fit()
       if (is.null(f)) return(NULL)
       n_patient = length(unique(get_data()$patient_id))
@@ -288,7 +289,7 @@ server = function(id) {
         ncol_facetwrap = ncol_facetwrap - 1
       p = plot(f) +
         facet_wrap(~patient_id, ncol = ncol_facetwrap) +
-        theme(legend.key.size = unit(2,"line")) +
+        theme(legend.key.size = unit(2, "line")) +
         guides(colour = guide_legend(override.aes = list(size = 2)))
       # Size is in inches
       width = (min(n_patient, ncol_facetwrap)*6 + 1.5)/1.4
@@ -315,7 +316,7 @@ server = function(id) {
         "At least 2 records required. Try individual curve fit or Bayesian fit instead."
       ),
       need(
-        (input$fit_method != "stan_group" ) || (length(unique(d$group)) > 1L),
+        (input$fit_method != "stan_group") || (length(unique(d$group)) > 1L),
         "Multiple groups required. Try individual curve fit or Bayesian fit instead."
       )
     ) # end validate
@@ -333,13 +334,13 @@ server = function(id) {
       data_only = null_fit(data),
       nls = nls_fit(data),
       nlme = nlme_fit(data),
-      stan = stan_fit( # in package breathteststan
+      stan = stan_fit(# in package breathteststan
         data,
         chains = 2,
         student_t_df = as.integer(input$student_t_df),
         iter = as.integer(input$iter)
       ),
-      stan_group = stan_group_fit( # in package breathteststan
+      stan_group = stan_group_fit(# in package breathteststan
         data,
         chains = 2,
         student_t_df = as.integer(input$student_t_df),
@@ -371,7 +372,7 @@ server = function(id) {
   output$coef_by_group_table = DT::renderDataTable({
     f = fit()
     req(!inherits(f, "breathtestnullfit"))
-    cf =  try(coef_by_group(f), silent = TRUE )
+    cf =  try(coef_by_group(f), silent = TRUE)
     req(!inherits(cf, "try-error"))
     bt_datatable(cf)
   })
@@ -433,8 +434,8 @@ server = function(id) {
         glue("a[data-value={ns('summary_panel')}]")
       )
     )
-    has_groups = ifelse(!has_fit || is.null(cf), FALSE,
-                        length(unique(cf$group)) > 1)
+    has_groups = if (!has_fit || is.null(cf)) FALSE else
+                        length(unique(cf$group)) > 1
     toggle(condition = has_groups,
            selector = glue("a[data-value={ns('group_differences_panel')}]"))
   })
@@ -467,28 +468,28 @@ server = function(id) {
 
   # --------------- Uploading files -----------------------------------------
   dt_list = reactive({
-    inFile <- input$upload # When upload changes
-    if (is.null(inFile)) return(NULL)
-    inFile$status = NA
+    in_file <- input$upload # When upload changes
+    if (is.null(in_file)) return(NULL)
+    in_file$status = NA
     dt_list = list()
-    n_files = nrow(inFile)
+    n_files = nrow(in_file)
     if (n_files == 0) return(NULL)
     for (i in 1:n_files) {
       # Restore original filename for better messaging
-      src_file = inFile[i,"datapath"]
-      dest_file = file.path(dirname(src_file),inFile[i,"name"])
+      src_file = in_file[i, "datapath"]
+      dest_file = file.path(dirname(src_file), in_file[i, "name"])
       suppressWarnings(file.remove(dest_file)) # In case it exists
       file.rename(src_file, dest_file)
       # Read file
       dt = try(read_any_breathtest(dest_file), silent = FALSE)
       if (length(dt) == 0) {
-        showNotification(paste("File", inFile[i, 1], "format is not valid"),
+        showNotification(paste("File", in_file[i, 1], "format is not valid"),
                          type = "error")
         clear_upload()
       } else if (inherits(dt, "try-error")) {
-        inFile[i,"status"] = str_replace(dt, dirname(src_file), "")
+        in_file[i, "status"] = str_replace(dt, dirname(src_file), "")
       } else {
-        inFile[i, "status"] = "Ok"
+        in_file[i, "status"] = "Ok"
         dt_list = c(dt_list, dt)
       }
     }
@@ -505,7 +506,7 @@ server = function(id) {
     if (!is.null(input$ok_patient)) {
       selected_records  = isolate(input$select_records)
       # clear for next run
-      updateCheckboxGroupInput(session, "select_records", selected = character(0) )
+      updateCheckboxGroupInput(session, "select_records", selected = character(0))
       if (!is.null(selected_records))
         dt_s = dt_s[as.integer(selected_records)]
     }
@@ -520,14 +521,14 @@ server = function(id) {
       if (isolate(input$append)) {
         dt_old = unlist(isolate(input$edit_data))
         # Remove header
-        dt = str_replace(dt,".*?\\n", "")
+        dt = str_replace(dt, ".*?\\n", "")
         dt = str_c(dt_old, "\n", dt)
       }
       updateAceEditor(session, "edit_data", value = dt)
     }
   })
 
-  patient_modal = function(dt_s, failed = FALSE){
+  patient_modal = function(dt_s, failed = FALSE) {
     pt = seq_along(dt_s)
     names(pt) = paste("Patient", purrr::map_chr(dt_s, "patient_id"),
                       purrr::map_chr(dt_s, "record_date"),

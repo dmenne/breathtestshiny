@@ -1,6 +1,6 @@
 
 #' @export
-breathtestdata_to_editor_format = function(data, data_subset=NULL){
+breathtestdata_to_editor_format = function(data, data_subset=NULL) {
   data_head = utils::head(data) # For example display
   data = breathtestcore::cleanup_data(data)
   tc = textConnection("dt", "w", local = TRUE)
@@ -14,4 +14,3 @@ breathtestdata_to_editor_format = function(data, data_subset=NULL){
   attr(dt_ed, "data_head") = data_head
   dt_ed
 }
-

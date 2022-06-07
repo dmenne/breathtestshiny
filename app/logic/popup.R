@@ -28,13 +28,12 @@ pop_control = function(session, input,  id, title, placement = "right",
 }
 
 #' @export
-pop_select = function(session, input,  id, title, placement = "right" ){
+pop_select = function(session, input,  id, title, placement = "right") {
   content = as.character(pop_content[input[[id]]])
   if (is.na(content)) content = ""
   ns = session$ns
   removePopover(session, ns(id))
-  if (input$show_pop ) {
+  if (input$show_pop) {
     addPopover(session, ns(id), title, content, placement)
   }
 }
-

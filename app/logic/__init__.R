@@ -1,4 +1,3 @@
-options(shiny.reactlog = FALSE)
 options(digits = 3) # used in signif
 # https://github.com/rstudio/shiny/issues/3626
 options(shiny.useragg = TRUE)
@@ -24,7 +23,10 @@ chains = min(parallel::detectCores(logical = TRUE), 2)
 # ------------------------------- Help text ---------------------------------------------
 #' @export
 pop_content = c(
-  append = "When unchecked, only the uploaded file or the uploaded files are displayed and fitted; the editor is automatically cleared before each upload. When checked, the editor is not cleared, data are appended to the exisiting ones. Note the slightly different behaviour of the grouping variable when no group name is given. ",
+  append = "When unchecked, only the uploaded file or the uploaded files are displayed and
+fitted; the editor is automatically cleared before each upload. When checked, the editor
+is not cleared, data are appended to the exisiting ones. Note the slightly different
+behaviour of the grouping variable when no group name is given. ",
   upload = "You can select or drag/drop multiple files of the same or mixed format at a time. Use the checkbox below if you prefer to add one file after the other.<br><b>When drag/drop does not respond (e.g. on Firefox), use another browser (e.g. Chrome) or the Browse button to select files.",
   data_only = "<code>No fit, data only</code> Select this before adding data or when changing data in the editor. With the others methods, any edit or selection triggers lengthy calculations.",
   nls = "<code>Individual curve fit (nls)</code> This is the method almost exclusively used in publications. It works for well-behaved breath test samples from healthy volunteers. For pathological records and when the recording time is too short compared to gastric emptying time, it can fail or give highly erratic results. Always use one of the population-based methods for clinical studies where multiple records are to be compared.",
@@ -106,4 +108,3 @@ manual_subsets = list(
   usz_13c_d = datasets$manual_subsets_d(),
   usz_13c_a = datasets$manual_subsets_a()
 )
-

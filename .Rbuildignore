@@ -18,7 +18,6 @@ deps.yaml
 ^build_docker.sh
 ^Rprofile.site
 ^push_to_docker_hub.cmd
-
-
 ^doc$
 ^Meta$
+^\.lintr$
