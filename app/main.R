@@ -39,8 +39,6 @@ box::use(
 
 )
 
-# TODO: hello
-
 #' @export
 ui = function(id) {
   ns = NS(id)
@@ -411,7 +409,6 @@ server = function(id) {
                         selected = "cross_over_5")
   })
 
-  # TODO Join with above?
   observe({
     data_subset = input$data_subset
     data_source = isolate(input$data_source)
