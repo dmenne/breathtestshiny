@@ -3,14 +3,12 @@
 .RData
 .Ruserdata
 inst/data
-docaux/
 inst/doc
 inst/shiny/include/*.html
-inst/shiny/tests/*.png
 vignettes/*.html
 deps.yaml
+docaux/
 *.cmd
 .Renviron
-/doc/
 /Meta/
-renv/
+^docs/

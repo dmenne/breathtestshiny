@@ -1,6 +1,6 @@
 Package: breathtestshiny
 Title: Shiny Web App to Fit 13c Time Series from Breath Tests
-Version: 0.5.1.9000
+Version: 0.5.2.0
 Authors@R: c(
     person("Dieter", "Menne", , "dieter.menne@menne-biomed.de", role = c("aut", "cre")),
     person("Menne Biomed Consulting Tuebingen", role = c("cph")),
@@ -12,28 +12,27 @@ Authors@R: c(
 Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
 Description: Uses packages breathtestcore and breathteststan 
   to fit gastric emptying 13C time series in a Shiny-based web app.
-Depends: R (>= 3.4.0)
+Depends: R (>= 4.0.0)
 Imports:
-  shiny (>= 1.5.0)
+  shiny (>= 1.7.0)
 Suggests: 
   breathtestcore (>= 0.8.0), 
   breathteststan (>= 0.8.0),
   DT,
   ragg,
-  shinyjs (>= 2.0.0),
+  shinyjs (>= 2.1.0),
   htmlwidgets,
   shinycssloaders,
   shinyBS,
   shinyAce, 
   shinythemes,
-  testthat, 
   knitr,
   rmarkdown
-URL: https://github.com/dmenne/breathtestshiny
+URL: https://github.com/dmenne/breathtestshiny,
+    https://dmenne.github.io/breathtestshiny/
 License: GPL-3
 Remotes:
   dmenne/breathtestcore,
   dmenne/breathteststan
-RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Encoding: UTF-8

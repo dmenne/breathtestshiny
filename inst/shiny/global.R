@@ -261,7 +261,7 @@ pop_content = c(
   manual = "Select individual records from the dropdown below",
   subjects_2 = "Two subjects with 3 and 2 meals in cross-over",
   all = "All records from USZ study with 3 meals, some are missing",
-  usz_13c_a = "13C time series PDR data from three different groups in a randomized (= not-crossover) design from Gastroenterology and Hepatology, University Hospital Zurich. These time series present a challenge for algorithms. Try the Bayesian mode, but do not trust such data nevertheless.",
+  usz_13c_a = "13C time series PDR data from three different groups in a randomized (= not-crossover) design from Gastroenterology and Hepatology, University Hospital Zurich. These records are much to short for a safe estimation of half-emptying time and present a challenge for algorithms. Try the Bayesian mode, but do not trust such data nevertheless.",
   random_14 = "14 random records from <code>usz_13c_a</code>",
   random_21 = "21 random records from <code>usz_13c_a</code>"
 )

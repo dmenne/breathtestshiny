@@ -20,3 +20,5 @@ deps.yaml
 
 ^doc$
 ^Meta$
+^pkgdown$
+^\.github$
