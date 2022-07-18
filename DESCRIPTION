@@ -27,15 +27,13 @@ Suggests:
   shinyAce, 
   shinythemes,
   knitr,
-  rmarkdown
+  rmarkdown,
+  remotes
 Remotes:
   dmenne/breathtestcore,
   dmenne/breathteststan
 URL: https://github.com/dmenne/breathtestshiny,
     https://dmenne.github.io/breathtestshiny/
 License: GPL-3
-Remotes:
-  dmenne/breathtestcore,
-  dmenne/breathteststan
 VignetteBuilder: knitr
 Encoding: UTF-8
