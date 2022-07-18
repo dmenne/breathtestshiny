@@ -12,7 +12,7 @@ Authors@R: c(
 Maintainer: Dieter Menne <dieter.menne@menne-biomed.de>
 Description: Uses packages breathtestcore and breathteststan 
   to fit gastric emptying 13C time series in a Shiny-based web app.
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.2.0)
 Imports:
   shiny (>= 1.7.0)
 Suggests: 
@@ -28,6 +28,9 @@ Suggests:
   shinythemes,
   knitr,
   rmarkdown
+Remotes:
+  dmenne/breathtestcore,
+  dmenne/breathteststan
 URL: https://github.com/dmenne/breathtestshiny,
     https://dmenne.github.io/breathtestshiny/
 License: GPL-3
