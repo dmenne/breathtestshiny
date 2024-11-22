@@ -1,24 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/404.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/articles/how_to_use.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dmenne.github.io/breathtestshiny/reference/run_shiny.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://dmenne.github.io/breathtestshiny/404.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/articles/how_to_use.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/articles/index.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/authors.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/index.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/reference/index.html</loc></url>
+<url><loc>https://dmenne.github.io/breathtestshiny/reference/run_shiny.html</loc></url>
 </urlset>
+
