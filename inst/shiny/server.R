@@ -294,6 +294,8 @@ shinyServer(function(input, output, session) {
       } else {
         inFile[i, "status"] = "Ok"
         dt_list = c(dt_list, dt)
+        attr(dt_list, "error") = c(attr(dt_list, "error"),
+                                   attr(dt, "error"))
       }
     }
     if (length(dt_list) == 0)  return(NULL)
@@ -333,6 +335,10 @@ shinyServer(function(input, output, session) {
 
   patient_modal = function(dt_s, failed = FALSE){
     pt = seq_along(dt_s)
+    errors = attr(dt_s, "error")
+    if (!is.null(errors))
+      errors = str_c("Skipped files:<br>",
+       str_replace_all(errors, "\n","<br>"))
     names(pt) = paste("Patient", purrr::map_chr(dt_s, "patient_id"),
                purrr::map_chr(dt_s, "record_date"),
                purrr::map_chr(dt_s, "start_time"))
@@ -343,10 +349,12 @@ shinyServer(function(input, output, session) {
                          pt),
       if (failed)
         div(tags$b("You must select at least one record", style = "color: red;")),
+      if (!is.null(errors))
+        tags$b(HTML(errors), style = "color:red"),
       footer = tagList(
         actionButton("ok_patient", "Ok")
       ),
-      size = "s"
+      size = "xl"
     )
   }
 
