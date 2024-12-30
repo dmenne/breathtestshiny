@@ -16,7 +16,7 @@ Depends: R (>= 4.2.0)
 Imports:
   shiny (>= 1.7.0)
 Suggests: 
-  breathtestcore (>= 0.8.0), 
+  breathtestcore (>= 0.8.9), 
   breathteststan (>= 0.8.0),
   DT,
   ragg,
