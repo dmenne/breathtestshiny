@@ -7,6 +7,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   libv8-dev \
   libxml2-dev \
   libcurl4-openssl-dev \
+  libfontconfig1-dev \
+  libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
+  libharfbuzz-dev libfribidi-dev \
   curl
 
 
